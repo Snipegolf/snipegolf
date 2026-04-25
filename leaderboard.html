@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnipeGolf Leaderboard</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div style="font-size:1.6rem">⛳</div>
+  <h1>SnipeGolf</h1>
+  <span class="tournament-name" id="tournament-name">Loading...</span>
+</header>
+
+<div class="container">
+
+  <div class="pub-title">
+    <h2 id="pub-name">Loading...</h2>
+    <p>Private Leaderboard — Live during play</p>
+  </div>
+
+  <div class="refresh-bar">
+    <span><span class="live-dot"></span>Live</span>
+    <span id="last-updated">—</span>
+    <button id="refresh-btn" style="background:none;border:1px solid var(--accent);color:var(--accent);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8rem">↻ Refresh</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Move</th>
+        <th>Name</th>
+        <th>Score</th>
+        <th>Picks</th>
+      </tr>
+    </thead>
+    <tbody id="lb-body">
+      <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:32px">Loading leaderboard...</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <p>SnipeGolf — Scores update every 1–5 minutes during play.</p>
+    <p style="margin-top:6px">Lost your entry link? Contact your pub admin.</p>
+  </div>
+
+</div>
+
+<script src="assets/js/leaderboard.js"></script>
+</body>
+</html>
