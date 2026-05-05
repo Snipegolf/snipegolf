@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <meta name="description" content="Cobh GC — Cobh Truist Championship 2026 — Golf Sweepstakes powered by SnipeGolf">
+  <title>Cobh GC — Cobh Truist Championship 2026 | SnipeGolf</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-page="index">
+
+  <header>
+    <a href="index.html" class="logo-link">⛳ SnipeGolf</a>
+    <!-- Logo image shown if provided -->
+    <!-- https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:R000.png/tournaments/logos/R480.png -->
+    <span class="tournament-name">Cobh GC — Cobh Truist Championship 2026</span>
+  </header>
+
+  <nav class="nav-bar">
+    <a href="index.html" class="active">🏠 Home</a>
+    <a href="leaderboard.html">📊 Leaderboard</a>
+    <a href="picks.html">✏️ Enter Picks</a>
+    <a href="qr.html">📲 QR Poster</a>
+  </nav>
+
+  <main class="container">
+
+    <!-- Hero card -->
+    <div class="card" style="text-align:center;padding:32px 20px">
+      <h1 style="color:var(--accent);font-size:clamp(1.5rem,4vw,2.2rem);margin-bottom:8px">
+        ⛳ Cobh GC — Cobh Truist Championship 2026
+      </h1>
+      <p style="color:var(--muted);font-size:clamp(.9rem,2.5vw,1.1rem);margin-bottom:20px">
+        Golf Sweepstakes — Pick 2 from each bracket and follow the action live.
+      </p>
+      <span id="status-badge" class="badge badge-live" style="font-size:.85rem">LIVE</span>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stat-row">
+      <div class="stat">
+        <div class="num" id="stat-entries">—</div>
+        <div class="lbl">Entries</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-leader">—</div>
+        <div class="lbl">Leader</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-score">—</div>
+        <div class="lbl">Score</div>
+      </div>
+    </div>
+
+    <!-- Mini leaderboard -->
+    <div class="card">
+      <h2>📊 Live Top 10</h2>
+      <div class="refresh-bar">
+        <span><span class="live-dot"></span>Auto-updating</span>
+        <span id="lb-updated" style="color:var(--muted)">Loading…</span>
+      </div>
+      <div class="lb-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="rank">#</th>
+              <th>Name</th>
+              <th>Score</th>
+              <th>↕</th>
+              <th>B1-1</th><th>B1-2</th>
+              <th>B2-1</th><th>B2-2</th>
+              <th class="hide-sm">B3-1</th><th class="hide-sm">B3-2</th>
+              <th class="hide-sm">B4-1</th><th class="hide-sm">B4-2</th>
+            </tr>
+          </thead>
+          <tbody id="lb-body">
+            <tr>
+              <td colspan="12" style="text-align:center;color:var(--muted);padding:28px">
+                Loading leaderboard…
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <a href="leaderboard.html" class="btn btn-teal" style="margin-top:16px">
+        View Full Leaderboard →
+      </a>
+    </div>
+
+    <!-- CTA cards -->
+    <div class="admin-menu">
+      <a href="picks.html" class="menu-btn">
+        <div class="icon">✏️</div>
+        <div class="title">Enter Picks</div>
+        <div class="desc">Pick 2 golfers from each bracket before entries close.</div>
+      </a>
+      <a href="leaderboard.html" class="menu-btn">
+        <div class="icon">📊</div>
+        <div class="title">Full Leaderboard</div>
+        <div class="desc">See all standings and head-to-head picks.</div>
+      </a>
+    </div>
+
+    <!-- Prize -->
+    <div class="card" style="text-align:center">
+      <h2 style="justify-content:center">🏆 Prize</h2>
+      <p style="font-size:1.3rem;color:var(--accent);font-weight:700" data-prize>TBA</p>
+      <p style="color:var(--muted);font-size:.82rem;margin-top:8px">
+        Organised by Cobh GC. 18+ only. No purchase from SnipeGolf.
+      </p>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>⛳ SnipeGolf Golf Sweepstakes Platform</p>
+    <p>
+      <a href="terms.html">Terms &amp; Conditions</a> &nbsp;|&nbsp;
+      <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+      <span>18+ Responsible Gambling</span>
+    </p>
+    <p style="margin-top:4px;font-size:.72rem">
+      Data Controller: Cobh GC. Processor: SnipeGolf. Retention: season + 30 days.
+    </p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
