@@ -1,0 +1,395 @@
+/* SnipeGolf League Frontend — style.css
+   Template variables are substituted by Apps Script on provisioning:
+   {{ACCENT_COLOR}} {{BG_COLOR}} — currently hardcoded to SnipeGolf palette
+   Mobile-first: 16px inputs (no iOS zoom), 48px touch targets, sticky header
+*/
+
+:root {
+  --bg:      #0f0f1a;
+  --card:    #1a1a2e;
+  --accent:  #e8b04b;
+  --accent2: #4ecdc4;
+  --text:    #f0f0f0;
+  --muted:   #7a8394;
+  --green:   #27ae60;
+  --red:     #e74c3c;
+  --border:  #2a2a3e;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+body {
+  background:  var(--bg);
+  color:       var(--text);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size:   15px;
+  line-height: 1.55;
+  min-height:  100vh;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Sticky Header ───────────────────────────────────────────────────────── */
+header {
+  position:     sticky;
+  top:          0;
+  z-index:      100;
+  background:   var(--card);
+  border-bottom: 2px solid var(--accent);
+  padding:      12px 20px;
+  display:      flex;
+  align-items:  center;
+  gap:          12px;
+  flex-wrap:    wrap;
+}
+
+.logo-link {
+  color:           var(--accent);
+  font-size:       1.2rem;
+  font-weight:     700;
+  letter-spacing:  0.5px;
+  text-decoration: none;
+  white-space:     nowrap;
+}
+
+header .league-logo {
+  height:        36px;
+  width:         auto;
+  border-radius: 4px;
+  flex-shrink:   0;
+}
+
+header .tournament-name {
+  font-size:      0.82rem;
+  color:          var(--muted);
+  margin-left:    auto;
+  white-space:    nowrap;
+  overflow:       hidden;
+  text-overflow:  ellipsis;
+  max-width:      44vw;
+}
+
+/* ── Navigation bar ──────────────────────────────────────────────────────── */
+.nav-bar {
+  background:  #13132a;
+  border-bottom: 1px solid var(--border);
+  padding:     0 20px;
+  display:     flex;
+  gap:         4px;
+  overflow-x:  auto;
+  scrollbar-width: none;
+}
+.nav-bar::-webkit-scrollbar { display: none; }
+.nav-bar a {
+  padding:         11px 16px;
+  font-size:       0.84rem;
+  color:           var(--muted);
+  white-space:     nowrap;
+  border-bottom:   2px solid transparent;
+  transition:      color .18s, border-color .18s;
+  text-decoration: none;
+}
+.nav-bar a.active,
+.nav-bar a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.container { max-width: 900px; margin: 0 auto; padding: 20px 16px; }
+
+/* ── Card ────────────────────────────────────────────────────────────────── */
+.card {
+  background:    var(--card);
+  border-radius: 10px;
+  padding:       22px 20px;
+  margin-bottom: 20px;
+  border:        1px solid var(--border);
+}
+.card h2 {
+  color:         var(--accent);
+  font-size:     1.2rem;
+  margin-bottom: 16px;
+  display:       flex;
+  align-items:   center;
+  gap:           8px;
+}
+.card h3 {
+  color:       var(--accent2);
+  font-size:   0.95rem;
+  margin:      20px 0 10px;
+}
+
+/* ── Stats row ───────────────────────────────────────────────────────────── */
+.stat-row {
+  display:               grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:                   12px;
+  margin-bottom:         20px;
+}
+.stat {
+  background:    #13132a;
+  border:        1px solid var(--border);
+  border-radius: 8px;
+  padding:       16px 12px;
+  text-align:    center;
+}
+.stat .num {
+  font-size:   1.9rem;
+  font-weight: 700;
+  color:       var(--accent);
+  line-height: 1.1;
+}
+.stat .lbl {
+  font-size:      0.72rem;
+  color:          var(--muted);
+  margin-top:     5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Forms & Inputs ──────────────────────────────────────────────────────── */
+/* CRITICAL: 16px font-size on inputs prevents iOS auto-zoom on focus */
+label {
+  display:        block;
+  color:          var(--muted);
+  font-size:      0.78rem;
+  margin-bottom:  4px;
+  margin-top:     16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+input, select, textarea {
+  width:            100%;
+  background:       #0a0a14;
+  border:           1.5px solid var(--border);
+  color:            var(--text);
+  padding:          12px 14px;
+  border-radius:    7px;
+  font-size:        16px;   /* NO ZOOM ON IOS */
+  min-height:       48px;   /* 48px min tap target */
+  -webkit-appearance: none;
+  appearance:       none;
+  transition:       border-color .18s;
+  font-family:      inherit;
+}
+input:focus, select:focus, textarea:focus {
+  outline:      none;
+  border-color: var(--accent);
+  box-shadow:   0 0 0 3px rgba(232,176,75,.12);
+}
+
+.input-row {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   14px;
+}
+.pick-grid {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   10px;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+  display:         block;
+  width:           100%;
+  background:      var(--accent);
+  color:           #0a0a14;
+  font-weight:     700;
+  padding:         15px 24px;
+  border:          none;
+  border-radius:   8px;
+  cursor:          pointer;
+  font-size:       1rem;
+  margin-top:      18px;
+  letter-spacing:  0.3px;
+  transition:      background .18s, transform .1s;
+  text-align:      center;
+  text-decoration: none;
+  min-height:      52px;
+  -webkit-appearance: none;
+  font-family:     inherit;
+}
+.btn:hover   { background: #d4a043; transform: translateY(-1px); }
+.btn:active  { transform: translateY(0); }
+.btn-teal    { background: var(--accent2); color: #0a0a14; }
+.btn-teal:hover { background: #3ab5ad; }
+.btn-outline {
+  background: transparent;
+  border:     2px solid var(--accent);
+  color:      var(--accent);
+  width:      auto;
+  padding:    10px 20px;
+  margin-top: 0;
+  min-height: 44px;
+}
+.btn-danger  { background: var(--red); color: #fff; }
+.btn-danger:hover { background: #c0392b; }
+.btn-sm { padding: 9px 16px; font-size: 0.82rem; width: auto; margin-top: 0; min-height: 40px; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+/* ── Alerts / Banners ────────────────────────────────────────────────────── */
+.msg-ok   { background: #0d2218; border: 1px solid var(--green);   color: var(--green);   padding: 14px 16px; border-radius: 8px; margin-bottom: 18px; font-size: .9rem; line-height: 1.5; }
+.msg-err  { background: #2a0d0d; border: 1px solid var(--red);     color: var(--red);     padding: 14px 16px; border-radius: 8px; margin-bottom: 18px; font-size: .9rem; line-height: 1.5; }
+.msg-info { background: #0d1a2a; border: 1px solid var(--accent2); color: var(--accent2); padding: 14px 16px; border-radius: 8px; margin-bottom: 18px; font-size: .9rem; }
+.msg-warn { background: #2a1f05; border: 1px solid var(--accent);  color: var(--accent);  padding: 14px 16px; border-radius: 8px; margin-bottom: 18px; font-size: .9rem; }
+
+/* ── Leaderboard Table ───────────────────────────────────────────────────── */
+.lb-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table    { width: 100%; border-collapse: collapse; font-size: .86rem; }
+thead tr { background: #12192e; color: var(--accent); font-size: .71rem; text-transform: uppercase; letter-spacing: .6px; }
+th, td   { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+tbody tr:hover { background: #1d1d35; }
+tbody tr:last-child td { border-bottom: none; }
+
+.rank      { font-weight: 700; color: var(--accent); text-align: center; width: 42px; }
+.move-up   { color: var(--green); font-size: .75rem; }
+.move-down { color: var(--red);   font-size: .75rem; }
+.move-same { color: var(--muted); font-size: .75rem; }
+.medal-1   { color: #ffd700; font-weight: 700; }
+.medal-2   { color: #c0c0c0; font-weight: 700; }
+.medal-3   { color: #cd7f32; font-weight: 700; }
+
+/* ── Badges ──────────────────────────────────────────────────────────────── */
+.badge         { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: .73rem; font-weight: 600; }
+.badge-live    { background: #0d2218; color: var(--green); }
+.badge-locked  { background: #2a1f05; color: var(--accent); }
+.badge-closed  { background: #1a1a1a; color: var(--muted); }
+
+/* ── GDPR Consent box ────────────────────────────────────────────────────── */
+.consent-box {
+  display:       flex;
+  align-items:   flex-start;
+  gap:           10px;
+  margin-top:    18px;
+  padding:       14px 16px;
+  background:    #13132a;
+  border-radius: 7px;
+  border:        1px solid var(--border);
+}
+.consent-box input[type="checkbox"] {
+  width:      20px;
+  min-height: 20px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  cursor:     pointer;
+}
+.consent-box label {
+  font-size:      .82rem;
+  color:          var(--muted);
+  margin:         0;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height:    1.5;
+  cursor:         pointer;
+}
+
+/* ── Refresh bar ─────────────────────────────────────────────────────────── */
+.refresh-bar {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+  margin-bottom:   14px;
+  font-size:       .8rem;
+  color:           var(--muted);
+}
+
+/* ── Live indicator ──────────────────────────────────────────────────────── */
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+.live-dot {
+  display:       inline-block;
+  width:         7px;
+  height:        7px;
+  background:    var(--green);
+  border-radius: 50%;
+  margin-right:  5px;
+  animation:     pulse 1.6s ease-in-out infinite;
+}
+
+/* ── Admin menu grid ─────────────────────────────────────────────────────── */
+.admin-menu {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   12px;
+  margin-top:            10px;
+}
+.menu-btn {
+  background:      var(--card);
+  border:          1.5px solid var(--border);
+  color:           var(--text);
+  padding:         18px 16px;
+  border-radius:   8px;
+  cursor:          pointer;
+  text-align:      left;
+  transition:      border-color .18s;
+  text-decoration: none;
+  display:         block;
+  min-height:      90px;
+}
+.menu-btn:hover    { border-color: var(--accent); text-decoration: none; }
+.menu-btn .icon    { font-size: 1.5rem; margin-bottom: 8px; }
+.menu-btn .title   { font-weight: 600; color: var(--accent); font-size: .92rem; }
+.menu-btn .desc    { color: var(--muted); font-size: .76rem; margin-top: 4px; line-height: 1.4; }
+
+/* ── QR Page ─────────────────────────────────────────────────────────────── */
+.qr-wrap {
+  text-align:  center;
+  padding:     40px 20px;
+}
+.qr-wrap h1     { font-size: clamp(1.4rem, 4vw, 2.4rem); color: var(--accent); margin-bottom: 10px; }
+.qr-wrap p      { color: var(--muted); margin-bottom: 24px; font-size: clamp(.9rem, 2.5vw, 1.1rem); }
+.qr-wrap canvas,
+.qr-wrap img    { max-width: min(320px, 80vw); margin: 0 auto; display: block; }
+.qr-code-box    { background: #fff; padding: 16px; border-radius: 10px; display: inline-block; margin: 20px auto; }
+
+/* ── Section divider ─────────────────────────────────────────────────────── */
+.section-divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.footer {
+  text-align:  center;
+  margin-top:  40px;
+  padding:     20px 16px;
+  font-size:   .76rem;
+  color:       var(--muted);
+  border-top:  1px solid var(--border);
+}
+.footer p    { margin-bottom: 6px; }
+.footer a    { color: var(--muted); }
+.footer a:hover { color: var(--accent); }
+
+/* ── Skeleton loader ─────────────────────────────────────────────────────── */
+@keyframes shimmer { from { background-position: -600px 0; } to { background-position: 600px 0; } }
+.skeleton {
+  background:           linear-gradient(90deg, var(--card) 25%, #22223a 50%, var(--card) 75%);
+  background-size:      600px 100%;
+  animation:            shimmer 1.4s infinite;
+  border-radius:        5px;
+  height:               18px;
+  margin-bottom:        8px;
+}
+
+/* ── Mobile breakpoint ───────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .input-row,
+  .pick-grid,
+  .admin-menu,
+  .stat-row        { grid-template-columns: 1fr !important; }
+  th, td           { padding: 8px 7px; font-size: .75rem; }
+  header .tournament-name { display: none; }
+  .card            { padding: 14px 12px; }
+  .container       { padding: 12px 8px; }
+  .btn             { font-size: .95rem; padding: 14px 18px; }
+  .stat .num       { font-size: 1.5rem; }
+  input, select    { font-size: 16px !important; } /* iOS no-zoom — MUST be 16px */
+  .nav-bar a       { padding: 10px 12px; font-size: .8rem; }
+}
+
+/* ── Print styles (for QR poster) ───────────────────────────────────────── */
+@media print {
+  header, .nav-bar, .footer { display: none; }
+  body   { background: #fff; color: #000; }
+  .card  { border: none; padding: 0; }
+  .qr-wrap h1 { color: #1f5a3a; }
+}
