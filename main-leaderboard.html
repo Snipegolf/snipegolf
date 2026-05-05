@@ -1,338 +1,97 @@
 <!DOCTYPE html>
+<!--
+  SnipeGolf — Cross-league public leaderboard (v2)
+  Pulls live data from ESPN's public golf API.
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-  <meta name="description" content="SnipeGolf — Live golf sweep leaderboards across all active leagues.">
-  <title>Live Leaderboards | SnipeGolf</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg:      #0f0f1a;
-      --card:    #1a1a2e;
-      --accent:  #e8b04b;
-      --accent2: #4ecdc4;
-      --text:    #f0f0f0;
-      --muted:   #7a8394;
-      --green:   #27ae60;
-      --red:     #e74c3c;
-      --border:  #2a2a3e;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background:  var(--bg);
-      color:       var(--text);
-      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-      font-size:   15px;
-      line-height: 1.55;
-      min-height:  100vh;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Live Leaderboard — SnipeGolf</title>
 
-    header {
-      position:     sticky;
-      top:          0;
-      z-index:      100;
-      background:   rgba(15,15,26,.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      padding:      12px 24px;
-      display:      flex;
-      align-items:  center;
-      gap:          16px;
-    }
-    .logo-link {
-      font-size:   1.2rem;
-      font-weight: 700;
-      color:       var(--accent);
-      letter-spacing: .5px;
-      text-decoration: none;
-    }
-    header .subtitle {
-      font-size:   .84rem;
-      color:       var(--muted);
-    }
-    header .back {
-      margin-left:  auto;
-      font-size:    .82rem;
-      color:        var(--muted);
-    }
-    header .back:hover { color: var(--accent); text-decoration: none; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
 
-    .container { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
-
-    .page-title {
-      display:       flex;
-      align-items:   center;
-      gap:           10px;
-      margin-bottom: 8px;
-    }
-    .page-title h1 {
-      font-size:   clamp(1.2rem, 3vw, 1.7rem);
-      font-weight: 700;
-      color:       var(--text);
-    }
-
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
-    .live-dot {
-      display:       inline-block;
-      width:         9px;
-      height:        9px;
-      background:    var(--green);
-      border-radius: 50%;
-      animation:     pulse 1.6s infinite;
-    }
-
-    .refresh-bar {
-      display:         flex;
-      justify-content: space-between;
-      align-items:     center;
-      margin-bottom:   20px;
-      font-size:       .8rem;
-      color:           var(--muted);
-    }
-
-    .league-section {
-      background:    var(--card);
-      border:        1px solid var(--border);
-      border-radius: 10px;
-      padding:       20px 18px;
-      margin-bottom: 24px;
-    }
-    .league-header {
-      display:         flex;
-      align-items:     center;
-      justify-content: space-between;
-      flex-wrap:       wrap;
-      gap:             10px;
-      margin-bottom:   14px;
-    }
-    .league-header .club-name {
-      font-size:   1.05rem;
-      font-weight: 700;
-      color:       var(--accent);
-    }
-    .league-header .tournament {
-      font-size: .82rem;
-      color:     var(--muted);
-    }
-    .league-header .full-link {
-      font-size:  .8rem;
-      color:      var(--accent2);
-      font-weight: 500;
-    }
-
-    .lb-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table    { width: 100%; border-collapse: collapse; font-size: .84rem; }
-    thead tr { background: #12192e; color: var(--accent); font-size: .7rem; text-transform: uppercase; letter-spacing: .6px; }
-    th, td   { padding: 9px 11px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
-    tbody tr:hover { background: #1d1d35; }
-    tbody tr:last-child td { border-bottom: none; }
-    .rank    { font-weight: 700; color: var(--accent); text-align: center; width: 38px; }
-    .move-up   { color: var(--green); font-size: .73rem; }
-    .move-down { color: var(--red);   font-size: .73rem; }
-    .medal-1   { color: #ffd700; font-weight: 700; }
-    .medal-2   { color: #c0c0c0; font-weight: 700; }
-    .medal-3   { color: #cd7f32; font-weight: 700; }
-
-    .no-leagues {
-      text-align:  center;
-      padding:     60px 20px;
-      color:       var(--muted);
-    }
-    .no-leagues h2 { font-size: 1.1rem; margin-bottom: 8px; }
-
-    .skeleton {
-      background:      linear-gradient(90deg, var(--card) 25%, #22223a 50%, var(--card) 75%);
-      background-size: 600px 100%;
-      animation:       shimmer 1.4s infinite;
-      border-radius:   4px;
-      height:          16px;
-      margin-bottom:   6px;
-    }
-    @keyframes shimmer { from { background-position: -600px 0; } to { background-position: 600px 0; } }
-
-    footer {
-      text-align:  center;
-      padding:     30px 20px;
-      font-size:   .75rem;
-      color:       var(--muted);
-      border-top:  1px solid var(--border);
-    }
-    footer a { color: var(--muted); }
-    footer a:hover { color: var(--accent); text-decoration: none; }
-
-    @media (max-width: 600px) {
-      th, td      { padding: 7px 7px; font-size: .72rem; }
-      .container  { padding: 14px 10px; }
-      .hide-sm    { display: none; }
-    }
-  </style>
+  <link rel="stylesheet" href="leagues/_template/css/style.css">
 </head>
-<body>
+<body data-page="main-leaderboard">
 
-  <header>
-    <a href="index.html" class="logo-link">⛳ SnipeGolf</a>
-    <span class="subtitle">Live Leaderboards</span>
-    <a href="index.html" class="back">← Home</a>
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a class="brand" href="index.html" aria-label="SnipeGolf home">
+        <span class="brand__mark" aria-hidden="true">S</span>
+        <span class="serif">SNIPEGOLF</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="main-leaderboard.html" class="active">Leaderboard</a>
+        <a href="index.html#features">Features</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="container">
+  <main>
+    <section class="section">
+      <div class="container">
 
-    <div class="page-title">
-      <span class="live-dot"></span>
-      <h1>All Active Leagues</h1>
-    </div>
+        <div class="mb-6">
+          <span class="eyebrow">Tournament leaderboard</span>
+          <h1 id="tournament-name" style="margin-top:8px">Loading tournament…</h1>
+          <p class="lead" style="margin-top:8px">
+            <span id="course-name">—</span>
+            &nbsp;·&nbsp;
+            <span id="round-status">—</span>
+          </p>
+        </div>
 
-    <div class="refresh-bar">
-      <span>Auto-refreshes every 60 seconds</span>
-      <span id="last-updated">Loading…</span>
-    </div>
+        <div class="card">
+          <div class="refresh-bar">
+            <span><span class="live-dot"></span><span id="last-updated">Loading live data…</span></span>
+            <span id="refresh-counter" class="text-muted">Refresh in 60s</span>
+          </div>
 
-    <!-- League sections rendered by JS -->
-    <div id="main-content">
-      <!-- Skeleton loaders -->
-      <div class="league-section">
-        <div class="skeleton" style="width:40%;margin-bottom:12px"></div>
-        <div class="skeleton" style="width:25%;margin-bottom:20px"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton" style="width:85%"></div>
+          <div class="lb-wrap" style="max-height:75vh">
+            <table class="lb" aria-label="Live tournament leaderboard">
+              <thead>
+                <tr>
+                  <th class="col-rank">Pos</th>
+                  <th>Player</th>
+                  <th class="hide-sm">Country</th>
+                  <th>Score</th>
+                  <th class="hide-sm">Today</th>
+                  <th>Thru</th>
+                </tr>
+              </thead>
+              <tbody id="scoreboard-body">
+                <tr><td colspan="6" style="padding:32px;text-align:center;color:var(--muted)">
+                  <span class="skeleton" style="width:40%"></span>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="text-muted mt-4" style="font-size:.82rem">
+          Data from ESPN's public golf scoreboard, refreshed every minute while this tab is visible. Times shown in your local timezone.
+        </p>
+
       </div>
-      <div class="league-section">
-        <div class="skeleton" style="width:38%;margin-bottom:12px"></div>
-        <div class="skeleton" style="width:22%;margin-bottom:20px"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton" style="width:70%"></div>
-      </div>
-    </div>
-
+    </section>
   </main>
 
-  <footer>
-    <p>⛳ SnipeGolf Golf Sweepstakes Platform</p>
-    <p>
-      <a href="index.html">Home</a> &nbsp;·&nbsp;
-      <a href="leagues/_template/terms.html">Terms &amp; Conditions</a> &nbsp;·&nbsp;
-      <a href="leagues/_template/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
-      <span>18+ Responsible Gambling</span>
-    </p>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__bottom" style="border:none;padding:0">
+        <span>© <span id="year"></span> SnipeGolf</span>
+        <span><a href="leagues/_template/terms.html">Terms</a> · <a href="leagues/_template/privacy.html">Privacy</a></span>
+      </div>
+    </div>
   </footer>
 
-  <script>
-  // Replace https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec with your deployed Apps Script URL after deploy.
-  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
-  var REFRESH  = 60000;
-
-  function fmt(n) {
-    var num = Number(n);
-    if (isNaN(num)) return String(n || '—');
-    if (num === 0) return 'E';
-    return num > 0 ? '+' + num : String(num);
-  }
-  function esc(s) {
-    return String(s || '')
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  function renderLeague(league, apiBase) {
-    var slug    = league.slug || '';
-    var entries = league.entries || [];
-    var lbUrl   = apiBase + '?league=' + encodeURIComponent(slug) + '&mode=leaderboard';
-
-    var html = '<div class="league-section">';
-    html += '<div class="league-header">';
-    html += '<div><div class="club-name">' + esc(league.clubName || '') + '</div>';
-    html += '<div class="tournament">' + esc(league.tournament || '') + '</div></div>';
-    html += '<a href="' + lbUrl + '" class="full-link">Full leaderboard →</a>';
-    html += '</div>';
-
-    if (!entries.length) {
-      html += '<p style="color:var(--muted);font-size:.82rem;padding:10px 0">No entries yet.</p>';
-    } else {
-      html += '<div class="lb-wrap"><table><thead><tr>';
-      html += '<th class="rank">#</th><th>Name</th><th>Score</th><th>↕</th>';
-      html += '<th>B1-1</th><th>B1-2</th><th class="hide-sm">B2-1</th><th class="hide-sm">B2-2</th>';
-      html += '</tr></thead><tbody>';
-
-      entries.forEach(function (r) {
-        var rank    = Number(r.rank) || 0;
-        var cls     = rank === 1 ? 'medal-1' : rank === 2 ? 'medal-2' : rank === 3 ? 'medal-3' : '';
-        var mv      = String(r.move || '');
-        var mvCls   = mv.indexOf('\u25b2') >= 0 ? 'move-up' : mv.indexOf('\u25bc') >= 0 ? 'move-down' : '';
-        var picks   = Array.isArray(r.picks) ? r.picks : [];
-
-        html += '<tr>';
-        html += '<td class="rank ' + cls + '">' + rank + '</td>';
-        html += '<td>' + esc(r.name) + '</td>';
-        html += '<td class="' + cls + '">' + fmt(r.total) + '</td>';
-        html += '<td class="' + mvCls + '">' + esc(mv) + '</td>';
-        html += '<td>' + esc(picks[0] || '') + '</td>';
-        html += '<td>' + esc(picks[1] || '') + '</td>';
-        html += '<td class="hide-sm">' + esc(picks[2] || '') + '</td>';
-        html += '<td class="hide-sm">' + esc(picks[3] || '') + '</td>';
-        html += '</tr>';
-      });
-
-      html += '</tbody></table></div>';
-    }
-    html += '</div>';
-    return html;
-  }
-
-  function load() {
-    if (!API_BASE || API_BASE === 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec') {
-      document.getElementById('main-content').innerHTML =
-        '<div class="no-leagues"><h2>⚙️ Setup Required</h2>' +
-        '<p>Update the API_BASE variable in main-leaderboard.html with your Apps Script URL.</p></div>';
-      return;
-    }
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', API_BASE + '?mode=mainleaderboard&format=json', true);
-    xhr.onload = function () {
-      document.getElementById('last-updated').textContent =
-        'Updated ' + new Date().toLocaleTimeString();
-
-      if (xhr.status !== 200) {
-        document.getElementById('main-content').innerHTML =
-          '<div class="no-leagues"><h2>Error loading data (HTTP ' + xhr.status + ')</h2></div>';
-        return;
-      }
-
-      var d;
-      try { d = JSON.parse(xhr.responseText); } catch (e) {
-        document.getElementById('main-content').innerHTML =
-          '<div class="no-leagues"><h2>Error parsing response</h2></div>';
-        return;
-      }
-
-      var leagues = d.leagues || [];
-      if (!leagues.length) {
-        document.getElementById('main-content').innerHTML =
-          '<div class="no-leagues">' +
-          '<h2>⛳ No active leagues right now</h2>' +
-          '<p>Leagues go live during tournament week. Check back Thursday!</p>' +
-          '</div>';
-        return;
-      }
-
-      var html = '';
-      leagues.forEach(function (l) { html += renderLeague(l, API_BASE); });
-      document.getElementById('main-content').innerHTML = html;
-    };
-    xhr.onerror = function () {
-      document.getElementById('main-content').innerHTML =
-        '<div class="no-leagues"><h2>Network error — could not load leaderboards</h2></div>';
-    };
-    xhr.send();
-  }
-
-  load();
-  setInterval(load, REFRESH);
-  </script>
-
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="leagues/_template/js/themes.js"></script>
+  <script src="leagues/_template/js/app.js"></script>
 </body>
 </html>
