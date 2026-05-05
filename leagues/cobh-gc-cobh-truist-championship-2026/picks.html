@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Enter Picks — Cobh GC — Cobh Truist Championship 2026 | SnipeGolf</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-page="picks">
+
+  <header>
+    <a href="index.html" class="logo-link">⛳ SnipeGolf</a>
+    <span class="tournament-name">Cobh GC — Cobh Truist Championship 2026</span>
+  </header>
+
+  <nav class="nav-bar">
+    <a href="index.html">🏠 Home</a>
+    <a href="leaderboard.html">📊 Leaderboard</a>
+    <a href="picks.html" class="active">✏️ Enter Picks</a>
+  </nav>
+
+  <main class="container">
+
+    <!--
+      This page is a static shell. The actual form is served dynamically
+      by the Apps Script web app via:
+        https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=cobh-gc-cobh-truist-championship-2026&mode=picks&pid=YOUR_ID
+
+      This static page redirects or embeds the form via iframe for clubs
+      that prefer a pure GitHub Pages URL. For most use cases, share the
+      Apps Script URL directly.
+
+      To redirect players to the live form, uncomment the redirect below.
+    -->
+
+    <div class="card" id="redirect-card">
+      <h2>✏️ Enter Your Picks</h2>
+      <p style="color:var(--muted);margin-bottom:20px">
+        You'll need a unique picks link from your club admin to enter.
+        If you have one, click the button below or open the link from your email/WhatsApp.
+      </p>
+      <div class="msg-info">
+        📲 Ask <strong>Cobh GC</strong> for your personal picks link.
+        Your admin can send it via email or WhatsApp from their admin dashboard.
+      </div>
+      <a href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=cobh-gc-cobh-truist-championship-2026&mode=picks"
+         class="btn" style="margin-top:16px">
+        Open Picks Form →
+      </a>
+    </div>
+
+    <!-- Picks form is embedded via the Apps Script web app URL -->
+    <!-- The PID (player ID) is appended by the admin when sending the link -->
+
+    <div class="card" style="margin-top:20px">
+      <h3>How It Works</h3>
+      <ol style="color:var(--muted);padding-left:20px;line-height:2.2;font-size:.9rem">
+        <li>Pick <strong style="color:var(--text)">2 golfers from each bracket</strong> (8 picks total)</li>
+        <li>Enter your <strong style="color:var(--text)">tiebreaker</strong> — predict the winner's 72-hole score</li>
+        <li>Submit before the deadline</li>
+        <li>Follow the <a href="leaderboard.html">live leaderboard</a> during tournament play</li>
+      </ol>
+      <div style="margin-top:16px;padding:12px 14px;background:#13132a;border-radius:6px;border:1px solid var(--border)">
+        <p style="font-size:.8rem;color:var(--muted)">
+          <strong style="color:var(--accent)">Prize:</strong> <span data-prize>TBA</span><br>
+          <strong style="color:var(--accent)">Organised by:</strong> Cobh GC &nbsp;&nbsp;
+          <strong style="color:var(--accent)">18+</strong> only
+        </p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>⛳ SnipeGolf Golf Sweepstakes Platform</p>
+    <p>
+      <a href="terms.html">Terms &amp; Conditions</a> &nbsp;|&nbsp;
+      <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+      <span>18+ Responsible Gambling</span>
+    </p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
