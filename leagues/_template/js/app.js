@@ -422,18 +422,30 @@
     if (!wrap) return;
     var url = wrap.getAttribute('data-url') || window.location.href;
 
-    if (typeof QRCode !== 'undefined') {
-      new QRCode(wrap, {
-        text: url, width: 360, height: 360,
-        colorDark: '#000000', colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
-      });
-    } else {
+    function fallbackImg(){
       var img = document.createElement('img');
-      img.src = 'https://chart.googleapis.com/chart?chs=360x360&cht=qr&chl=' + encodeURIComponent(url) + '&choe=UTF-8';
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&ecc=H&data=' + encodeURIComponent(url);
       img.alt = 'Picks QR code';
       img.width = 360; img.height = 360;
+      img.onerror = function(){
+        // Last-resort: Google Charts (may be deprecated but worth trying)
+        img.onerror = null;
+        img.src = 'https://quickchart.io/qr?text=' + encodeURIComponent(url) + '&size=360';
+      };
+      wrap.innerHTML = '';
       wrap.appendChild(img);
+    }
+    if (typeof QRCode !== 'undefined') {
+      try {
+        wrap.innerHTML = '';
+        new QRCode(wrap, {
+          text: url, width: 360, height: 360,
+          colorDark: '#000000', colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } catch(e){ fallbackImg(); }
+    } else {
+      fallbackImg();
     }
     var lbl = $('#qr-url-label');
     if (lbl) lbl.textContent = url;
