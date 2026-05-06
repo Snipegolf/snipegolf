@@ -2,10 +2,8 @@
  * SnipeGolf — app.js (v3)
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
- * Template variables (substituted by Apps Script on provisioning):
- *   https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec           Apps Script web-app URL
- *   youghal-gc-truist-championship-2026               league group code (gc param)
- *   401811945            ESPN tournament event id (falls back to body[data-espn-id])
+ * League: youghal-gc-truist-championship-2026
+ * API: https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBlOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec
  *
  * Page router: <body data-page="leaderboard|picks|admin|index|qr|main-leaderboard|landing|terms|privacy">
  */
@@ -13,10 +11,9 @@
 (function () {
   'use strict';
 
-  var API_BASE = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBlOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
   var SLUG     = 'youghal-gc-truist-championship-2026';
-  var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
-                 (!/\{\{/.test('401811945') ? '401811945' : '401580354');
+  var ESPN_ID  = document.body.getAttribute('data-espn-id') || '401811945';
 
   var REFRESH_MS  = 60000;
   var FAIL_TEXT   = 'Connection lost — retrying…';
@@ -42,8 +39,7 @@
 
   function apiUrl(mode, extra) {
     var base = API_BASE;
-    if (!base || /\{\{|^$/.test(base)) return null;
-    // Support both old ?league=SLUG&mode=X and new ?mode=X&gc=SLUG patterns
+    if (!base || /\{\{|^$/.test(base) || base.indexOf('YOUR_DEPLOYMENT') >= 0) return null;
     var url = base + '?mode=' + mode + '&gc=' + encodeURIComponent(SLUG) + '&format=json';
     if (extra) url += '&' + extra;
     return url;
@@ -142,7 +138,7 @@
     });
   }
 
-  /* ── Leaderboard ───────────────────────────────────────────────────── */
+  /* ── Leaderboard ──────────────────────────────────────────────────── */
 
   function startCountdown(el, ms) {
     if (!el) return;
@@ -168,7 +164,6 @@
     var cell = document.createElement('td');
     cell.colSpan = tr.children.length;
     var grid = '<div class="lb-detail-grid">';
-    // Support both 4-pick (legacy) and 8-pick bracket format
     var labels = picks.length > 4
       ? ['B1 Pick A','B1 Pick B','B2 Pick A','B2 Pick B','B3 Pick A','B3 Pick B','B4 Pick A','B4 Pick B']
       : ['Pick 1','Pick 2','Pick 3','Pick 4'];
@@ -218,7 +213,10 @@
       var medal  = rank === 1 ? 'medal-1' : rank === 2 ? 'medal-2' : rank === 3 ? 'medal-3' : '';
       var mv     = String(r.move || '');
       var mvCls  = mv.indexOf('\u25b2') >= 0 ? 'move-up' : mv.indexOf('\u25bc') >= 0 ? 'move-down' : 'move-same';
-      var picks  = Array.isArray(r.picks) ? r.picks : [];
+      var picks  = Array.isArray(r.picks) ? r.picks : [
+        r.b1pick1, r.b1pick2, r.b2pick1, r.b2pick2,
+        r.b3pick1, r.b3pick2, r.b4pick1, r.b4pick2
+      ].filter(Boolean);
       var best   = picks.length ? picks[0] : '';
       var worst  = picks.length ? picks[picks.length - 1] : '';
 
@@ -279,14 +277,12 @@
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Public main leaderboard (ESPN) ─────────────────────────────── */
+  /* ── Public main leaderboard (ESPN) ──────────────────── */
 
   function initMainLeaderboard() {
     var tbody = $('#scoreboard-body');
     if (!tbody) return;
-    var url = ESPN_ID
-      ? 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=' + encodeURIComponent(ESPN_ID)
-      : 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard';
+    var url = 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=' + encodeURIComponent(ESPN_ID);
 
     function load() {
       fetchJson(url, function (err, data) {
@@ -348,7 +344,7 @@
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Picks form ────────────────────────────────────────────────────── */
+  /* ── Picks form ──────────────────────────────────────────────────── */
 
   function initPicksForm() {
     var form = $('#picks-form');
@@ -381,7 +377,6 @@
         seen[values[j]] = true;
       }
 
-      // Tiebreaker — score to par (e.g. -10), NOT 72-hole stroke total
       var tb = form.querySelector('input[name="tiebreaker"]');
       if (tb) {
         var n = Number(tb.value);
@@ -416,7 +411,7 @@
     div.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  /* ── QR ────────────────────────────────────────────────────────────── */
+  /* ── QR ─────────────────────────────────────────────────────── */
 
   function initQr() {
     var wrap = $('#qr-target');
@@ -451,7 +446,7 @@
     if (lbl) lbl.textContent = url;
   }
 
-  /* ── Config / branding ─────────────────────────────────────────────── */
+  /* ── Config / branding ───────────────────────────────────────────────── */
 
   function loadConfig() {
     var url = apiUrl('config');
@@ -472,27 +467,7 @@
     });
   }
 
-  /* ── Live ticker ─────────────────────────────────────────────────── */
-
-  function initTicker() {
-    var ticker = $('#live-ticker');
-    if (!ticker) return;
-    var clubs = [
-      { club: 'SAAS 10, Dublin',        leader: 'Rory McIlroy',    score: 'TBC' },
-      { club: 'Cobh GC',                leader: 'Scottie Scheffler',score: 'TBC' },
-      { club: 'Baydos, Cork',           leader: 'Collin Morikawa', score: 'TBC' },
-      { club: 'Royal County Down GC',   leader: 'Shane Lowry',     score: 'TBC' },
-      { club: 'Portmarnock GC',         leader: 'Jon Rahm',        score: 'TBC' }
-    ];
-    var html = '';
-    clubs.forEach(function (d) {
-      html += '<span class="ticker__pill"><span class="live-dot"></span>' +
-              esc(d.club) + ' · ' + esc(d.leader) + ' <strong>' + esc(d.score) + '</strong></span>';
-    });
-    ticker.innerHTML = html;
-  }
-
-  /* ── Page router ───────────────────────────────────────────────────── */
+  /* ── Page router ──────────────────────────────────────────────────── */
 
   function init() {
     initThemePicker();
@@ -504,7 +479,6 @@
       case 'qr':                initQr(); loadConfig(); break;
       case 'index':             initLeaderboard(); loadConfig(); break;
       case 'main-leaderboard':  initMainLeaderboard(); break;
-      case 'landing':           initTicker(); break;
       default: loadConfig();
     }
   }
