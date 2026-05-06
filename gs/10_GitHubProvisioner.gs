@@ -1,5 +1,5 @@
 // ============================================================
-// 10_GitHubProvisioner.gs  (v3 — Registry + Email + 7 files)
+// 10_GitHubProvisioner.gs  (v3.1 — reads WEB_APP_URL property)
 // Reads from Master Registry, generates entry code, pushes
 // 7 files to GitHub Pages, writes code back to registry,
 // and emails the club admin — all in one click.
@@ -166,10 +166,12 @@ function generateEntryCode_() {
   return code;
 }
 
-// ─── API BASE URL ──────────────────────────────────────────────────────────────
+// ─── API BASE URL — reads WEB_APP_URL (matches existing Script Properties) ────
 
 function getApiBase_() {
-  return PropertiesService.getScriptProperties().getProperty('API_BASE') ||
+  var props = PropertiesService.getScriptProperties();
+  return props.getProperty('WEB_APP_URL') ||
+         props.getProperty('API_BASE')    ||
          'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
 }
 
