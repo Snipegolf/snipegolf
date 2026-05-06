@@ -1,7 +1,8 @@
 /**
  * SnipeGolf — themes.js
- * 10 tournament-inspired colourways. Each theme defines CSS custom properties
- * that drive the entire visual system. Activated via <body data-theme="…">.
+ * 10 tournament-inspired colourways + 2 bonus themes.
+ * Each theme defines CSS custom properties that drive the entire visual system.
+ * Activated via <body data-theme="…">.
  *
  * Required vars per theme:
  *   --bg        page background
@@ -14,9 +15,6 @@
  *   --border    hairline divider
  *   --good      positive / movement up
  *   --bad       negative / movement down
- *
- * Each theme also declares whether it's `dark` or `light` so app.js can
- * pick a sensible status-bar / scrollbar treatment.
  */
 
 (function (global) {
@@ -39,6 +37,24 @@
         '--border': 'rgba(245,239,224,0.10)',
         '--good': '#7fc99a',
         '--bad': '#e08374'
+      }
+    },
+    {
+      id: 'oakmont',
+      name: 'Oakmont',
+      mode: 'dark',
+      desc: 'US Open — steel, white, navy',
+      tokens: {
+        '--bg': '#0d1520',
+        '--surface': '#162236',
+        '--surface-2': '#1e304d',
+        '--text': '#f0f4ff',
+        '--muted': '#8fa3c0',
+        '--accent': '#c8a84b',
+        '--accent-2': '#e8d080',
+        '--border': 'rgba(200,168,75,0.15)',
+        '--good': '#6dbf8a',
+        '--bad': '#e07060'
       }
     },
     {
@@ -202,6 +218,24 @@
         '--good': '#00ff87',
         '--bad': '#ff5a6b'
       }
+    },
+    {
+      id: 'shinnecock',
+      name: 'Shinnecock Hills',
+      mode: 'dark',
+      desc: 'Links brown, cream, sky',
+      tokens: {
+        '--bg': '#1a1208',
+        '--surface': '#2e2010',
+        '--surface-2': '#3d2e1a',
+        '--text': '#f5e8c8',
+        '--muted': '#b09a72',
+        '--accent': '#d4a843',
+        '--accent-2': '#eaccaa',
+        '--border': 'rgba(245,232,200,0.12)',
+        '--good': '#90c97a',
+        '--bad': '#d46a5a'
+      }
     }
   ];
 
@@ -250,7 +284,7 @@
     var stored = load();
     var theme = stored ? getById(stored) : null;
     if (!theme) {
-      // Per-league default: <meta name="default-theme" content="augusta">
+      // Per-league default: <meta name="default-theme" content="oakmont">
       var meta = document.querySelector('meta[name="default-theme"]');
       if (meta) {
         var leagueDefault = (meta.getAttribute('content') || '').trim();

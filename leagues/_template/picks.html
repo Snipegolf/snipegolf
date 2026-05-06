@@ -2,9 +2,8 @@
 <!--
   SnipeGolf — League picks entry (v2)
   Static shell. The Apps Script web app handles the actual form posting
-  via {{API_BASE}}?league={{SLUG}}&mode=picks (with optional pid).
-  This page provides the shell + redirect for users coming via QR / WhatsApp
-  who don't yet have a personal pid.
+  via ?mode=enter&gc=GROUPCODE
+  This page provides the branded shell + redirect for users coming via QR / WhatsApp.
 -->
 <html lang="en">
 <head>
@@ -61,25 +60,23 @@
         <header class="mb-6">
           <span class="eyebrow">Entry</span>
           <h1 style="margin-top:8px">Enter your picks</h1>
-          <p class="lead">Pick <strong>2 golfers from each of 4 brackets</strong>, add your tiebreaker, and submit before the deadline. Members enter via the personal link from your club admin.</p>
+          <p class="lead">Pick <strong>2 golfers from each of 4 brackets</strong>, add your tiebreaker (winner's score to par, e.g. -10), and submit before the deadline. Use the personal link from your pub admin.</p>
         </header>
 
-        <!-- If a personal pid is in the URL, redirect to the live form. -->
         <noscript>
           <div class="msg msg-warn">JavaScript is required to load the secure picks form. Use the link below.</div>
         </noscript>
 
         <div class="card mb-4">
           <h3 style="margin-bottom:var(--s-3)">Open the secure form</h3>
-          <p class="text-muted mb-4">Use the personal entry link your club sent you (email or WhatsApp) — it includes your unique ID. If you have it, you'll be redirected automatically. If not, ask your club admin.</p>
+          <p class="text-muted mb-4">Use the entry link your pub admin sent you (email or WhatsApp) — it includes your group code. If you don't have it yet, ask your admin.</p>
           <a class="btn btn--block btn--lg" id="form-link"
-             href="{{API_BASE}}?league={{SLUG}}&mode=picks">
+             href="{{API_BASE}}?mode=enter&gc={{SLUG}}">
             Open picks form →
           </a>
         </div>
 
-        <!-- Reference: visual scaffold of what the Apps Script form will render.
-             This is shown so a player understands the structure ahead of time. -->
+        <!-- Visual preview of what the Apps Script form renders -->
         <details class="card">
           <summary style="cursor:pointer;font-weight:600;font-family:var(--font-display);font-size:1.1rem">
             What the form looks like
@@ -109,7 +106,7 @@
 
             <div class="bracket mt-5">
               <div class="bracket__header">
-                <span class="bracket__title">Bracket 1 · Top ranked</span>
+                <span class="bracket__title">Bracket 1 · Top favourites</span>
                 <span class="bracket__hint">Pick 2</span>
               </div>
               <div class="input-row">
@@ -120,7 +117,7 @@
 
             <div class="bracket">
               <div class="bracket__header">
-                <span class="bracket__title">Bracket 2 · Mid-tier</span>
+                <span class="bracket__title">Bracket 2 · Contenders</span>
                 <span class="bracket__hint">Pick 2</span>
               </div>
               <div class="input-row">
@@ -152,8 +149,9 @@
             </div>
 
             <div class="mt-5" style="max-width:240px">
-              <label for="pf-tiebreaker">Tiebreaker · winner's 72-hole score</label>
-              <input id="pf-tiebreaker" name="tiebreaker" type="number" min="200" max="350" placeholder="e.g. 268" disabled>
+              <label for="pf-tiebreaker">Tiebreaker · winner's score to par</label>
+              <input id="pf-tiebreaker" name="tiebreaker" type="number" min="-40" max="40" placeholder="e.g. -10" disabled>
+              <p style="font-size:0.78rem;color:var(--muted);margin-top:6px">Enter the winner's final score relative to par (e.g. -10 means ten under par). Nearest prediction wins the tiebreaker; under beats over if equidistant.</p>
             </div>
 
             <div class="consent">

@@ -1,11 +1,11 @@
 /**
- * SnipeGolf — app.js (v2)
+ * SnipeGolf — app.js (v3)
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
  * Template variables (substituted by Apps Script on provisioning):
  *   {{API_BASE}}           Apps Script web-app URL
- *   {{SLUG}}               league slug
- *   {{ESPN_ID}}            ESPN tournament event id
+ *   {{SLUG}}               league group code (gc param)
+ *   {{ESPN_ID}}            ESPN tournament event id (falls back to body[data-espn-id])
  *
  * Page router: <body data-page="leaderboard|picks|admin|index|qr|main-leaderboard|landing|terms|privacy">
  */
@@ -15,7 +15,8 @@
 
   var API_BASE = '{{API_BASE}}';
   var SLUG     = '{{SLUG}}';
-  var ESPN_ID  = '{{ESPN_ID}}';
+  var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
+                 (!/\{\{/.test('{{ESPN_ID}}') ? '{{ESPN_ID}}' : '401580354');
 
   var REFRESH_MS  = 60000;
   var FAIL_TEXT   = 'Connection lost — retrying…';
@@ -42,7 +43,8 @@
   function apiUrl(mode, extra) {
     var base = API_BASE;
     if (!base || /\{\{|^$/.test(base)) return null;
-    var url = base + '?league=' + encodeURIComponent(SLUG) + '&mode=' + mode;
+    // Support both old ?league=SLUG&mode=X and new ?mode=X&gc=SLUG patterns
+    var url = base + '?mode=' + mode + '&gc=' + encodeURIComponent(SLUG) + '&format=json';
     if (extra) url += '&' + extra;
     return url;
   }
@@ -166,8 +168,12 @@
     var cell = document.createElement('td');
     cell.colSpan = tr.children.length;
     var grid = '<div class="lb-detail-grid">';
-    for (var i = 0; i < 8; i++) {
-      grid += '<div><span>Pick ' + (i + 1) + '</span><strong>' + esc(picks[i] || '—') + '</strong></div>';
+    // Support both 4-pick (legacy) and 8-pick bracket format
+    var labels = picks.length > 4
+      ? ['B1 Pick A','B1 Pick B','B2 Pick A','B2 Pick B','B3 Pick A','B3 Pick B','B4 Pick A','B4 Pick B']
+      : ['Pick 1','Pick 2','Pick 3','Pick 4'];
+    for (var i = 0; i < Math.max(picks.length, labels.length); i++) {
+      grid += '<div><span>' + esc(labels[i] || ('Pick ' + (i+1))) + '</span><strong>' + esc(picks[i] || '—') + '</strong></div>';
     }
     grid += '</div>';
     cell.innerHTML = '<div class="lb-detail">' + grid + '</div>';
@@ -247,7 +253,7 @@
   function initLeaderboard() {
     var wrap = $('#lb-body');
     if (!wrap) return;
-    var url = apiUrl('leaderboard', 'format=json');
+    var url = apiUrl('leaderboard');
     if (!url) {
       wrap.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Awaiting deployment configuration…</td></tr>';
       return;
@@ -278,7 +284,7 @@
   function initMainLeaderboard() {
     var tbody = $('#scoreboard-body');
     if (!tbody) return;
-    var url = ESPN_ID && !/\{\{/.test(ESPN_ID)
+    var url = ESPN_ID
       ? 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=' + encodeURIComponent(ESPN_ID)
       : 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard';
 
@@ -313,7 +319,7 @@
           var pos  = (c.status && c.status.position && c.status.position.displayName) || '—';
           var thru = (c.status && (c.status.thru || (c.status.type && c.status.type.shortDetail))) || '—';
           var today= '—';
-          var total= c.score || (c.statistics && c.statistics[0] && c.statistics[0].displayValue) || '—';
+          var total= c.score || '—';
           stats.forEach(function (s) {
             if (s.name === 'scoreToPar') total = s.displayValue;
             if (s.name === 'currentRoundScore' || s.name === 'todaysPar') today = s.displayValue;
@@ -375,13 +381,13 @@
         seen[values[j]] = true;
       }
 
-      // Tiebreaker — score to par (e.g. -23), NOT a 72-hole stroke total
+      // Tiebreaker — score to par (e.g. -10), NOT 72-hole stroke total
       var tb = form.querySelector('input[name="tiebreaker"]');
       if (tb) {
         var n = Number(tb.value);
         if (tb.value === '' || isNaN(n) || n < -40 || n > 40) {
           e.preventDefault();
-          showError('Enter the winner\'s score to par, e.g. -23. Must be between -40 and +40.');
+          showError('Enter the winner\'s score to par, e.g. -10. Must be between -40 and +40.');
           return;
         }
       }
@@ -448,7 +454,7 @@
   /* ── Config / branding ─────────────────────────────────────────────── */
 
   function loadConfig() {
-    var url = apiUrl('config', 'format=json');
+    var url = apiUrl('config');
     if (!url) return;
     fetchJson(url, function (err, cfg) {
       if (err || !cfg) return;
@@ -471,15 +477,15 @@
   function initTicker() {
     var ticker = $('#live-ticker');
     if (!ticker) return;
-    var demo = [
-      { club: 'Royal County Down GC', score: '-12', leader: 'Lowry' },
-      { club: 'Lahinch GC',           score: '-9',  leader: 'McIlroy' },
-      { club: 'Portmarnock',          score: '-7',  leader: 'Rahm' },
-      { club: 'The K Club',           score: '-6',  leader: 'Scheffler' },
-      { club: 'Ballybunion',          score: '-5',  leader: 'Hovland' }
+    var clubs = [
+      { club: 'SAAS 10, Dublin',        leader: 'Rory McIlroy',    score: 'TBC' },
+      { club: 'Cobh GC',                leader: 'Scottie Scheffler',score: 'TBC' },
+      { club: 'Baydos, Cork',           leader: 'Collin Morikawa', score: 'TBC' },
+      { club: 'Royal County Down GC',   leader: 'Shane Lowry',     score: 'TBC' },
+      { club: 'Portmarnock GC',         leader: 'Jon Rahm',        score: 'TBC' }
     ];
     var html = '';
-    demo.forEach(function (d) {
+    clubs.forEach(function (d) {
       html += '<span class="ticker__pill"><span class="live-dot"></span>' +
               esc(d.club) + ' · ' + esc(d.leader) + ' <strong>' + esc(d.score) + '</strong></span>';
     });
