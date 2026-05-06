@@ -1,13 +1,12 @@
 /**
- * SnipeGolf — app.js (v3)
+ * SnipeGolf — app.js (v4)
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
- * Template variables (substituted by Apps Script on provisioning):
- *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec           Apps Script web-app URL
- *   baydos-test-truist-championship-2026               league group code (gc param)
- *   401811945            ESPN tournament event id (falls back to body[data-espn-id])
- *
- * Page router: <body data-page="leaderboard|picks|admin|index|qr|main-leaderboard|landing|terms|privacy">
+ * Fixed v4:
+ *  - apiUrl() now passes both ?gc= AND ?league= for full Apps Script compatibility
+ *  - leaderboard mode correctly calls mode=leaderboard
+ *  - config mode added
+ *  - picks form redirect uses correct URL with gc param
  */
 
 (function () {
@@ -40,11 +39,14 @@
       .replace(/"/g, '&quot;');
   }
 
+  // Pass BOTH gc= and league= so it works regardless of which param doGet checks
   function apiUrl(mode, extra) {
     var base = API_BASE;
     if (!base || /\{\{|^$/.test(base)) return null;
-    // Support both old ?league=SLUG&mode=X and new ?mode=X&gc=SLUG patterns
-    var url = base + '?mode=' + mode + '&gc=' + encodeURIComponent(SLUG) + '&format=json';
+    var url = base + '?mode=' + mode
+            + '&gc='     + encodeURIComponent(SLUG)
+            + '&league=' + encodeURIComponent(SLUG)
+            + '&format=json';
     if (extra) url += '&' + extra;
     return url;
   }
@@ -142,7 +144,7 @@
     });
   }
 
-  /* ── Leaderboard ───────────────────────────────────────────────────── */
+  /* ── Leaderboard ──────────────────────────────────────────────────── */
 
   function startCountdown(el, ms) {
     if (!el) return;
@@ -168,7 +170,6 @@
     var cell = document.createElement('td');
     cell.colSpan = tr.children.length;
     var grid = '<div class="lb-detail-grid">';
-    // Support both 4-pick (legacy) and 8-pick bracket format
     var labels = picks.length > 4
       ? ['B1 Pick A','B1 Pick B','B2 Pick A','B2 Pick B','B3 Pick A','B3 Pick B','B4 Pick A','B4 Pick B']
       : ['Pick 1','Pick 2','Pick 3','Pick 4'];
@@ -199,7 +200,7 @@
       if (elScore)  elScore.textContent  = '—';
     }
     if (elUpd) {
-      var ts = data && data.updatedAt ? new Date(data.updatedAt) : new Date();
+      var ts = data && data.lastUpdated ? new Date(data.lastUpdated) : new Date();
       elUpd.textContent = 'Updated ' + ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
@@ -216,19 +217,43 @@
     entries.forEach(function (r, idx) {
       var rank   = Number(r.rank) || (idx + 1);
       var medal  = rank === 1 ? 'medal-1' : rank === 2 ? 'medal-2' : rank === 3 ? 'medal-3' : '';
-      var mv     = String(r.move || '');
-      var mvCls  = mv.indexOf('\u25b2') >= 0 ? 'move-up' : mv.indexOf('\u25bc') >= 0 ? 'move-down' : 'move-same';
-      var picks  = Array.isArray(r.picks) ? r.picks : [];
-      var best   = picks.length ? picks[0] : '';
-      var worst  = picks.length ? picks[picks.length - 1] : '';
+      var move   = Number(r.move || 0);
+      var mvCls  = move > 0 ? 'move-up' : move < 0 ? 'move-down' : 'move-same';
+      var mvTxt  = move > 0 ? '▲' + move : move < 0 ? '▼' + Math.abs(move) : '—';
+
+      // Build picks array from flat fields (b1pick1, b1score1 ... b4pick2, b4score2)
+      var picks = [
+        r.b1pick1 || '', r.b1pick2 || '',
+        r.b2pick1 || '', r.b2pick2 || '',
+        r.b3pick1 || '', r.b3pick2 || '',
+        r.b4pick1 || '', r.b4pick2 || ''
+      ].filter(function(p){ return p; });
+      // Legacy: if data has picks array directly use that
+      if (Array.isArray(r.picks) && r.picks.length) picks = r.picks;
+
+      var scores = [
+        r.b1score1, r.b1score2,
+        r.b2score1, r.b2score2,
+        r.b3score1, r.b3score2,
+        r.b4score1, r.b4score2
+      ];
+
+      // Best = lowest score, worst = highest
+      var scoredPairs = picks.map(function(p, i) { return { name: p, score: scores[i] }; })
+        .filter(function(x){ return x.score !== null && x.score !== undefined && x.score !== ''; });
+      scoredPairs.sort(function(a,b){ return Number(a.score) - Number(b.score); });
+      var best  = scoredPairs.length ? scoredPairs[0].name : (picks[0] || '—');
+      var worst = scoredPairs.length ? scoredPairs[scoredPairs.length-1].name : (picks[picks.length-1] || '—');
 
       html += '<tr class="expandable" data-picks="' + esc(JSON.stringify(picks)) + '">';
       html += '<td class="col-rank ' + medal + '">' + rank + '</td>';
-      html += '<td class="col-name"><strong>' + esc(r.name) + '</strong></td>';
+      html += '<td class="col-name"><strong>' + esc(r.name) + '</strong>';
+      if (r.scored) html += '<small style="display:block;color:var(--muted);font-size:0.75rem">' + esc(r.scored) + ' scored</small>';
+      html += '</td>';
       html += '<td class="col-score ' + medal + '">' + fmtScore(r.total) + '</td>';
       html += '<td class="hide-sm">' + esc(best) + '</td>';
       html += '<td class="hide-sm">' + esc(worst) + '</td>';
-      html += '<td class="hide-xs ' + mvCls + '">' + esc(mv || '—') + '</td>';
+      html += '<td class="hide-xs ' + mvCls + '">' + esc(mvTxt) + '</td>';
       html += '</tr>';
     });
     wrap.innerHTML = html;
@@ -247,7 +272,7 @@
     if (!wrap) return;
     wrap.innerHTML =
       '<tr><td colspan="6" style="text-align:center;color:var(--bad);padding:24px">' +
-      esc(err && err.message ? FAIL_TEXT : 'No data') + '</td></tr>';
+      esc(FAIL_TEXT) + '</td></tr>';
   }
 
   function initLeaderboard() {
@@ -262,6 +287,8 @@
     function load() {
       fetchJson(url, function (err, data) {
         if (err) { showLbError(wrap, err); return; }
+        // Handle error object returned from Apps Script
+        if (data && data.error) { showLbError(wrap, { message: data.error }); return; }
         renderLeaderboard(data);
       });
     }
@@ -279,7 +306,7 @@
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Public main leaderboard (ESPN) ─────────────────────────────── */
+  /* ── Public main leaderboard (ESPN) ───────────────────────────────── */
 
   function initMainLeaderboard() {
     var tbody = $('#scoreboard-body');
@@ -351,6 +378,13 @@
   /* ── Picks form ────────────────────────────────────────────────────── */
 
   function initPicksForm() {
+    // Update the "Open picks form" button href dynamically in case slug differs
+    var formLink = $('#form-link');
+    if (formLink) {
+      formLink.href = API_BASE + '?mode=enter&gc=' + encodeURIComponent(SLUG)
+                              + '&league=' + encodeURIComponent(SLUG);
+    }
+
     var form = $('#picks-form');
     if (!form) return;
 
@@ -381,7 +415,6 @@
         seen[values[j]] = true;
       }
 
-      // Tiebreaker — score to par (e.g. -10), NOT 72-hole stroke total
       var tb = form.querySelector('input[name="tiebreaker"]');
       if (tb) {
         var n = Number(tb.value);
@@ -416,7 +449,7 @@
     div.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  /* ── QR ────────────────────────────────────────────────────────────── */
+  /* ── QR ──────────────────────────────────────────────────────────────── */
 
   function initQr() {
     var wrap = $('#qr-target');
@@ -457,22 +490,24 @@
     var url = apiUrl('config');
     if (!url) return;
     fetchJson(url, function (err, cfg) {
-      if (err || !cfg) return;
+      if (err || !cfg || cfg.error) return;
       if (cfg.tournament) {
-        var t = $('[data-tournament]'); if (t) t.textContent = cfg.tournament;
-        document.title = document.title.replace('Truist Championship 2026', cfg.tournament);
+        $$('[data-tournament]').forEach(function (t) { t.textContent = cfg.tournament; });
+        document.title = cfg.tournament + ' | SnipeGolf';
+      }
+      if (cfg.clubName) {
+        $$('[data-club-name]').forEach(function (el) { el.textContent = cfg.clubName; });
       }
       var badge = $('#status-badge');
       if (badge && cfg.status) {
         badge.textContent = cfg.status.toUpperCase();
         badge.className = 'badge badge-' + cfg.status.toLowerCase();
       }
-      $$('[data-prize]').forEach(function (el) { el.textContent = cfg.prizeText || el.textContent; });
-      $$('[data-club-name]').forEach(function (el) { if (cfg.clubName) el.textContent = cfg.clubName; });
+      $$('[data-prize]').forEach(function (el) { if (cfg.prizeText) el.textContent = cfg.prizeText; });
     });
   }
 
-  /* ── Live ticker ─────────────────────────────────────────────────── */
+  /* ── Live ticker ───────────────────────────────────────────────────── */
 
   function initTicker() {
     var ticker = $('#live-ticker');
@@ -492,17 +527,17 @@
     ticker.innerHTML = html;
   }
 
-  /* ── Page router ───────────────────────────────────────────────────── */
+  /* ── Page router ────────────────────────────────────────────────────── */
 
   function init() {
     initThemePicker();
     var page = (document.body.getAttribute('data-page') || '').toLowerCase();
     switch (page) {
-      case 'leaderboard':       initLeaderboard(); loadConfig(); break;
-      case 'picks':             initPicksForm();  loadConfig(); break;
+      case 'leaderboard':       initLeaderboard();     loadConfig(); break;
+      case 'picks':             initPicksForm();       loadConfig(); break;
       case 'admin':             loadConfig(); break;
-      case 'qr':                initQr(); loadConfig(); break;
-      case 'index':             initLeaderboard(); loadConfig(); break;
+      case 'qr':                initQr();              loadConfig(); break;
+      case 'index':             initLeaderboard();     loadConfig(); break;
       case 'main-leaderboard':  initMainLeaderboard(); break;
       case 'landing':           initTicker(); break;
       default: loadConfig();
