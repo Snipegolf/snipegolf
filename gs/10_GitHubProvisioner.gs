@@ -1,5 +1,5 @@
 // ============================================================
-// 10_GitHubProvisioner.gs  (v3.3 — full token substitution)
+// 10_GitHubProvisioner.gs  (v3.4 — reads WebAppUrl from Config sheet)
 // Reads from Master Registry, generates entry code, pushes
 // 7 files to GitHub Pages, writes code back to registry,
 // and emails the club admin — all in one click.
@@ -15,25 +15,57 @@ function getGitHubToken_() {
   return PropertiesService.getScriptProperties().getProperty('GITHUB_PAT');
 }
 
+// ─── API BASE URL ──────────────────────────────────────────────────────────────
+// Priority order:
+//   1. Script Property: WEB_APP_URL  (best — set once, all leagues use it)
+//   2. Script Property: API_BASE     (legacy alias)
+//   3. Config sheet row: WebAppUrl / webappurl / api url / apibase  (fallback)
+//   4. Placeholder string (will trigger warning)
+
+function getApiBase_() {
+  var props = PropertiesService.getScriptProperties();
+  var fromProps = props.getProperty('WEB_APP_URL') || props.getProperty('API_BASE');
+  if (fromProps && fromProps.indexOf('YOUR_DEPLOYMENT_ID') < 0) return fromProps;
+
+  // Fallback: read from Config sheet
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var configSheet = ss.getSheetByName('Config') || ss.getSheetByName('config');
+  if (configSheet) {
+    var data = configSheet.getDataRange().getValues();
+    for (var i = 0; i < data.length; i++) {
+      var k = String(data[i][0]).trim().toLowerCase();
+      var v = String(data[i][1]).trim();
+      if ((k === 'webappurl' || k === 'web app url' || k === 'api url' ||
+           k === 'apibase'   || k === 'api base') && v && v.indexOf('YOUR_DEPLOYMENT_ID') < 0) {
+        return v;
+      }
+    }
+  }
+
+  return 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+}
+
 // ─── MAIN ENTRY POINT ─────────────────────────────────────────────────────────
 
 function provisionLeagueOnGitHub_() {
   var ui = SpreadsheetApp.getUi();
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  // Guard: warn if WEB_APP_URL is missing before doing anything
+  // Guard: warn if apiBase is still a placeholder
   var apiBase = getApiBase_();
-  if (apiBase.indexOf('YOUR_DEPLOYMENT_ID') >= 0) {
+  if (!apiBase || apiBase.indexOf('YOUR_DEPLOYMENT_ID') >= 0) {
     var proceed = ui.alert(
-      '⚠️ WEB_APP_URL not set',
-      'Script Properties → WEB_APP_URL is not configured.\n\n' +
-      'The picks form "Open form" button will be broken until you:\n' +
-      '1. Deploy your Apps Script as a Web App\n' +
-      '2. Copy the deployment URL\n' +
-      '3. In Apps Script → Project Settings → Script Properties, add:\n' +
-      '   Key: WEB_APP_URL\n' +
-      '   Value: https://script.google.com/macros/s/YOUR_ID/exec\n\n' +
-      'Continue provisioning anyway (files will still push)?',
+      '⚠️ WebApp URL not configured',
+      'Could not find your Apps Script deployment URL.\n\n' +
+      'To fix, do ONE of the following:\n\n' +
+      'Option A (recommended):\n' +
+      '  Apps Script → Project Settings → Script Properties\n' +
+      '  Add key: WEB_APP_URL\n' +
+      '  Value: https://script.google.com/macros/s/YOUR_ID/exec\n\n' +
+      'Option B:\n' +
+      '  Config sheet → add row: WebAppUrl | <your deployment URL>\n\n' +
+      'The picks form will be broken without this.\n\n' +
+      'Continue provisioning anyway?',
       ui.ButtonSet.YES_NO
     );
     if (proceed !== ui.Button.YES) return;
@@ -117,7 +149,8 @@ function provisionLeagueOnGitHub_() {
     '🏌️ ' + cfg.tournamentName + '\n' +
     '🏠 ' + cfg.clubName + '\n' +
     '📧 ' + cfg.adminName + ' <' + cfg.adminEmail + '>\n' +
-    '🔑 Entry Code: ' + entryCode + '\n\n' +
+    '🔑 Entry Code: ' + entryCode + '\n' +
+    '🌐 API: ' + apiBase.substring(0, 60) + '…\n\n' +
     'Push 7 files + email admin?',
     ui.ButtonSet.YES_NO
   );
@@ -180,15 +213,6 @@ function generateEntryCode_() {
   var code  = '';
   for (var i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
   return code;
-}
-
-// ─── API BASE URL ──────────────────────────────────────────────────────────────
-
-function getApiBase_() {
-  var props = PropertiesService.getScriptProperties();
-  return props.getProperty('WEB_APP_URL') ||
-         props.getProperty('API_BASE')    ||
-         'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
 }
 
 // ─── SEND ADMIN EMAIL ──────────────────────────────────────────────────────────
@@ -307,30 +331,21 @@ function buildLeaderboardHtml_(cfg) { return substituteTokens_(getTemplateFile_(
 function buildQrHtml_(cfg)          { return substituteTokens_(getTemplateFile_('leagues/_template/qr.html'),          cfg); }
 
 // ─── TOKEN SUBSTITUTION — ALL known template tokens ───────────────────────────
-// Covers: API_BASE, SLUG, ESPN_ID, LEAGUE_NAME, CLUB_NAME, TOURNAMENT,
-//         PRIZE_TEXT, NUM_PICKS, ENTRY_CODE, YEAR, PUBLIC_URL, THEME,
-//         LOGO_URL, TOURNAMENT_LOGO_URL
 
 function substituteTokens_(template, cfg) {
   return template
-    // Core config
     .replace(/\{\{API_BASE\}\}/g,              cfg.apiBase        || '')
     .replace(/\{\{SLUG\}\}/g,                  cfg.slug           || '')
     .replace(/\{\{ESPN_ID\}\}/g,               cfg.espnId         || '')
-    // Names — LEAGUE_NAME and TOURNAMENT both resolve to tournamentName
     .replace(/\{\{LEAGUE_NAME\}\}/g,           cfg.tournamentName || '')
     .replace(/\{\{TOURNAMENT\}\}/g,            cfg.tournamentName || '')
     .replace(/\{\{CLUB_NAME\}\}/g,             cfg.clubName       || cfg.tournamentName || '')
-    // Entry & picks
     .replace(/\{\{ENTRY_CODE\}\}/g,            cfg.entryCode      || '')
     .replace(/\{\{NUM_PICKS\}\}/g,             String(cfg.numPicks || 8))
     .replace(/\{\{PRIZE_TEXT\}\}/g,            cfg.prizeText      || '')
-    // Year & URLs
     .replace(/\{\{YEAR\}\}/g,                  cfg.year           || new Date().getFullYear().toString())
     .replace(/\{\{PUBLIC_URL\}\}/g,            cfg.publicUrl      || '')
-    // Theme (default to SnipeDefault if not set)
     .replace(/\{\{THEME\}\}/g,                 cfg.theme          || 'SnipeDefault')
-    // Logo URLs — leave blank (no onerror hides them anyway)
     .replace(/\{\{LOGO_URL\}\}/g,              '')
     .replace(/\{\{TOURNAMENT_LOGO_URL\}\}/g,   '');
 }
