@@ -3,7 +3,7 @@
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
  * Template variables (substituted by Apps Script on provisioning):
- *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBlOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec  Apps Script web-app URL
+ *   https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec           Apps Script web-app URL
  *   baydos-test-truist-championship-2026               league group code (gc param)
  *   401811945            ESPN tournament event id (falls back to body[data-espn-id])
  *
@@ -13,7 +13,7 @@
 (function () {
   'use strict';
 
-  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBlOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
+  var API_BASE = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
   var SLUG     = 'baydos-test-truist-championship-2026';
   var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
                  (!/\{\{/.test('401811945') ? '401811945' : '401580354');
@@ -43,6 +43,7 @@
   function apiUrl(mode, extra) {
     var base = API_BASE;
     if (!base || /\{\{|^$/.test(base)) return null;
+    // Support both old ?league=SLUG&mode=X and new ?mode=X&gc=SLUG patterns
     var url = base + '?mode=' + mode + '&gc=' + encodeURIComponent(SLUG) + '&format=json';
     if (extra) url += '&' + extra;
     return url;
@@ -167,6 +168,7 @@
     var cell = document.createElement('td');
     cell.colSpan = tr.children.length;
     var grid = '<div class="lb-detail-grid">';
+    // Support both 4-pick (legacy) and 8-pick bracket format
     var labels = picks.length > 4
       ? ['B1 Pick A','B1 Pick B','B2 Pick A','B2 Pick B','B3 Pick A','B3 Pick B','B4 Pick A','B4 Pick B']
       : ['Pick 1','Pick 2','Pick 3','Pick 4'];
@@ -349,12 +351,6 @@
   /* ── Picks form ────────────────────────────────────────────────────── */
 
   function initPicksForm() {
-    // Wire up the form-link button with the correct URL including gc param
-    var formLink = $('#form-link');
-    if (formLink) {
-      formLink.href = API_BASE + '?mode=enter&gc=' + encodeURIComponent(SLUG);
-    }
-
     var form = $('#picks-form');
     if (!form) return;
 
@@ -385,6 +381,7 @@
         seen[values[j]] = true;
       }
 
+      // Tiebreaker — score to par (e.g. -10), NOT 72-hole stroke total
       var tb = form.querySelector('input[name="tiebreaker"]');
       if (tb) {
         var n = Number(tb.value);
