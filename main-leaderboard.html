@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <!--
-  SnipeGolf — US Open 2026 live leaderboard (v2)
-  Pulls live data from ESPN. Visual polish update.
+  SnipeGolf — Truist Championship 2026 live leaderboard
+  Pulls live data from ESPN event 401811945.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0d1520">
-  <meta name="default-theme" content="oakmont">
-  <title>US Open 2026 Live — SnipeGolf</title>
+  <title>Truist Championship 2026 Live — SnipeGolf</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +27,7 @@
     .lb-hero__img {
       position: absolute;
       inset: 0;
-      background-image: url('https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/71993863-6d8a-418c-8a7f-3cb521fa14a6.png');
+      background-image: url('https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop');
       background-size: cover;
       background-position: center 35%;
       opacity: 0.12;
@@ -39,8 +38,6 @@
       position: relative;
       z-index: 1;
     }
-
-    /* Logo in brand */
     .brand img.brand-logo {
       height: 32px;
       width: auto;
@@ -49,7 +46,7 @@
     .brand__mark { display: none; }
   </style>
 </head>
-<body data-page="main-leaderboard" data-espn-id="401580354">
+<body data-page="main-leaderboard" data-espn-id="401811945">
 
   <header class="site-header" role="banner">
     <div class="site-header__inner">
@@ -59,7 +56,7 @@
       </a>
       <nav class="site-nav" aria-label="Primary">
         <a href="index.html">Home</a>
-        <a href="main-leaderboard.html" class="active">US Open Live</a>
+        <a href="main-leaderboard.html" class="active">Truist Live</a>
         <a href="index.html#features">Features</a>
       </nav>
     </div>
@@ -71,12 +68,12 @@
       <section class="section lb-hero__inner" style="padding-bottom:var(--s-6)">
         <div class="container">
           <div style="margin-bottom:var(--s-5)">
-            <span class="eyebrow">125th US Open · Oakmont Country Club</span>
-            <h1 id="tournament-name" style="margin-top:8px">US Open 2026</h1>
+            <span class="eyebrow">Truist Championship · Quail Hollow Club, Charlotte</span>
+            <h1 id="tournament-name" style="margin-top:8px">Truist Championship 2026</h1>
             <p class="lead" style="margin-top:8px">
-              <span id="course-name">Oakmont Country Club, Pennsylvania</span>
+              <span id="course-name">Quail Hollow Club, Charlotte, NC</span>
               &nbsp;·&nbsp;
-              <span id="round-status">12–15 June 2026</span>
+              <span id="round-status">8–11 May 2026</span>
             </p>
           </div>
 
@@ -102,7 +99,7 @@
             </div>
 
             <div class="lb-wrap" style="max-height:65vh">
-              <table class="lb" aria-label="US Open 2026 live leaderboard">
+              <table class="lb" aria-label="Truist Championship 2026 live leaderboard">
                 <thead>
                   <tr>
                     <th class="col-rank">Pos</th>

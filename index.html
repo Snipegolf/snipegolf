@@ -17,7 +17,6 @@
 
   <link rel="stylesheet" href="leagues/_template/css/style.css">
   <style>
-    /* ── Landing-page extras ───────────────────────────────────────── */
     .hero {
       position: relative;
       min-height: clamp(500px, 70vh, 800px);
@@ -29,7 +28,7 @@
     .hero__bg {
       position: absolute;
       inset: 0;
-      background-image: url('https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/71993863-6d8a-418c-8a7f-3cb521fa14a6.png');
+      background-image: url('https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop');
       background-size: cover;
       background-position: center 30%;
       z-index: 0;
@@ -57,7 +56,6 @@
     .hero .lead { color: rgba(255,255,255,0.75); max-width: 56ch; }
     .hero__ctas { margin-top: var(--s-6); display:flex; flex-wrap:wrap; gap:var(--s-3); }
 
-    /* How-it-works visual row */
     .how-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -78,7 +76,6 @@
     }
     .how-steps { display: flex; flex-direction: column; gap: var(--s-5); }
 
-    /* Contact section with background */
     .contact-section {
       position: relative;
       overflow: hidden;
@@ -86,7 +83,7 @@
     .contact-section__bg {
       position: absolute;
       inset: 0;
-      background-image: url('https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5a539b18-fd66-41d8-ac17-8064ed502528.png');
+      background-image: url('https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop');
       background-size: cover;
       background-position: center;
       opacity: 0.18;
@@ -97,7 +94,6 @@
       z-index: 1;
     }
 
-    /* Feature grid visual refinement */
     .feature-grid {
       display: grid;
       gap: var(--s-4);
@@ -132,7 +128,6 @@
       .feature-grid .feature:first-child { grid-column: span 1; }
     }
 
-    /* Logo in brand */
     .brand img.brand-logo {
       height: 32px;
       width: auto;
@@ -152,7 +147,7 @@
         <span class="brand__mark" aria-hidden="true">S</span>
       </a>
       <nav class="site-nav" aria-label="Primary">
-        <a href="main-leaderboard.html">US Open Live</a>
+        <a href="main-leaderboard.html">Truist Live</a>
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
         <a href="#contact">Contact</a>
@@ -166,11 +161,11 @@
     <section class="hero">
       <div class="hero__bg" role="presentation" aria-hidden="true"></div>
       <div class="container hero__inner">
-        <span class="eyebrow">🏆 US Open 2026 · Oakmont Country Club</span>
+        <span class="eyebrow">🏆 Truist Championship 2026 · Quail Hollow Club</span>
         <h1>Your club's sweep.<br>Tour-grade experience.</h1>
         <p class="lead">Live leaderboards, mobile entry, automatic withdrawal swaps, and admin tools that turn a Saturday-morning headache into a proper major experience for your members.</p>
         <div class="hero__ctas">
-          <a class="btn btn--lg" href="main-leaderboard.html">View US Open live scores</a>
+          <a class="btn btn--lg" href="main-leaderboard.html">View Truist live scores</a>
           <a class="btn btn--ghost btn--lg" href="#contact">Set up your club</a>
         </div>
       </div>
@@ -183,9 +178,9 @@
           <div class="card__header">
             <div>
               <h3>Clubs running sweeps right now</h3>
-              <p class="text-muted" style="font-size:.9rem;margin-top:4px">US Open 2026 — 12–15 June · Oakmont, Pennsylvania</p>
+              <p class="text-muted" style="font-size:.9rem;margin-top:4px">Truist Championship 2026 — 8–11 May · Quail Hollow Club, Charlotte</p>
             </div>
-            <a class="btn btn--ghost btn--sm" href="main-leaderboard.html">Open US Open scoreboard →</a>
+            <a class="btn btn--ghost btn--sm" href="main-leaderboard.html">Open Truist scoreboard →</a>
           </div>
           <div class="ticker" id="live-ticker" role="list" aria-label="Active leagues"></div>
         </div>
@@ -202,7 +197,6 @@
         </div>
 
         <div class="feature-grid">
-          <!-- Featured tile with image -->
           <article class="feature">
             <div class="feature-text">
               <div class="feature__icon" aria-hidden="true">
@@ -212,8 +206,8 @@
               <p>Powered by ESPN data. Refreshes every 60 seconds during play with rank movement, tiebreakers and round-by-round picks. Every club has its own private scoreboard.</p>
             </div>
             <div class="feature-img">
-              <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/59d67bfc-ec5b-415d-8e29-d917eb9994a2.png"
-                   alt="Mobile leaderboard app" width="480" height="300" loading="lazy">
+              <img src="https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=480&q=80&fit=crop"
+                   alt="Golf leaderboard on mobile" width="480" height="300" loading="lazy">
             </div>
           </article>
 
@@ -271,8 +265,8 @@
 
         <div class="how-grid">
           <div class="how-img">
-            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/71993863-6d8a-418c-8a7f-3cb521fa14a6.png"
-                 alt="Championship golf tournament atmosphere" width="600" height="450" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1535132011086-b8818f016104?w=600&q=80&fit=crop"
+                 alt="Golf tournament atmosphere" width="600" height="450" loading="lazy">
           </div>
           <div class="how-steps">
             <div class="step">
@@ -323,7 +317,7 @@
           <span class="eyebrow">Set up your club · US Open 2026</span>
           <h2 style="margin:12px 0">Ready for Oakmont?</h2>
           <p class="lead" style="max-width:52ch;margin:0 auto var(--s-5)">We'll have your league live in under an hour. No setup fee for the first event. Tee off 12 June.</p>
-          <a class="btn btn--lg" href="mailto:badenmaher@gmail.com?subject=SnipeGolf%20—%20US%20Open%202026%20enquiry">Email Baden →</a>
+          <a class="btn btn--lg" href="mailto:badenmaher@gmail.com?subject=SnipeGolf%20enquiry">Email Baden →</a>
         </div>
       </div>
     </section>
@@ -342,7 +336,7 @@
         <div>
           <h4>Product</h4>
           <ul>
-            <li><a href="main-leaderboard.html">US Open live scores</a></li>
+            <li><a href="main-leaderboard.html">Truist live scores</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#how">How it works</a></li>
           </ul>
