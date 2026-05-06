@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <!--
-  SnipeGolf — US Open 2026 live leaderboard
-  Pulls live data from ESPN's public golf API.
-  US Open 2026: Oakmont Country Club, 12–15 June 2026
-  ESPN event ID: updated to auto-detect the current event if ID is stale.
+  SnipeGolf — US Open 2026 live leaderboard (v2)
+  Pulls live data from ESPN. Visual polish update.
 -->
 <html lang="en">
 <head>
@@ -18,14 +16,46 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="leagues/_template/css/style.css">
+  <style>
+    .lb-hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(32px,5vw,56px) 0 0;
+      background:
+        radial-gradient(ellipse at 80% -20%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 55%),
+        var(--bg);
+    }
+    .lb-hero__img {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/71993863-6d8a-418c-8a7f-3cb521fa14a6.png');
+      background-size: cover;
+      background-position: center 35%;
+      opacity: 0.12;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .lb-hero__inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Logo in brand */
+    .brand img.brand-logo {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+    .brand__mark { display: none; }
+  </style>
 </head>
 <body data-page="main-leaderboard" data-espn-id="401580354">
 
   <header class="site-header" role="banner">
     <div class="site-header__inner">
       <a class="brand" href="index.html" aria-label="SnipeGolf home">
+        <img class="brand-logo" src="assets/snipe-logo.png" alt="SnipeGolf" width="120" height="32" loading="eager">
         <span class="brand__mark" aria-hidden="true">S</span>
-        <span class="serif">SNIPEGOLF</span>
       </a>
       <nav class="site-nav" aria-label="Primary">
         <a href="index.html">Home</a>
@@ -36,63 +66,79 @@
   </header>
 
   <main>
-    <section class="section">
-      <div class="container">
+    <div class="lb-hero">
+      <div class="lb-hero__img" role="presentation" aria-hidden="true"></div>
+      <section class="section lb-hero__inner" style="padding-bottom:var(--s-6)">
+        <div class="container">
+          <div style="margin-bottom:var(--s-5)">
+            <span class="eyebrow">125th US Open · Oakmont Country Club</span>
+            <h1 id="tournament-name" style="margin-top:8px">US Open 2026</h1>
+            <p class="lead" style="margin-top:8px">
+              <span id="course-name">Oakmont Country Club, Pennsylvania</span>
+              &nbsp;·&nbsp;
+              <span id="round-status">12–15 June 2026</span>
+            </p>
+          </div>
 
-        <div class="mb-6">
-          <span class="eyebrow">125th US Open · Oakmont Country Club</span>
-          <h1 id="tournament-name" style="margin-top:8px">US Open 2026</h1>
-          <p class="lead" style="margin-top:8px">
-            <span id="course-name">Oakmont Country Club, Pennsylvania</span>
-            &nbsp;·&nbsp;
-            <span id="round-status">12–15 June 2026</span>
+          <div class="stats" style="margin-bottom:var(--s-5)">
+            <div class="stat">
+              <span class="stat__num" style="font-size:clamp(1.2rem,3vw,1.8rem)">80</span>
+              <span class="stat__lbl">Players in field</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num" style="font-size:clamp(1.2rem,3vw,1.8rem)">60s</span>
+              <span class="stat__lbl">Auto-refresh</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num" style="font-size:clamp(1.2rem,3vw,1.8rem)">ESPN</span>
+              <span class="stat__lbl">Live data source</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="refresh-bar">
+              <span><span class="live-dot"></span><span id="last-updated">Loading live data…</span></span>
+              <span id="refresh-counter" class="text-muted">Refresh in 60s</span>
+            </div>
+
+            <div class="lb-wrap" style="max-height:65vh">
+              <table class="lb" aria-label="US Open 2026 live leaderboard">
+                <thead>
+                  <tr>
+                    <th class="col-rank">Pos</th>
+                    <th>Player</th>
+                    <th class="hide-sm">Country</th>
+                    <th>Score</th>
+                    <th class="hide-sm">Today</th>
+                    <th>Thru</th>
+                  </tr>
+                </thead>
+                <tbody id="scoreboard-body">
+                  <tr><td colspan="6" style="padding:32px;text-align:center;color:var(--muted)">
+                    <span class="skeleton" style="width:40%"></span>
+                  </td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="text-muted mt-4" style="font-size:.82rem">
+            Data from ESPN's public golf scoreboard · refreshed every minute while this tab is visible · times in your local timezone
           </p>
-        </div>
 
-        <div class="card">
-          <div class="refresh-bar">
-            <span><span class="live-dot"></span><span id="last-updated">Loading live data…</span></span>
-            <span id="refresh-counter" class="text-muted">Refresh in 60s</span>
-          </div>
-
-          <div class="lb-wrap" style="max-height:75vh">
-            <table class="lb" aria-label="US Open 2026 live leaderboard">
-              <thead>
-                <tr>
-                  <th class="col-rank">Pos</th>
-                  <th>Player</th>
-                  <th class="hide-sm">Country</th>
-                  <th>Score</th>
-                  <th class="hide-sm">Today</th>
-                  <th>Thru</th>
-                </tr>
-              </thead>
-              <tbody id="scoreboard-body">
-                <tr><td colspan="6" style="padding:32px;text-align:center;color:var(--muted)">
-                  <span class="skeleton" style="width:40%"></span>
-                </td></tr>
-              </tbody>
-            </table>
+          <div class="mt-5" style="text-align:center">
+            <a href="index.html#contact" class="btn btn--ghost">Set up your club's sweep →</a>
           </div>
         </div>
-
-        <p class="text-muted mt-4" style="font-size:.82rem">
-          Data from ESPN's public golf scoreboard, refreshed every minute while this tab is visible. Times shown in your local timezone.
-        </p>
-
-        <div class="mt-5" style="text-align:center">
-          <a href="index.html#contact" class="btn btn--ghost">Set up your club's sweep →</a>
-        </div>
-
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <footer class="site-footer">
     <div class="container">
       <div class="site-footer__bottom" style="border:none;padding:0">
         <span>© <span id="year"></span> SnipeGolf</span>
-        <span><a href="leagues/_template/terms.html">Terms</a> · <a href="leagues/_template/privacy.html">Privacy</a></span>
+        <span><a href="leagues/_template/terms.html">Terms</a> · <a href="leagues/_template/privacy.html">Privacy</a> · <a href="index.html">← Home</a></span>
       </div>
     </div>
   </footer>
