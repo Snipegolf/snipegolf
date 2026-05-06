@@ -3,7 +3,7 @@
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
  * Template variables (substituted by Apps Script on provisioning):
- *   https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec           Apps Script web-app URL
+ *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec           Apps Script web-app URL
  *   baydos-test-truist-championship-2026               league group code (gc param)
  *   401811945            ESPN tournament event id (falls back to body[data-espn-id])
  *
@@ -13,7 +13,7 @@
 (function () {
   'use strict';
 
-  var API_BASE = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
   var SLUG     = 'baydos-test-truist-championship-2026';
   var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
                  (!/\{\{/.test('401811945') ? '401811945' : '401580354');
