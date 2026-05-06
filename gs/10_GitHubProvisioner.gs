@@ -1,8 +1,10 @@
 // ============================================================
-// 10_GitHubProvisioner.gs  (v3.1 — reads WEB_APP_URL property)
+// 10_GitHubProvisioner.gs  (v3.3 — full token substitution)
 // Reads from Master Registry, generates entry code, pushes
 // 7 files to GitHub Pages, writes code back to registry,
 // and emails the club admin — all in one click.
+// Files: index.html, picks.html, leaderboard.html, qr.html,
+//        js/app.js, js/themes.js, css/style.css
 // ============================================================
 
 var GITHUB_OWNER  = 'Snipegolf';
@@ -19,13 +21,30 @@ function provisionLeagueOnGitHub_() {
   var ui = SpreadsheetApp.getUi();
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
+  // Guard: warn if WEB_APP_URL is missing before doing anything
+  var apiBase = getApiBase_();
+  if (apiBase.indexOf('YOUR_DEPLOYMENT_ID') >= 0) {
+    var proceed = ui.alert(
+      '⚠️ WEB_APP_URL not set',
+      'Script Properties → WEB_APP_URL is not configured.\n\n' +
+      'The picks form "Open form" button will be broken until you:\n' +
+      '1. Deploy your Apps Script as a Web App\n' +
+      '2. Copy the deployment URL\n' +
+      '3. In Apps Script → Project Settings → Script Properties, add:\n' +
+      '   Key: WEB_APP_URL\n' +
+      '   Value: https://script.google.com/macros/s/YOUR_ID/exec\n\n' +
+      'Continue provisioning anyway (files will still push)?',
+      ui.ButtonSet.YES_NO
+    );
+    if (proceed !== ui.Button.YES) return;
+  }
+
   var reg = ss.getSheetByName('Master Registry');
   if (!reg) { ui.alert('❌ No "Master Registry" sheet found.'); return; }
 
   var regData    = reg.getDataRange().getValues();
   var regHeaders = regData[0];
 
-  // Column indices
   var colSlug       = regHeaders.indexOf('Slug');
   var colClub       = regHeaders.indexOf('ClubName');
   var colAdmin      = regHeaders.indexOf('AdminName');
@@ -40,7 +59,6 @@ function provisionLeagueOnGitHub_() {
     ui.alert('❌ Master Registry missing Slug or ClubName column.'); return;
   }
 
-  // Build numbered list for the prompt
   var choices = [];
   for (var i = 1; i < regData.length; i++) {
     var slug = (regData[i][colSlug] || '').toString().trim();
@@ -62,6 +80,8 @@ function provisionLeagueOnGitHub_() {
   }
 
   var row = regData[picked];
+  var year = colYear >= 0 ? (row[colYear] || '').toString().trim() : '';
+  if (!year) year = new Date().getFullYear().toString();
 
   var cfg = {
     slug:           (row[colSlug]            || '').toString().trim(),
@@ -71,28 +91,26 @@ function provisionLeagueOnGitHub_() {
     adminPhone:     colPhone >= 0  ? (row[colPhone]      || '').toString().trim() : '',
     tournamentName: colTournament >= 0 ? (row[colTournament] || '').toString().trim() : '',
     espnId:         colEspn >= 0   ? (row[colEspn]       || '').toString().trim() : '',
-    year:           colYear >= 0   ? (row[colYear]       || '').toString().trim() : new Date().getFullYear().toString(),
+    year:           year,
     prizeText:      '',
-    numPicks:       8
+    numPicks:       8,
+    theme:          'SnipeDefault'
   };
 
   if (!cfg.tournamentName)
     cfg.tournamentName = cfg.slug.replace(/-/g, ' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
   if (!cfg.slug) { ui.alert('Slug is empty in that registry row.'); return; }
 
-  // Generate entry code if not already set
   var entryCode = (colCode >= 0 && row[colCode]) ? row[colCode].toString().trim() : '';
   if (!entryCode) {
     entryCode = generateEntryCode_();
-    if (colCode >= 0) {
-      reg.getRange(picked + 1, colCode + 1).setValue(entryCode);
-    }
+    if (colCode >= 0) reg.getRange(picked + 1, colCode + 1).setValue(entryCode);
   }
   cfg.entryCode = entryCode;
-  cfg.apiBase   = getApiBase_();
+  cfg.apiBase   = apiBase;
+  cfg.publicUrl = 'https://' + GITHUB_OWNER.toLowerCase() + '.github.io/' + GITHUB_REPO + '/leagues/' + cfg.slug;
 
-  // Confirm dialog
-  var liveUrl = 'https://' + GITHUB_OWNER.toLowerCase() + '.github.io/' + GITHUB_REPO + '/leagues/' + cfg.slug + '/';
+  var liveUrl = cfg.publicUrl + '/';
   var confirm = ui.alert(
     'Confirm Provisioning',
     '📁 leagues/' + cfg.slug + '/\n' +
@@ -105,7 +123,6 @@ function provisionLeagueOnGitHub_() {
   );
   if (confirm !== ui.Button.YES) return;
 
-  // Push all 7 files
   var files  = buildLeagueFiles_(cfg);
   var errors = [];
   files.forEach(function(f) {
@@ -123,7 +140,6 @@ function provisionLeagueOnGitHub_() {
     return;
   }
 
-  // Email admin
   if (cfg.adminEmail) {
     try {
       sendAdminEmail_(cfg, entryCode, liveUrl);
@@ -135,7 +151,7 @@ function provisionLeagueOnGitHub_() {
 
   ui.alert(
     '✅ Done!\n\n' +
-    '7 files pushed to GitHub.\n' +
+    files.length + ' files pushed to GitHub.\n' +
     '🌐 ' + liveUrl + '\n' +
     '🔑 Entry code: ' + entryCode + '\n' +
     (cfg.adminEmail ? '📧 Email sent to ' + cfg.adminEmail : '⚠️ No admin email on file.')
@@ -147,13 +163,13 @@ function provisionLeagueOnGitHub_() {
 function buildLeagueFiles_(cfg) {
   var base = 'leagues/' + cfg.slug;
   return [
-    { path: base + '/index.html',      label: 'leaderboard page',  content: buildIndexHtml_(cfg) },
-    { path: base + '/picks.html',      label: 'picks form',        content: buildPicksHtml_(cfg) },
-    { path: base + '/scoreboard.html', label: 'tour leaderboard',  content: buildScoreboardHtml_(cfg) },
-    { path: base + '/qr.html',         label: 'QR page',           content: buildQrHtml_(cfg) },
-    { path: base + '/js/app.js',       label: 'app bundle',        content: buildAppJs_(cfg) },
-    { path: base + '/js/themes.js',    label: 'themes bundle',     content: getTemplateFile_('leagues/_template/js/themes.js') },
-    { path: base + '/css/style.css',   label: 'stylesheet',        content: getTemplateFile_('leagues/_template/css/style.css') }
+    { path: base + '/index.html',       label: 'home page',         content: buildIndexHtml_(cfg) },
+    { path: base + '/picks.html',       label: 'picks form',        content: buildPicksHtml_(cfg) },
+    { path: base + '/leaderboard.html', label: 'sweep leaderboard', content: buildLeaderboardHtml_(cfg) },
+    { path: base + '/qr.html',          label: 'QR poster',         content: buildQrHtml_(cfg) },
+    { path: base + '/js/app.js',        label: 'app bundle',        content: buildAppJs_(cfg) },
+    { path: base + '/js/themes.js',     label: 'themes bundle',     content: getTemplateFile_('leagues/_template/js/themes.js') },
+    { path: base + '/css/style.css',    label: 'stylesheet',        content: getTemplateFile_('leagues/_template/css/style.css') }
   ];
 }
 
@@ -166,7 +182,7 @@ function generateEntryCode_() {
   return code;
 }
 
-// ─── API BASE URL — reads WEB_APP_URL (matches existing Script Properties) ────
+// ─── API BASE URL ──────────────────────────────────────────────────────────────
 
 function getApiBase_() {
   var props = PropertiesService.getScriptProperties();
@@ -179,7 +195,7 @@ function getApiBase_() {
 
 function sendAdminEmail_(cfg, entryCode, liveUrl) {
   var picksUrl = liveUrl + 'picks.html';
-  var lbUrl    = liveUrl + 'index.html';
+  var lbUrl    = liveUrl + 'leaderboard.html';
   var qrUrl    = liveUrl + 'qr.html';
   var subject  = '🏌️ SnipeGolf — ' + cfg.tournamentName + ' is live! Entry code: ' + entryCode;
 
@@ -285,19 +301,36 @@ function buildAppJs_(cfg) {
     .replace(/\{\{LEAGUE_NAME\}\}/g, cfg.tournamentName);
 }
 
-function buildIndexHtml_(cfg)      { return substituteTokens_(getTemplateFile_('leagues/_template/index.html'), cfg); }
-function buildPicksHtml_(cfg)      { return substituteTokens_(getTemplateFile_('leagues/_template/picks.html'), cfg); }
-function buildScoreboardHtml_(cfg) { return substituteTokens_(getTemplateFile_('leagues/_template/scoreboard.html'), cfg); }
-function buildQrHtml_(cfg)         { return substituteTokens_(getTemplateFile_('leagues/_template/qr.html'), cfg); }
+function buildIndexHtml_(cfg)       { return substituteTokens_(getTemplateFile_('leagues/_template/index.html'),       cfg); }
+function buildPicksHtml_(cfg)       { return substituteTokens_(getTemplateFile_('leagues/_template/picks.html'),       cfg); }
+function buildLeaderboardHtml_(cfg) { return substituteTokens_(getTemplateFile_('leagues/_template/leaderboard.html'), cfg); }
+function buildQrHtml_(cfg)          { return substituteTokens_(getTemplateFile_('leagues/_template/qr.html'),          cfg); }
+
+// ─── TOKEN SUBSTITUTION — ALL known template tokens ───────────────────────────
+// Covers: API_BASE, SLUG, ESPN_ID, LEAGUE_NAME, CLUB_NAME, TOURNAMENT,
+//         PRIZE_TEXT, NUM_PICKS, ENTRY_CODE, YEAR, PUBLIC_URL, THEME,
+//         LOGO_URL, TOURNAMENT_LOGO_URL
 
 function substituteTokens_(template, cfg) {
   return template
-    .replace(/\{\{API_BASE\}\}/g,    cfg.apiBase)
-    .replace(/\{\{SLUG\}\}/g,        cfg.slug)
-    .replace(/\{\{ESPN_ID\}\}/g,     cfg.espnId)
-    .replace(/\{\{LEAGUE_NAME\}\}/g, cfg.tournamentName)
-    .replace(/\{\{CLUB_NAME\}\}/g,   cfg.clubName || cfg.tournamentName)
-    .replace(/\{\{PRIZE_TEXT\}\}/g,  cfg.prizeText || '')
-    .replace(/\{\{NUM_PICKS\}\}/g,   String(cfg.numPicks || 8))
-    .replace(/\{\{ENTRY_CODE\}\}/g,  cfg.entryCode || '');
+    // Core config
+    .replace(/\{\{API_BASE\}\}/g,              cfg.apiBase        || '')
+    .replace(/\{\{SLUG\}\}/g,                  cfg.slug           || '')
+    .replace(/\{\{ESPN_ID\}\}/g,               cfg.espnId         || '')
+    // Names — LEAGUE_NAME and TOURNAMENT both resolve to tournamentName
+    .replace(/\{\{LEAGUE_NAME\}\}/g,           cfg.tournamentName || '')
+    .replace(/\{\{TOURNAMENT\}\}/g,            cfg.tournamentName || '')
+    .replace(/\{\{CLUB_NAME\}\}/g,             cfg.clubName       || cfg.tournamentName || '')
+    // Entry & picks
+    .replace(/\{\{ENTRY_CODE\}\}/g,            cfg.entryCode      || '')
+    .replace(/\{\{NUM_PICKS\}\}/g,             String(cfg.numPicks || 8))
+    .replace(/\{\{PRIZE_TEXT\}\}/g,            cfg.prizeText      || '')
+    // Year & URLs
+    .replace(/\{\{YEAR\}\}/g,                  cfg.year           || new Date().getFullYear().toString())
+    .replace(/\{\{PUBLIC_URL\}\}/g,            cfg.publicUrl      || '')
+    // Theme (default to SnipeDefault if not set)
+    .replace(/\{\{THEME\}\}/g,                 cfg.theme          || 'SnipeDefault')
+    // Logo URLs — leave blank (no onerror hides them anyway)
+    .replace(/\{\{LOGO_URL\}\}/g,              '')
+    .replace(/\{\{TOURNAMENT_LOGO_URL\}\}/g,   '');
 }
