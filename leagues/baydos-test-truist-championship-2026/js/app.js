@@ -1,23 +1,25 @@
 /**
- * SnipeGolf — app.js (v4)
- * Baydos Test — Truist Championship 2026
- * API_BASE, SLUG (gc param), ESPN_ID all hard-wired for this league.
+ * SnipeGolf — app.js (v3)
+ * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
+ *
+ * Template variables (substituted by Apps Script on provisioning):
+ *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec           Apps Script web-app URL
+ *   baydos-test-truist-championship-2026               league group code (gc param)
+ *   401811945            ESPN tournament event id (falls back to body[data-espn-id])
+ *
+ * Page router: <body data-page="leaderboard|picks|admin|index|qr|main-leaderboard|landing|terms|privacy">
  */
 
 (function () {
   'use strict';
 
   var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
-  var SLUG     = 'BAYDOS1';   // group code used by doGet() as gc=
-  var ESPN_ID  = '401811945'; // Truist Championship 2026
+  var SLUG     = 'baydos-test-truist-championship-2026';
+  var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
+                 (!/\{\{/.test('401811945') ? '401811945' : '401580354');
 
-  var REFRESH_MS = 60000;
-  var FAIL_TEXT  = 'Connection lost — retrying…';
-
-  var HERO_FALLBACKS = {
-    'truist':  'https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop',
-    'default': 'https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop'
-  };
+  var REFRESH_MS  = 60000;
+  var FAIL_TEXT   = 'Connection lost — retrying…';
 
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -38,10 +40,11 @@
       .replace(/"/g, '&quot;');
   }
 
-  // Uses ?mode=X&gc=SLUG to match Apps Script doGet() handler
   function apiUrl(mode, extra) {
-    if (!API_BASE) return null;
-    var url = API_BASE + '?mode=' + mode + '&gc=' + encodeURIComponent(SLUG);
+    var base = API_BASE;
+    if (!base || /\{\{|^$/.test(base)) return null;
+    // Support both old ?league=SLUG&mode=X and new ?mode=X&gc=SLUG patterns
+    var url = base + '?mode=' + mode + '&gc=' + encodeURIComponent(SLUG) + '&format=json';
     if (extra) url += '&' + extra;
     return url;
   }
@@ -67,7 +70,7 @@
     xhr.send();
   }
 
-  /* ── Theme picker ─────────────────────────────────────────────────── */
+  /* ── Theme picker ────────────────────────────────────────────────── */
 
   function initThemePicker() {
     if (!window.SnipeThemes) return;
@@ -77,6 +80,7 @@
 
   function buildThemeFab(currentTheme) {
     if ($('.theme-fab')) return;
+
     var fab = document.createElement('button');
     fab.className = 'theme-fab';
     fab.setAttribute('aria-label', 'Choose theme');
@@ -88,16 +92,19 @@
         '<circle cx="11" cy="6.5" r="1.2" fill="currentColor"/>' +
         '<circle cx="16.5" cy="8" r="1.2" fill="currentColor"/>' +
       '</svg>';
+
     var drawer = document.createElement('div');
     drawer.className = 'theme-drawer';
     drawer.setAttribute('role', 'dialog');
     drawer.setAttribute('aria-label', 'Theme picker');
     drawer.innerHTML =
       '<div class="theme-drawer__title">Theme</div>' +
-      '<div class="theme-drawer__sub">Choose a course palette.</div>' +
+      '<div class="theme-drawer__sub">Choose a course palette. Auto-rotates daily otherwise.</div>' +
       '<div class="theme-grid" id="theme-grid"></div>';
+
     document.body.appendChild(drawer);
     document.body.appendChild(fab);
+
     var grid = $('#theme-grid', drawer);
     window.SnipeThemes.list.forEach(function (t) {
       var btn = document.createElement('button');
@@ -117,109 +124,25 @@
         var applied = window.SnipeThemes.apply(t.id);
         window.SnipeThemes.save(applied.id);
         $$('.theme-swatch', drawer).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeId === applied.id)); });
-        applyHeroTheme();
       });
       grid.appendChild(btn);
     });
+
     function close() { drawer.classList.remove('open'); fab.setAttribute('aria-expanded', 'false'); }
-    function toggle() { var open = drawer.classList.toggle('open'); fab.setAttribute('aria-expanded', String(open)); }
+    function toggle() {
+      var open = drawer.classList.toggle('open');
+      fab.setAttribute('aria-expanded', String(open));
+    }
     fab.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
-    document.addEventListener('click', function (e) { if (!drawer.contains(e.target) && e.target !== fab) close(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-  }
-
-  /* ── Hero visual layer ────────────────────────────────────────────── */
-
-  function applyHeroTheme() {
-    var hero = $('.league-hero');
-    if (!hero) return;
-    var bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#0a0a0a';
-    var overlay = hero.querySelector('.league-hero__overlay');
-    if (overlay) {
-      overlay.style.background =
-        'linear-gradient(to bottom, ' + bg + 'cc 0%, ' + bg + '88 40%, ' + bg + 'ee 80%, ' + bg + ' 100%)';
-    }
-  }
-
-  function injectHero(cfg) {
-    var imgUrl = (cfg && cfg.heroImageUrl) || '';
-    if (!imgUrl || /\{\{/.test(imgUrl)) {
-      imgUrl = HERO_FALLBACKS['truist'];
-    }
-    var hero = $('.league-hero');
-    if (!hero) return;
-    hero.style.backgroundImage = 'url(' + imgUrl + ')';
-    applyHeroTheme();
-  }
-
-  /* ── Config / branding ────────────────────────────────────────────── */
-
-  function loadConfig() {
-    var url = apiUrl('config', 'format=json');
-    if (!url) { injectHero(null); return; }
-    fetchJson(url, function (err, cfg) {
-      if (err || !cfg) { injectHero(null); return; }
-      if (cfg.colourway && window.SnipeThemes) {
-        var COLOURWAY_MAP = {
-          'Augusta Classic':'augusta','Quail Hollow':'quail-hollow','Pebble Beach':'pebble-beach',
-          'St Andrews':'st-andrews','Pinehurst':'pinehurst','Bethpage Black':'bethpage-black',
-          'Royal Birkdale':'royal-birkdale','Riviera':'riviera','Whistling Straits':'whistling-straits',
-          'Snipe Default':'snipe-default','quail-hollow':'quail-hollow','augusta':'augusta',
-          'pebble-beach':'pebble-beach','st-andrews':'st-andrews','pinehurst':'pinehurst',
-          'bethpage-black':'bethpage-black','royal-birkdale':'royal-birkdale','riviera':'riviera',
-          'whistling-straits':'whistling-straits','snipe-default':'snipe-default'
-        };
-        var themeId = COLOURWAY_MAP[cfg.colourway];
-        if (themeId && !window.SnipeThemes.load()) {
-          window.SnipeThemes.apply(themeId);
-          $$('.theme-swatch').forEach(function (b) {
-            b.setAttribute('aria-pressed', String(b.dataset.themeId === themeId));
-          });
-        }
-      }
-      if (cfg.tournament) {
-        $$('[data-tournament]').forEach(function (el) { el.textContent = cfg.tournament; });
-        document.title = document.title.replace(/^[^|]+/, cfg.tournament + ' ');
-      }
-      if (cfg.clubName) {
-        $$('[data-club-name]').forEach(function (el) { el.textContent = cfg.clubName; });
-        $$('[data-club-footer]').forEach(function (el) { el.textContent = cfg.clubName + ' · Sweepstakes operated under house rules'; });
-      }
-      if (cfg.tournamentDates || cfg.dates) {
-        var dates = cfg.tournamentDates || cfg.dates;
-        $$('[data-dates]').forEach(function (el) { el.textContent = dates; });
-      }
-      if (cfg.prizeText || cfg.prize) {
-        var prize = cfg.prizeText || cfg.prize;
-        $$('[data-prize]').forEach(function (el) { el.textContent = prize; });
-      }
-      var badge = $('#status-badge');
-      if (badge && cfg.status) {
-        badge.textContent = cfg.status.toUpperCase();
-        badge.className = 'badge badge-' + cfg.status.toLowerCase();
-      }
-      if (cfg.clubLogoUrl) {
-        $$('[data-club-logo]').forEach(function (img) {
-          img.src = cfg.clubLogoUrl; img.removeAttribute('style'); img.alt = cfg.clubName || 'Club';
-        });
-      }
-      if (cfg.tournamentLogoUrl || cfg.tournamentLogo) {
-        var tLogo = cfg.tournamentLogoUrl || cfg.tournamentLogo;
-        $$('[data-tournament-logo]').forEach(function (img) {
-          img.src = tLogo; img.style.display = ''; img.alt = cfg.tournament || 'Tournament';
-        });
-      }
-      injectHero(cfg);
-      if (cfg.entryCodeHint) {
-        $$('[data-entry-hint]').forEach(function (el) { el.textContent = cfg.entryCodeHint; });
-      }
-      if (cfg.showAdminLink === false) {
-        $$('[data-admin-link]').forEach(function (el) { el.style.display = 'none'; });
-      }
+    document.addEventListener('click', function (e) {
+      if (!drawer.contains(e.target) && e.target !== fab) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
     });
   }
 
-  /* ── Leaderboard ──────────────────────────────────────────────────── */
+  /* ── Leaderboard ───────────────────────────────────────────────────── */
 
   function startCountdown(el, ms) {
     if (!el) return;
@@ -245,6 +168,7 @@
     var cell = document.createElement('td');
     cell.colSpan = tr.children.length;
     var grid = '<div class="lb-detail-grid">';
+    // Support both 4-pick (legacy) and 8-pick bracket format
     var labels = picks.length > 4
       ? ['B1 Pick A','B1 Pick B','B2 Pick A','B2 Pick B','B3 Pick A','B3 Pick B','B4 Pick A','B4 Pick B']
       : ['Pick 1','Pick 2','Pick 3','Pick 4'];
@@ -265,6 +189,7 @@
     var elLeader= $('#stat-leader');
     var elScore = $('#stat-score');
     var elUpd   = $('#lb-updated');
+
     if (elCount)  elCount.textContent  = entries.length || '0';
     if (entries.length > 0) {
       if (elLeader) elLeader.textContent = (entries[0].name || '').split(' ').pop();
@@ -277,21 +202,26 @@
       var ts = data && data.updatedAt ? new Date(data.updatedAt) : new Date();
       elUpd.textContent = 'Updated ' + ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
+
     if (!wrap) return;
     if (!entries.length) {
-      wrap.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px">' +
-        esc((data && data.message) || 'No entries yet — check back once picks are submitted.') + '</td></tr>';
+      wrap.innerHTML =
+        '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px">' +
+        esc((data && data.message) || 'No entries yet — check back once picks are submitted.') +
+        '</td></tr>';
       return;
     }
+
     var html = '';
     entries.forEach(function (r, idx) {
-      var rank  = Number(r.rank) || (idx + 1);
-      var medal = rank === 1 ? 'medal-1' : rank === 2 ? 'medal-2' : rank === 3 ? 'medal-3' : '';
-      var mv    = String(r.move || '');
-      var mvCls = mv.indexOf('\u25b2') >= 0 ? 'move-up' : mv.indexOf('\u25bc') >= 0 ? 'move-down' : 'move-same';
-      var picks = Array.isArray(r.picks) ? r.picks : [];
-      var best  = picks.length ? picks[0] : '';
-      var worst = picks.length ? picks[picks.length - 1] : '';
+      var rank   = Number(r.rank) || (idx + 1);
+      var medal  = rank === 1 ? 'medal-1' : rank === 2 ? 'medal-2' : rank === 3 ? 'medal-3' : '';
+      var mv     = String(r.move || '');
+      var mvCls  = mv.indexOf('\u25b2') >= 0 ? 'move-up' : mv.indexOf('\u25bc') >= 0 ? 'move-down' : 'move-same';
+      var picks  = Array.isArray(r.picks) ? r.picks : [];
+      var best   = picks.length ? picks[0] : '';
+      var worst  = picks.length ? picks[picks.length - 1] : '';
+
       html += '<tr class="expandable" data-picks="' + esc(JSON.stringify(picks)) + '">';
       html += '<td class="col-rank ' + medal + '">' + rank + '</td>';
       html += '<td class="col-name"><strong>' + esc(r.name) + '</strong></td>';
@@ -302,10 +232,12 @@
       html += '</tr>';
     });
     wrap.innerHTML = html;
+
     $$('.expandable', wrap).forEach(function (tr) {
       tr.addEventListener('click', function () {
         var picks;
-        try { picks = JSON.parse(tr.getAttribute('data-picks') || '[]'); } catch (e) { picks = []; }
+        try { picks = JSON.parse(tr.getAttribute('data-picks') || '[]'); }
+        catch (e) { picks = []; }
         expandRow(tr, picks);
       });
     });
@@ -313,32 +245,41 @@
 
   function showLbError(wrap, err) {
     if (!wrap) return;
-    wrap.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--bad);padding:24px">' +
+    wrap.innerHTML =
+      '<tr><td colspan="6" style="text-align:center;color:var(--bad);padding:24px">' +
       esc(err && err.message ? FAIL_TEXT : 'No data') + '</td></tr>';
   }
 
   function initLeaderboard() {
     var wrap = $('#lb-body');
     if (!wrap) return;
-    var url = apiUrl('leaderboard', 'format=json');
+    var url = apiUrl('leaderboard');
     if (!url) {
       wrap.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Awaiting deployment configuration…</td></tr>';
       return;
     }
+
     function load() {
       fetchJson(url, function (err, data) {
         if (err) { showLbError(wrap, err); return; }
         renderLeaderboard(data);
       });
     }
+
     load();
-    setInterval(function () { if (document.visibilityState === 'visible') load(); }, REFRESH_MS);
-    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') load(); });
+    setInterval(function () {
+      if (document.visibilityState === 'visible') load();
+    }, REFRESH_MS);
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') load();
+    });
+
     var counter = $('#refresh-counter');
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Public main leaderboard (ESPN) ──────────────────────────────── */
+  /* ── Public main leaderboard (ESPN) ─────────────────────────────── */
 
   function initMainLeaderboard() {
     var tbody = $('#scoreboard-body');
@@ -346,6 +287,7 @@
     var url = ESPN_ID
       ? 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=' + encodeURIComponent(ESPN_ID)
       : 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard';
+
     function load() {
       fetchJson(url, function (err, data) {
         if (err || !data) {
@@ -355,28 +297,35 @@
         var ev = (data.events && data.events[0]) || data;
         var comp = ev.competitions && ev.competitions[0];
         var competitors = (comp && comp.competitors) || [];
-        var tEl = $('#tournament-name'); var cEl = $('#course-name');
-        var sEl = $('#round-status');    var uEl = $('#last-updated');
+
+        var tEl = $('#tournament-name');
+        var cEl = $('#course-name');
+        var sEl = $('#round-status');
+        var uEl = $('#last-updated');
         if (tEl && ev.name) tEl.textContent = ev.name;
         if (cEl && ev.courses && ev.courses[0]) cEl.textContent = ev.courses[0].name;
         if (sEl && comp && comp.status && comp.status.type) sEl.textContent = comp.status.type.shortDetail || comp.status.type.description || '';
         if (uEl) uEl.textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+
         if (!competitors.length) {
           tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No leaderboard data available yet.</td></tr>';
           return;
         }
+
         var html = '';
         competitors.slice(0, 80).forEach(function (c) {
           var ath  = c.athlete || {};
           var stats= c.statistics || [];
           var pos  = (c.status && c.status.position && c.status.position.displayName) || '—';
           var thru = (c.status && (c.status.thru || (c.status.type && c.status.type.shortDetail))) || '—';
-          var today= '—'; var total = c.score || '—';
+          var today= '—';
+          var total= c.score || '—';
           stats.forEach(function (s) {
             if (s.name === 'scoreToPar') total = s.displayValue;
             if (s.name === 'currentRoundScore' || s.name === 'todaysPar') today = s.displayValue;
           });
-          var country = (ath.flag && ath.flag.alt) || ath.citizenship || '';
+          var country = (ath.flag && ath.flag.alt) || (ath.citizenship) || '';
+
           html += '<tr>';
           html += '<td class="col-rank">' + esc(pos) + '</td>';
           html += '<td class="col-name"><strong>' + esc(ath.displayName || '—') + '</strong></td>';
@@ -389,50 +338,67 @@
         tbody.innerHTML = html;
       });
     }
+
     load();
-    setInterval(function () { if (document.visibilityState === 'visible') load(); }, REFRESH_MS);
+    setInterval(function () {
+      if (document.visibilityState === 'visible') load();
+    }, REFRESH_MS);
+
     var counter = $('#refresh-counter');
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Picks form ───────────────────────────────────────────────────── */
+  /* ── Picks form ────────────────────────────────────────────────────── */
 
   function initPicksForm() {
     var form = $('#picks-form');
     if (!form) return;
-    var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
-    if (submitBtn) {
-      submitBtn.addEventListener('click', function (e) {
-        var syntheticSubmit = new Event('submit', { cancelable: true, bubbles: true });
-        var cancelled = !form.dispatchEvent(syntheticSubmit);
-        if (!cancelled) form.submit();
-      });
-    }
+
     form.addEventListener('submit', function (e) {
       var selects = $$('select[required]', form);
-      var values = []; var allFilled = true;
+      var values = [];
+      var allFilled = true;
+
       for (var i = 0; i < selects.length; i++) {
         var v = selects[i].value;
         if (!v) { allFilled = false; break; }
         values.push(v);
       }
-      if (!allFilled) { e.preventDefault(); showError('Please select a golfer for every pick slot.'); return; }
+
+      if (!allFilled) {
+        e.preventDefault();
+        showError('Please select a golfer for every pick slot.');
+        return;
+      }
+
       var seen = {};
       for (var j = 0; j < values.length; j++) {
-        if (seen[values[j]]) { e.preventDefault(); showError('You cannot pick the same golfer twice: ' + values[j]); return; }
+        if (seen[values[j]]) {
+          e.preventDefault();
+          showError('You cannot pick the same golfer twice: ' + values[j]);
+          return;
+        }
         seen[values[j]] = true;
       }
+
+      // Tiebreaker — score to par (e.g. -10), NOT 72-hole stroke total
       var tb = form.querySelector('input[name="tiebreaker"]');
       if (tb) {
         var n = Number(tb.value);
         if (tb.value === '' || isNaN(n) || n < -40 || n > 40) {
           e.preventDefault();
-          showError("Enter the winner's score to par, e.g. -23. Must be between -40 and +40.");
+          showError('Enter the winner\'s score to par, e.g. -10. Must be between -40 and +40.');
           return;
         }
       }
+
       var gdpr = form.querySelector('input[name="gdpr"]');
-      if (gdpr && !gdpr.checked) { e.preventDefault(); showError('You must accept the data consent to submit your picks.'); return; }
+      if (gdpr && !gdpr.checked) {
+        e.preventDefault();
+        showError('You must accept the data consent to submit your picks.');
+        return;
+      }
+
       var btn = form.querySelector('button[type="submit"]');
       if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
     });
@@ -442,49 +408,104 @@
     var existing = $('#client-error');
     if (existing) existing.parentNode.removeChild(existing);
     var div = document.createElement('div');
-    div.id = 'client-error'; div.className = 'msg msg-err'; div.textContent = msg;
+    div.id = 'client-error';
+    div.className = 'msg msg-err';
+    div.textContent = msg;
     var form = $('#picks-form');
     if (form) form.insertBefore(div, form.firstChild);
     div.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  /* ── QR ───────────────────────────────────────────────────────────── */
+  /* ── QR ────────────────────────────────────────────────────────────── */
 
   function initQr() {
     var wrap = $('#qr-target');
     if (!wrap) return;
     var url = wrap.getAttribute('data-url') || window.location.href;
+
     function fallbackImg() {
       var img = document.createElement('img');
       img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&ecc=H&data=' + encodeURIComponent(url);
-      img.alt = 'Picks QR code'; img.width = 360; img.height = 360;
+      img.alt = 'Picks QR code';
+      img.width = 360; img.height = 360;
       img.onerror = function () {
         img.onerror = null;
         img.src = 'https://quickchart.io/qr?text=' + encodeURIComponent(url) + '&size=360';
       };
-      wrap.innerHTML = ''; wrap.appendChild(img);
+      wrap.innerHTML = '';
+      wrap.appendChild(img);
     }
     if (typeof QRCode !== 'undefined') {
-      try { wrap.innerHTML = ''; new QRCode(wrap, { text: url, width: 360, height: 360, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H }); }
-      catch (e) { fallbackImg(); }
-    } else { fallbackImg(); }
+      try {
+        wrap.innerHTML = '';
+        new QRCode(wrap, {
+          text: url, width: 360, height: 360,
+          colorDark: '#000000', colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } catch (e) { fallbackImg(); }
+    } else {
+      fallbackImg();
+    }
     var lbl = $('#qr-url-label');
     if (lbl) lbl.textContent = url;
   }
 
-  /* ── Page router ─────────────────────────────────────────────────── */
+  /* ── Config / branding ─────────────────────────────────────────────── */
+
+  function loadConfig() {
+    var url = apiUrl('config');
+    if (!url) return;
+    fetchJson(url, function (err, cfg) {
+      if (err || !cfg) return;
+      if (cfg.tournament) {
+        var t = $('[data-tournament]'); if (t) t.textContent = cfg.tournament;
+        document.title = document.title.replace('Truist Championship 2026', cfg.tournament);
+      }
+      var badge = $('#status-badge');
+      if (badge && cfg.status) {
+        badge.textContent = cfg.status.toUpperCase();
+        badge.className = 'badge badge-' + cfg.status.toLowerCase();
+      }
+      $$('[data-prize]').forEach(function (el) { el.textContent = cfg.prizeText || el.textContent; });
+      $$('[data-club-name]').forEach(function (el) { if (cfg.clubName) el.textContent = cfg.clubName; });
+    });
+  }
+
+  /* ── Live ticker ─────────────────────────────────────────────────── */
+
+  function initTicker() {
+    var ticker = $('#live-ticker');
+    if (!ticker) return;
+    var clubs = [
+      { club: 'SAAS 10, Dublin',        leader: 'Rory McIlroy',    score: 'TBC' },
+      { club: 'Cobh GC',                leader: 'Scottie Scheffler',score: 'TBC' },
+      { club: 'Baydos, Cork',           leader: 'Collin Morikawa', score: 'TBC' },
+      { club: 'Royal County Down GC',   leader: 'Shane Lowry',     score: 'TBC' },
+      { club: 'Portmarnock GC',         leader: 'Jon Rahm',        score: 'TBC' }
+    ];
+    var html = '';
+    clubs.forEach(function (d) {
+      html += '<span class="ticker__pill"><span class="live-dot"></span>' +
+              esc(d.club) + ' · ' + esc(d.leader) + ' <strong>' + esc(d.score) + '</strong></span>';
+    });
+    ticker.innerHTML = html;
+  }
+
+  /* ── Page router ───────────────────────────────────────────────────── */
 
   function init() {
     initThemePicker();
     var page = (document.body.getAttribute('data-page') || '').toLowerCase();
     switch (page) {
       case 'leaderboard':       initLeaderboard(); loadConfig(); break;
-      case 'picks':             initPicksForm();   loadConfig(); break;
+      case 'picks':             initPicksForm();  loadConfig(); break;
       case 'admin':             loadConfig(); break;
       case 'qr':                initQr(); loadConfig(); break;
       case 'index':             initLeaderboard(); loadConfig(); break;
       case 'main-leaderboard':  initMainLeaderboard(); break;
-      default:                  loadConfig();
+      case 'landing':           initTicker(); break;
+      default: loadConfig();
     }
   }
 
