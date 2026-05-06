@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <!--
-  SnipeGolf — League picks entry (v3)
+  SnipeGolf — League picks entry (v4)
   Entry button uses ?mode=enter&gc=BAYDOS1 to match doGet() in Apps Script.
+  v4: removed target=_blank (breaks on iOS), added onclick fallback.
 -->
 <html lang="en">
 <head>
@@ -62,24 +63,30 @@
 
         <div class="card mb-4">
           <h3 style="margin-bottom:var(--s-3)">Open the secure entry form</h3>
-          <p class="text-muted mb-4">Tap the button below to open the live entry form. You'll need the <strong>entry code</strong> from your club admin (Baydos Test group code).</p>
-          <a class="btn btn--block btn--lg" id="form-link"
-             href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=enter&gc=BAYDOS1"
-             target="_blank" rel="noopener">
-            Open picks form →
-          </a>
+          <p class="text-muted mb-4">Tap the button below to open the live entry form. You will need the <strong>entry code</strong> from your club admin (Baydos Test group code).</p>
+
+          <!-- button: no target=_blank — direct navigation is most reliable on all browsers/iOS -->
+          <button class="btn btn--block btn--lg" id="open-form-btn" type="button"
+                  onclick="window.location.href='https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=enter&gc=BAYDOS1'">
+            Open picks form &rarr;
+          </button>
+
+          <!-- fallback plain link in case JS is blocked -->
+          <p class="text-muted mt-3" style="font-size:.8rem;text-align:center">
+            Link not working? <a href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=enter&gc=BAYDOS1">Tap here instead</a>
+          </p>
         </div>
 
         <div class="card mt-5">
           <h3>What happens next</h3>
           <ol class="text-muted" style="padding-left:1.2rem;line-height:2;font-size:.95rem">
-            <li>You'll get a confirmation email with your picks summary.</li>
+            <li>You will get a confirmation email with your picks summary.</li>
             <li>If a golfer withdraws before Thursday, we automatically swap to the next available player in the same bracket.</li>
             <li>Track standings live on the <a href="leaderboard.html">leaderboard</a> during play.</li>
           </ol>
           <div class="msg msg-info mt-4">
-            <strong style="color:var(--accent)">Tournament:</strong> Truist Championship 2026, 8–11 May ·
-            <strong style="color:var(--accent)">Organised by:</strong> <span data-club-name>Baydos Test</span> · 18+ only.
+            <strong style="color:var(--accent)">Tournament:</strong> Truist Championship 2026, 8&ndash;11 May &middot;
+            <strong style="color:var(--accent)">Organised by:</strong> <span data-club-name>Baydos Test</span> &middot; 18+ only.
           </div>
         </div>
 
@@ -91,7 +98,7 @@
     <div class="container">
       <div class="site-footer__bottom" style="border:none;padding-top:0">
         <span>Baydos Test</span>
-        <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · 18+</span>
+        <span><a href="terms.html">Terms</a> &middot; <a href="privacy.html">Privacy</a> &middot; 18+</span>
       </div>
     </div>
   </footer>
