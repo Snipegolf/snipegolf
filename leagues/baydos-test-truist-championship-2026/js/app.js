@@ -1,13 +1,11 @@
 /**
- * SnipeGolf — app.js (v2)
- * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
+ * SnipeGolf — app.js (v3)
+ * Config-driven visuals: colourway, logos, dates, prize, hero image all loaded from API.
  *
  * Template variables (substituted by Apps Script on provisioning):
- *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec           Apps Script web-app URL
- *   baydos-test-truist-championship-2026               league slug
- *   401811945            ESPN tournament event id
- *
- * Page router: <body data-page="leaderboard|picks|admin|index|qr|main-leaderboard|landing|terms|privacy">
+ *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec  — Apps Script web-app URL
+ *   baydos-test-truist-championship-2026  — league slug
+ *   401811945  — ESPN tournament event id
  */
 
 (function () {
@@ -19,6 +17,15 @@
 
   var REFRESH_MS  = 60000;
   var FAIL_TEXT   = 'Connection lost — retrying…';
+
+  // Fallback hero images by tournament slug keyword
+  var HERO_FALLBACKS = {
+    'truist':       'https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop',
+    'masters':      'https://images.unsplash.com/photo-1600783245777-080fd7ff9253?w=1400&q=80&fit=crop',
+    'us-open':      'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=1400&q=80&fit=crop',
+    'open':         'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=1400&q=80&fit=crop',
+    'default':      'https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop'
+  };
 
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -68,7 +75,7 @@
     xhr.send();
   }
 
-  /* ── Theme picker ───────────────────────────────────────────────────── */
+  /* ── Theme picker ───────────────────────────────────────────────────────────── */
 
   function initThemePicker() {
     if (!window.SnipeThemes) return;
@@ -122,6 +129,7 @@
         var applied = window.SnipeThemes.apply(t.id);
         window.SnipeThemes.save(applied.id);
         $$('.theme-swatch', drawer).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeId === applied.id)); });
+        applyHeroTheme();
       });
       grid.appendChild(btn);
     });
@@ -140,7 +148,136 @@
     });
   }
 
-  /* ── Leaderboard ───────────────────────────────────────────────────── */
+  /* ── Hero visual layer ──────────────────────────────────────────────── */
+
+  var _heroImageUrl = null;
+
+  function applyHeroTheme() {
+    var hero = $('.league-hero');
+    if (!hero) return;
+    var bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#0a0a0a';
+    var overlay = hero.querySelector('.league-hero__overlay');
+    if (overlay) {
+      overlay.style.background =
+        'linear-gradient(to bottom, ' + bg + 'cc 0%, ' + bg + '88 40%, ' + bg + 'ee 80%, ' + bg + ' 100%)';
+    }
+  }
+
+  function injectHero(cfg) {
+    var imgUrl = (cfg && cfg.heroImageUrl) || '';
+    if (!imgUrl || /\{\{/.test(imgUrl)) {
+      var keys = Object.keys(HERO_FALLBACKS);
+      for (var i = 0; i < keys.length; i++) {
+        if (SLUG.indexOf(keys[i]) >= 0) { imgUrl = HERO_FALLBACKS[keys[i]]; break; }
+      }
+      if (!imgUrl) imgUrl = HERO_FALLBACKS['default'];
+    }
+    _heroImageUrl = imgUrl;
+
+    var hero = $('.league-hero');
+    if (!hero) return;
+    hero.style.backgroundImage = 'url(' + imgUrl + ')';
+    applyHeroTheme();
+  }
+
+  /* ── Config / branding ─────────────────────────────────────────────── */
+
+  function loadConfig() {
+    var url = apiUrl('config', 'format=json');
+    if (!url) { injectHero(null); return; }
+
+    fetchJson(url, function (err, cfg) {
+      if (err || !cfg) { injectHero(null); return; }
+
+      // 1. Colourway → theme
+      if (cfg.colourway && window.SnipeThemes) {
+        var COLOURWAY_MAP = {
+          'Augusta Classic': 'augusta', 'Quail Hollow': 'quail-hollow',
+          'Pebble Beach': 'pebble-beach', 'St Andrews': 'st-andrews',
+          'Pinehurst': 'pinehurst', 'Bethpage Black': 'bethpage-black',
+          'Royal Birkdale': 'royal-birkdale', 'Riviera': 'riviera',
+          'Whistling Straits': 'whistling-straits', 'Snipe Default': 'snipe-default',
+          'augusta': 'augusta', 'quail-hollow': 'quail-hollow',
+          'pebble-beach': 'pebble-beach', 'st-andrews': 'st-andrews',
+          'pinehurst': 'pinehurst', 'bethpage-black': 'bethpage-black',
+          'royal-birkdale': 'royal-birkdale', 'riviera': 'riviera',
+          'whistling-straits': 'whistling-straits', 'snipe-default': 'snipe-default'
+        };
+        var themeId = COLOURWAY_MAP[cfg.colourway];
+        if (themeId && !window.SnipeThemes.load()) {
+          window.SnipeThemes.apply(themeId);
+          $$('.theme-swatch').forEach(function (b) {
+            b.setAttribute('aria-pressed', String(b.dataset.themeId === themeId));
+          });
+        }
+      }
+
+      // 2. Tournament name
+      if (cfg.tournament) {
+        $$('[data-tournament]').forEach(function (el) { el.textContent = cfg.tournament; });
+        document.title = document.title.replace(/^[^|]+/, cfg.tournament + ' ');
+      }
+
+      // 3. Club name
+      if (cfg.clubName) {
+        $$('[data-club-name]').forEach(function (el) { el.textContent = cfg.clubName; });
+        $$('[data-club-footer]').forEach(function (el) { el.textContent = cfg.clubName + ' \u00b7 Sweepstakes operated under house rules'; });
+      }
+
+      // 4. Dates
+      if (cfg.tournamentDates || cfg.dates) {
+        var dates = cfg.tournamentDates || cfg.dates;
+        $$('[data-dates]').forEach(function (el) { el.textContent = dates; });
+      }
+
+      // 5. Prize
+      if (cfg.prizeText || cfg.prize) {
+        var prize = cfg.prizeText || cfg.prize;
+        $$('[data-prize]').forEach(function (el) { el.textContent = prize; });
+      }
+
+      // 6. Status badge
+      var badge = $('#status-badge');
+      if (badge && cfg.status) {
+        badge.textContent = cfg.status.toUpperCase();
+        badge.className = 'badge badge-' + cfg.status.toLowerCase();
+      }
+
+      // 7. Club logo
+      if (cfg.clubLogoUrl) {
+        $$('[data-club-logo]').forEach(function (img) {
+          img.src = cfg.clubLogoUrl;
+          img.removeAttribute('style');
+          img.alt = cfg.clubName || 'Club';
+        });
+      }
+
+      // 8. Tournament logo
+      if (cfg.tournamentLogoUrl || cfg.tournamentLogo) {
+        var tLogo = cfg.tournamentLogoUrl || cfg.tournamentLogo;
+        $$('[data-tournament-logo]').forEach(function (img) {
+          img.src = tLogo;
+          img.style.display = '';
+          img.alt = cfg.tournament || 'Tournament';
+        });
+      }
+
+      // 9. Hero image
+      injectHero(cfg);
+
+      // 10. Entry code hint
+      if (cfg.entryCodeHint) {
+        $$('[data-entry-hint]').forEach(function (el) { el.textContent = cfg.entryCodeHint; });
+      }
+
+      // 11. Admin link visibility
+      if (cfg.showAdminLink === false) {
+        $$('[data-admin-link]').forEach(function (el) { el.style.display = 'none'; });
+      }
+    });
+  }
+
+  /* ── Leaderboard ──────────────────────────────────────────────────────── */
 
   function startCountdown(el, ms) {
     if (!el) return;
@@ -273,7 +410,7 @@
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Public main leaderboard (ESPN) ────────────────────────────────── */
+  /* ── Public main leaderboard (ESPN) ─────────────────────────────────────── */
 
   function initMainLeaderboard() {
     var tbody = $('#scoreboard-body');
@@ -342,11 +479,24 @@
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Picks form ────────────────────────────────────────────────────── */
+  /* ── Picks form ─────────────────────────────────────────────────────── */
 
   function initPicksForm() {
     var form = $('#picks-form');
     if (!form) return;
+
+    // Make submit button work on any click including mobile tap
+    var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function (e) {
+        // Manually trigger form validation and submission
+        var syntheticSubmit = new Event('submit', { cancelable: true, bubbles: true });
+        var cancelled = !form.dispatchEvent(syntheticSubmit);
+        if (!cancelled) {
+          form.submit();
+        }
+      });
+    }
 
     form.addEventListener('submit', function (e) {
       var selects = $$('select[required]', form);
@@ -375,13 +525,12 @@
         seen[values[j]] = true;
       }
 
-      // Tiebreaker — score to par (e.g. -23), NOT a 72-hole stroke total
       var tb = form.querySelector('input[name="tiebreaker"]');
       if (tb) {
         var n = Number(tb.value);
         if (tb.value === '' || isNaN(n) || n < -40 || n > 40) {
           e.preventDefault();
-          showError('Enter the winner\'s score to par, e.g. -23. Must be between -40 and +40.');
+          showError("Enter the winner's score to par, e.g. -23. Must be between -40 and +40.");
           return;
         }
       }
@@ -410,7 +559,7 @@
     div.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  /* ── QR ────────────────────────────────────────────────────────────── */
+  /* ── QR ─────────────────────────────────────────────────────────────── */
 
   function initQr() {
     var wrap = $('#qr-target');
@@ -445,48 +594,7 @@
     if (lbl) lbl.textContent = url;
   }
 
-  /* ── Config / branding ─────────────────────────────────────────────── */
-
-  function loadConfig() {
-    var url = apiUrl('config', 'format=json');
-    if (!url) return;
-    fetchJson(url, function (err, cfg) {
-      if (err || !cfg) return;
-      if (cfg.tournament) {
-        var t = $('[data-tournament]'); if (t) t.textContent = cfg.tournament;
-        document.title = document.title.replace('Baydos Test — Truist Championship 2026', cfg.tournament);
-      }
-      var badge = $('#status-badge');
-      if (badge && cfg.status) {
-        badge.textContent = cfg.status.toUpperCase();
-        badge.className = 'badge badge-' + cfg.status.toLowerCase();
-      }
-      $$('[data-prize]').forEach(function (el) { el.textContent = cfg.prizeText || el.textContent; });
-      $$('[data-club-name]').forEach(function (el) { if (cfg.clubName) el.textContent = cfg.clubName; });
-    });
-  }
-
-  /* ── Live ticker ───────────────────────────────────────────────────── */
-
-  function initTicker() {
-    var ticker = $('#live-ticker');
-    if (!ticker) return;
-    var demo = [
-      { club: 'Royal County Down GC', score: '-12', leader: 'Lowry' },
-      { club: 'Lahinch GC',           score: '-9',  leader: 'McIlroy' },
-      { club: 'Portmarnock',          score: '-7',  leader: 'Rahm' },
-      { club: 'The K Club',           score: '-6',  leader: 'Scheffler' },
-      { club: 'Ballybunion',          score: '-5',  leader: 'Hovland' }
-    ];
-    var html = '';
-    demo.forEach(function (d) {
-      html += '<span class="ticker__pill"><span class="live-dot"></span>' +
-              esc(d.club) + ' · ' + esc(d.leader) + ' <strong>' + esc(d.score) + '</strong></span>';
-    });
-    ticker.innerHTML = html;
-  }
-
-  /* ── Page router ───────────────────────────────────────────────────── */
+  /* ── Page router ──────────────────────────────────────────────────────── */
 
   function init() {
     initThemePicker();
@@ -498,7 +606,7 @@
       case 'qr':                initQr(); loadConfig(); break;
       case 'index':             initLeaderboard(); loadConfig(); break;
       case 'main-leaderboard':  initMainLeaderboard(); break;
-      case 'landing':           initTicker(); break;
+      case 'landing':           break;
       default: loadConfig();
     }
   }
