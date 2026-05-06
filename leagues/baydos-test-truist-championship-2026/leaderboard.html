@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="default-theme" content="dark">
+  <meta name="default-theme" content="{{THEME}}">
   <title>Leaderboard — Truist Championship 2026 | SnipeGolf</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,13 +34,13 @@
   <div class="league-header">
     <div class="league-header__row">
       <div class="league-logos">
-        <img src="https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:R000.png/tournaments/logos/R480.png" alt="Truist Championship 2026" onerror="this.style.display='none'">
+        <img src="{{LOGO_URL}}" alt="Baydos Test" onerror="this.style.display='none'">
         <span class="league-logos__divider" aria-hidden="true"></span>
-        <img src="" alt="Truist Championship 2026" onerror="this.style.display='none'">
+        <img src="{{TOURNAMENT_LOGO_URL}}" alt="{{TOURNAMENT}}" onerror="this.style.display='none'">
       </div>
       <div class="league-title">
-        <span data-tournament>Truist Championship 2026</span>
-        <small data-club-name>Truist Championship 2026</small>
+        <span data-tournament>{{TOURNAMENT}}</span>
+        <small data-club-name>Baydos Test</small>
       </div>
     </div>
   </div>
@@ -116,7 +116,7 @@
   <footer class="site-footer">
     <div class="container">
       <div class="site-footer__bottom" style="border:none;padding-top:0">
-        <span>Truist Championship 2026</span>
+        <span>Baydos Test</span>
         <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></span>
       </div>
     </div>
