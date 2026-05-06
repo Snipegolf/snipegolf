@@ -1,30 +1,23 @@
 <!DOCTYPE html>
 <!--
   SnipeGolf — League home (v2)
-  Template variables substituted by Apps Script:
-    Truist Championship 2026, Baydos Test, {{TOURNAMENT}}, {{YEAR}},
-    , {{LOGO_URL}}, {{TOURNAMENT_LOGO_URL}},
-    https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec, baydos-test-truist-championship-2026, 401811945, {{PUBLIC_URL}}, {{ADMIN_TOKEN}},
-    {{TOURNAMENT_DATES}}
+  Tournament name is set from Config sheet via loadConfig() in app.js.
+  Static fallback below so page is readable even if API is slow.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="default-theme" content="{{THEME}}">
   <meta name="description" content="Truist Championship 2026 — Golf Sweepstakes powered by SnipeGolf">
   <title>Truist Championship 2026 | SnipeGolf</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="index">
 
-  <!-- Global brand bar -->
   <header class="site-header" role="banner">
     <div class="site-header__inner">
       <a class="brand" href="../../index.html" aria-label="SnipeGolf home">
@@ -38,17 +31,15 @@
     </div>
   </header>
 
-  <!-- Per-league brand bar: club logo + tournament logo + name -->
   <div class="league-header">
     <div class="league-header__row">
       <div class="league-logos" aria-label="League branding">
-        <img src="{{LOGO_URL}}" alt="Baydos Test" onerror="this.style.display='none'">
+        <img src="https://res.cloudinary.com/pgatour-prod/d_tournaments-logos:R000.png/tournaments/logos/R480.png" alt="Baydos Test" onerror="this.style.display='none'">
         <span class="league-logos__divider" aria-hidden="true"></span>
-        <img src="{{TOURNAMENT_LOGO_URL}}" alt="{{TOURNAMENT}}" onerror="this.style.display='none'">
       </div>
       <div class="league-title">
-        <span data-tournament>{{TOURNAMENT}}</span>
-        <small data-club-name>Baydos Test · {{YEAR}}</small>
+        <span data-tournament>Truist Championship 2026</span>
+        <small data-club-name>Baydos Test &middot; 2026</small>
       </div>
     </div>
   </div>
@@ -57,22 +48,18 @@
     <section class="section">
       <div class="container">
 
-        <!-- Hero -->
         <div class="card card--feature" style="text-align:center;background:var(--surface);">
           <span class="eyebrow">Sweepstakes</span>
-          <h1 class="serif" style="margin:12px 0">Truist Championship 2026</h1>
-          <p class="lead" style="max-width:54ch;margin:0 auto var(--s-4)">{{TOURNAMENT}} · {{TOURNAMENT_DATES}}</p>
+          <h1 class="serif" style="margin:12px 0" data-tournament>Truist Championship 2026</h1>
+          <p class="lead" style="max-width:54ch;margin:0 auto var(--s-4)">Pick 2 golfers from each of 4 brackets &mdash; lowest combined score wins.</p>
           <span id="status-badge" class="badge badge-live" style="margin-bottom:var(--s-4)">LIVE</span>
-
           <p style="font-size:1.05rem;color:var(--accent);font-weight:600;margin-top:var(--s-4)" data-prize></p>
-
           <div class="hero__ctas" style="justify-content:center;margin-top:var(--s-5)">
             <a class="btn btn--lg" href="picks.html">Submit picks</a>
             <a class="btn btn--ghost btn--lg" href="leaderboard.html">View leaderboard</a>
           </div>
         </div>
 
-        <!-- Tab nav -->
         <nav class="tab-nav" aria-label="League sections">
           <a href="index.html" class="active">Home</a>
           <a href="leaderboard.html">Leaderboard</a>
@@ -80,34 +67,21 @@
           <a href="qr.html">QR poster</a>
         </nav>
 
-        <!-- Stats row -->
         <div class="stats mb-6">
-          <div class="stat">
-            <span class="stat__num" id="stat-entries">—</span>
-            <span class="stat__lbl">Entries</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num" id="stat-leader">—</span>
-            <span class="stat__lbl">Leader</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num" id="stat-score">—</span>
-            <span class="stat__lbl">Top score</span>
-          </div>
+          <div class="stat"><span class="stat__num" id="stat-entries">—</span><span class="stat__lbl">Entries</span></div>
+          <div class="stat"><span class="stat__num" id="stat-leader">—</span><span class="stat__lbl">Leader</span></div>
+          <div class="stat"><span class="stat__num" id="stat-score">—</span><span class="stat__lbl">Top score</span></div>
         </div>
 
-        <!-- Mini leaderboard -->
         <div class="card">
           <div class="card__header">
             <h2>Live top 10</h2>
-            <a class="btn btn--ghost btn--sm" href="leaderboard.html">Full board →</a>
+            <a class="btn btn--ghost btn--sm" href="leaderboard.html">Full board &rarr;</a>
           </div>
-
           <div class="refresh-bar">
             <span><span class="live-dot"></span>Auto-updating</span>
             <span id="lb-updated">Loading…</span>
           </div>
-
           <div class="lb-wrap">
             <table class="lb" aria-label="League leaderboard top 10">
               <thead>
@@ -129,9 +103,8 @@
           </div>
         </div>
 
-        <!-- Admin link -->
         <p class="text-center mt-6 text-muted" style="font-size:.85rem">
-          Club admin? <a href="admin.html">Open the admin dashboard →</a>
+          Club admin? <a href="admin.html">Open the admin dashboard &rarr;</a>
         </p>
       </div>
     </section>
@@ -140,12 +113,10 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container">
       <div class="site-footer__bottom" style="border:none;padding-top:0">
-        <span>Baydos Test · Sweepstakes operated under house rules</span>
-        <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · 18+ Responsible gambling</span>
+        <span>Baydos Test &middot; Sweepstakes operated under house rules</span>
+        <span><a href="terms.html">Terms</a> &middot; <a href="privacy.html">Privacy</a> &middot; 18+ Responsible gambling</span>
       </div>
-      <p class="text-muted mt-3" style="font-size:.74rem">
-        Data Controller: Baydos Test. Processor: SnipeGolf. Retention: season + 30 days.
-      </p>
+      <p class="text-muted mt-3" style="font-size:.74rem">Data Controller: Baydos Test. Processor: SnipeGolf. Retention: season + 30 days.</p>
     </div>
   </footer>
 
