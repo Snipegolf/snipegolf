@@ -3,9 +3,9 @@
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
  * Template variables (substituted by Apps Script on provisioning):
- *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec           Apps Script web-app URL
+ *              Apps Script web-app URL
  *   test-truist-championship-2026               league group code (gc param)
- *   40811945            ESPN tournament event id (falls back to body[data-espn-id])
+ *   2026            ESPN tournament event id (falls back to body[data-espn-id])
  *
  * Page router: <body data-page="leaderboard|picks|admin|index|qr|main-leaderboard|landing|terms|privacy">
  */
@@ -13,10 +13,10 @@
 (function () {
   'use strict';
 
-  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
+  var API_BASE = '';
   var SLUG     = 'test-truist-championship-2026';
   var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
-                 (!/\{\{/.test('40811945') ? '40811945' : '401580354');
+                 (!/\{\{/.test('2026') ? '2026' : '401580354');
 
   var REFRESH_MS  = 60000;
   var FAIL_TEXT   = 'Connection lost — retrying…';
@@ -460,7 +460,7 @@
       if (err || !cfg) return;
       if (cfg.tournament) {
         var t = $('[data-tournament]'); if (t) t.textContent = cfg.tournament;
-        document.title = document.title.replace('Test — Truist Championship', cfg.tournament);
+        document.title = document.title.replace('test-truist-championship-2026', cfg.tournament);
       }
       var badge = $('#status-badge');
       if (badge && cfg.status) {
