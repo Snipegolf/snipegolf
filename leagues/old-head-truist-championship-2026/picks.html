@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!--
+  SnipeGolf — Native picks entry (v3)
+  Loads bracket golfers from API, enforces 2-per-bracket mutual-exclusion,
+  submits directly to Apps Script backend.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Enter picks — Truist Championship 2026 | SnipeGolf</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* ── Picks-specific overrides ── */
+    .picks-intro { margin-bottom: var(--s-6, 1.5rem); }
+    .picks-intro p { color: var(--muted); font-size: .95rem; }
+
+    /* Personal details */
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3, .75rem); }
+    @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--s-3, .75rem); }
+    .field label { font-size: .82rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+    .field input, .field select {
+      background: var(--surface-2, #1e1e1e);
+      border: 1px solid var(--border, #2a2a2a);
+      border-radius: 10px;
+      color: var(--text, #f0f0f0);
+      font-size: 1rem;
+      padding: 12px 14px;
+      width: 100%;
+      transition: border-color .18s;
+    }
+    .field input:focus, .field select:focus { outline: none; border-color: var(--accent, #f0c040); }
+    .field input.err, .field select.err { border-color: var(--bad, #e05555); }
+
+    /* Code field */
+    .code-hint { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+
+    /* Bracket cards */
+    .bracket-card {
+      background: var(--surface, #161616);
+      border: 1px solid var(--border, #2a2a2a);
+      border-radius: 14px;
+      padding: var(--s-4, 1rem) var(--s-4, 1rem) var(--s-3, .75rem);
+      margin-bottom: var(--s-4, 1rem);
+    }
+    .bracket-card__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--s-3, .75rem);
+    }
+    .bracket-card__label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display, 'Fraunces', serif);
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    .bracket-card__emoji { font-size: 1.2rem; }
+    .bracket-card__hint {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface-2, #1e1e1e);
+      border-radius: 20px;
+      padding: 3px 10px;
+    }
+    .bracket-picks { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3, .75rem); }
+    @media (max-width: 480px) { .bracket-picks { grid-template-columns: 1fr; } }
+
+    /* Loading skeleton for selects */
+    .select-skeleton {
+      background: linear-gradient(90deg, var(--surface-2,#1e1e1e) 25%, var(--surface-3,#252525) 50%, var(--surface-2,#1e1e1e) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease-in-out infinite;
+      border-radius: 10px;
+      height: 46px;
+    }
+    @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+
+    /* Tiebreaker */
+    .tb-wrap { max-width: 220px; }
+    .tb-hint { font-size: .8rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+    /* Consent */
+    .consent-row { display: flex; align-items: flex-start; gap: 10px; margin: var(--s-4,1rem) 0; }
+    .consent-row input[type=checkbox] { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; accent-color: var(--accent, #f0c040); cursor: pointer; }
+    .consent-row label { font-size: .88rem; color: var(--muted); line-height: 1.5; cursor: pointer; }
+    .consent-row label a { color: var(--accent, #f0c040); }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      background: var(--accent, #f0c040);
+      color: #111;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-submit:not(:disabled):hover { opacity: .9; }
+    .btn-submit:not(:disabled):active { transform: scale(.98); }
+
+    /* Error / success messages */
+    .form-msg { border-radius: 10px; padding: 12px 16px; margin-bottom: var(--s-4, 1rem); font-size: .92rem; display: none; }
+    .form-msg.show { display: block; }
+    .form-msg.err { background: rgba(224,85,85,.12); border: 1px solid rgba(224,85,85,.35); color: #e05555; }
+    .form-msg.ok  { background: rgba(80,200,120,.12); border: 1px solid rgba(80,200,120,.35); color: #50c878; }
+
+    /* Spinner */
+    .spinner { width: 20px; height: 20px; border: 3px solid rgba(0,0,0,.2); border-top-color: #111; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body data-page="picks">
+
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a class="brand" href="../../index.html" aria-label="SnipeGolf home">
+        <span class="brand__mark" aria-hidden="true">S</span>
+        <span class="serif">SNIPEGOLF</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="leaderboard.html">Leaderboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="league-header">
+    <div class="league-header__row">
+      <div class="league-title">
+        <span data-tournament>Truist Championship 2026</span>
+        <small data-club-name>Old Head</small>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="section">
+      <div class="container container-narrow">
+
+        <nav class="tab-nav" aria-label="League sections">
+          <a href="index.html">Home</a>
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="picks.html" class="active">Enter picks</a>
+        </nav>
+
+        <header class="picks-intro">
+          <span class="eyebrow">Entry</span>
+          <h1 style="margin-top:8px">Enter your picks</h1>
+          <p>Pick <strong>2 golfers from each bracket</strong>. Once you select a golfer in one slot, they disappear from the other slot in the same bracket. Add your tiebreaker guess and submit.</p>
+        </header>
+
+        <!-- Global error / success -->
+        <div class="form-msg err" id="msg-err" role="alert" aria-live="polite"></div>
+        <div class="form-msg ok"  id="msg-ok"  role="status" aria-live="polite"></div>
+
+        <form id="picks-form" novalidate autocomplete="on">
+
+          <!-- ── Personal details ── -->
+          <div class="card mb-4">
+            <h3 style="margin-bottom:var(--s-4)">Your details</h3>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="pf-first">First name <span aria-hidden="true" style="color:var(--bad)">*</span></label>
+                <input id="pf-first" name="first" autocomplete="given-name" placeholder="e.g. Padraig" required>
+              </div>
+              <div class="field">
+                <label for="pf-last">Last name <span aria-hidden="true" style="color:var(--bad)">*</span></label>
+                <input id="pf-last" name="last" autocomplete="family-name" placeholder="e.g. Harrington" required>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="pf-email">Email <span aria-hidden="true" style="color:var(--bad)">*</span></label>
+                <input id="pf-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+              </div>
+              <div class="field">
+                <label for="pf-phone">Phone (optional)</label>
+                <input id="pf-phone" name="phone" type="tel" autocomplete="tel" placeholder="+353 86…">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="pf-code">Entry code <span aria-hidden="true" style="color:var(--bad)">*</span></label>
+              <input id="pf-code" name="code" autocomplete="off" placeholder="Code from your club admin" required>
+              <p class="code-hint">Required — stops uninvited entries. Get it from your club or pub admin.</p>
+            </div>
+          </div>
+
+          <!-- ── Brackets (injected by JS) ── -->
+          <div id="brackets-wrap">
+            <!-- skeleton shown while loading -->
+            <div class="bracket-card" id="skel-1">
+              <div class="bracket-card__head">
+                <div class="bracket-card__label"><span class="bracket-card__emoji">🏆</span> Bracket 1</div>
+                <div class="bracket-card__hint">Pick 2</div>
+              </div>
+              <div class="bracket-picks">
+                <div class="select-skeleton"></div>
+                <div class="select-skeleton"></div>
+              </div>
+            </div>
+            <div class="bracket-card" id="skel-2">
+              <div class="bracket-card__head">
+                <div class="bracket-card__label"><span class="bracket-card__emoji">🥈</span> Bracket 2</div>
+                <div class="bracket-card__hint">Pick 2</div>
+              </div>
+              <div class="bracket-picks">
+                <div class="select-skeleton"></div>
+                <div class="select-skeleton"></div>
+              </div>
+            </div>
+            <div class="bracket-card" id="skel-3">
+              <div class="bracket-card__head">
+                <div class="bracket-card__label"><span class="bracket-card__emoji">🌿</span> Bracket 3</div>
+                <div class="bracket-card__hint">Pick 2</div>
+              </div>
+              <div class="bracket-picks">
+                <div class="select-skeleton"></div>
+                <div class="select-skeleton"></div>
+              </div>
+            </div>
+            <div class="bracket-card" id="skel-4">
+              <div class="bracket-card__head">
+                <div class="bracket-card__label"><span class="bracket-card__emoji">🎯</span> Bracket 4 — Longshots</div>
+                <div class="bracket-card__hint">Pick 2</div>
+              </div>
+              <div class="bracket-picks">
+                <div class="select-skeleton"></div>
+                <div class="select-skeleton"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Tiebreaker ── -->
+          <div class="card mb-4">
+            <div class="tb-wrap">
+              <div class="field">
+                <label for="pf-tb">Tiebreaker — winning score vs par <span aria-hidden="true" style="color:var(--bad)">*</span></label>
+                <input id="pf-tb" name="tiebreaker" type="number" min="-40" max="40" placeholder="e.g. -22" required>
+              </div>
+              <p class="tb-hint">Your prediction for the winner's score vs par (e.g. -21 for 21 under). Closest wins. On a tie, lower (more under) wins.</p>
+            </div>
+          </div>
+
+          <!-- ── Consent ── -->
+          <div class="card mb-4">
+            <div class="consent-row">
+              <input id="pf-gdpr" name="gdpr" type="checkbox" required>
+              <label for="pf-gdpr">
+                I agree to my name, email, and phone being stored for this sweep only.
+                <span data-club-name>Old Head</span> is the data controller;
+                SnipeGolf is the data processor. Data is retained for the tournament season plus 30 days.
+                <a href="../../privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+              </label>
+            </div>
+          </div>
+
+          <button class="btn-submit" type="submit" id="submit-btn" disabled>
+            <span id="submit-label">✅ Submit My Picks →</span>
+          </button>
+
+        </form>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__bottom" style="border:none;padding-top:0">
+        <span>🏌️ SnipeGolf Golf Sweepstakes Platform</span>
+        <span>
+          <a href="../../terms.html">Terms &amp; Conditions</a> |
+          <a href="../../privacy.html">Privacy Policy</a> |
+          18+ Responsible Gambling
+        </span>
+      </div>
+      <p style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:6px">
+        Data Controller: Club Admin. Processor: SnipeGolf. Retention: season + 30 days.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/themes.js"></script>
+  <script src="js/picks-form.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
