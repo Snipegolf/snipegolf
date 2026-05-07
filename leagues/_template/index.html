@@ -66,7 +66,7 @@
           <p style="font-size:1.05rem;color:var(--accent);font-weight:600;margin-top:var(--s-4)" data-prize>{{PRIZE_TEXT}}</p>
 
           <div class="hero__ctas" style="justify-content:center;margin-top:var(--s-5)">
-            <a class="btn btn--lg" href="picks.html">Submit picks</a>
+            <a class="btn btn--lg" href="{{API_BASE}}?league={{SLUG}}&amp;mode=picks">Submit picks</a>
             <a class="btn btn--ghost btn--lg" href="leaderboard.html">View leaderboard</a>
           </div>
         </div>
@@ -75,7 +75,7 @@
         <nav class="tab-nav" aria-label="League sections">
           <a href="index.html" class="active">Home</a>
           <a href="leaderboard.html">Leaderboard</a>
-          <a href="picks.html">Enter picks</a>
+          <a href="{{API_BASE}}?league={{SLUG}}&amp;mode=picks">Enter picks</a>
           <a href="qr.html">QR poster</a>
         </nav>
 
