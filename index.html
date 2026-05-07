@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <!--
-  SnipeGolf — Global landing page (v3)
-  Full visual overhaul: hero image, section photography, logo in header
+  SnipeGolf — Global landing page (v2)
+  Premium golf-tournament feel · 10 daily-rotating colourways · mobile-first
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0d1520">
+  <meta name="theme-color" content="#0a0a0a">
   <meta name="description" content="SnipeGolf — run your golf club's sweepstake like a tour event. Live leaderboards, mobile entry, automatic WD swap, GDPR-compliant.">
   <title>SnipeGolf — Run your club's sweep like a pro</title>
 
@@ -15,139 +15,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="leagues/_template/css/style.css">
-  <style>
-    .hero {
-      position: relative;
-      min-height: clamp(500px, 70vh, 800px);
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      padding: 0;
-    }
-    .hero__bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop');
-      background-size: cover;
-      background-position: center 30%;
-      z-index: 0;
-    }
-    .hero__bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to right,
-        rgba(5,12,20,0.88) 0%,
-        rgba(5,12,20,0.72) 45%,
-        rgba(5,12,20,0.30) 100%
-      );
-    }
-    .hero__inner {
-      position: relative;
-      z-index: 2;
-      max-width: 680px;
-      padding: clamp(64px,10vw,120px) clamp(16px,4vw,48px);
-      width: 100%;
-    }
-    .hero__inner .eyebrow { margin-bottom: var(--s-3); display: block; }
-    .hero h1 { margin: var(--s-3) 0 var(--s-4); color: #fff; }
-    .hero .lead { color: rgba(255,255,255,0.75); max-width: 56ch; }
-    .hero__ctas { margin-top: var(--s-6); display:flex; flex-wrap:wrap; gap:var(--s-3); }
-
-    .how-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--s-6);
-      align-items: center;
-    }
-    .how-img {
-      border-radius: var(--r-xl);
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      background: var(--surface);
-    }
-    .how-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .how-steps { display: flex; flex-direction: column; gap: var(--s-5); }
-
-    .contact-section {
-      position: relative;
-      overflow: hidden;
-    }
-    .contact-section__bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('https://images.unsplash.com/photo-1535132011086-b8818f016104?w=1400&q=80&fit=crop');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.18;
-      z-index: 0;
-    }
-    .contact-section__inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .feature-grid {
-      display: grid;
-      gap: var(--s-4);
-      grid-template-columns: repeat(3, 1fr);
-    }
-    .feature-grid .feature:first-child {
-      grid-column: span 2;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--s-5);
-      align-items: start;
-    }
-    .feature-grid .feature:first-child .feature-text { display: flex; flex-direction: column; }
-    .feature-grid .feature:first-child .feature-img {
-      border-radius: var(--r-lg);
-      overflow: hidden;
-      aspect-ratio: 16/10;
-    }
-    .feature-grid .feature:first-child .feature-img img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-
-    @media (max-width: 900px) {
-      .feature-grid { grid-template-columns: repeat(2, 1fr); }
-      .feature-grid .feature:first-child { grid-column: span 2; grid-template-columns: 1fr; }
-      .feature-grid .feature:first-child .feature-img { display: none; }
-      .how-grid { grid-template-columns: 1fr; }
-      .how-img { display: none; }
-    }
-    @media (max-width: 600px) {
-      .feature-grid { grid-template-columns: 1fr; }
-      .feature-grid .feature:first-child { grid-column: span 1; }
-    }
-
-    .brand img.brand-logo {
-      height: 32px;
-      width: auto;
-      display: block;
-    }
-    .brand__mark { display: none; }
-  </style>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body data-page="landing">
 
-  <a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Skip to content</a>
+  <a class="brand" href="#main" style="position:absolute;left:-9999px">Skip to content</a>
 
   <header class="site-header" role="banner">
     <div class="site-header__inner">
       <a class="brand" href="index.html" aria-label="SnipeGolf home">
-        <img class="brand-logo" src="assets/snipe-logo.png" alt="SnipeGolf" width="120" height="32" loading="eager">
         <span class="brand__mark" aria-hidden="true">S</span>
+        <span class="serif">SNIPEGOLF</span>
       </a>
       <nav class="site-nav" aria-label="Primary">
-        <a href="main-leaderboard.html">Truist Live</a>
+        <a href="main-leaderboard.html">Leaderboard</a>
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
         <a href="#contact">Contact</a>
@@ -157,37 +38,47 @@
 
   <main id="main">
 
-    <!-- ─── Hero ─────────────────────────────────────────────────────── -->
+    <!-- ─── Hero ───────────────────────────────────────────────────── -->
     <section class="hero">
-      <div class="hero__bg" role="presentation" aria-hidden="true"></div>
       <div class="container hero__inner">
-        <span class="eyebrow">🏆 Truist Championship 2026 · Quail Hollow Club</span>
-        <h1>Your club's sweep.<br>Tour-grade experience.</h1>
-        <p class="lead">Live leaderboards, mobile entry, automatic withdrawal swaps, and admin tools that turn a Saturday-morning headache into a proper major experience for your members.</p>
+        <span class="eyebrow">Golf sweepstakes platform</span>
+        <h1>Run your club's sweep<br>like a pro.</h1>
+        <p class="lead">Live leaderboards, mobile entry, automatic withdrawal swaps, and admin tools that take a Saturday-morning headache and turn it into a tour-grade experience for your members.</p>
         <div class="hero__ctas">
-          <a class="btn btn--lg" href="main-leaderboard.html">View Truist live scores</a>
+          <a class="btn btn--lg" href="main-leaderboard.html">View live leaderboard</a>
           <a class="btn btn--ghost btn--lg" href="#contact">Set up your club</a>
         </div>
       </div>
+
+      <!-- Subtle course silhouette -->
+      <svg class="golf-silhouette" viewBox="0 0 1600 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <path d="M0,200 C200,140 400,180 600,160 C800,140 950,180 1100,150 C1280,116 1440,170 1600,140 L1600,240 L0,240 Z" fill="currentColor" opacity="0.7"/>
+        <path d="M0,220 C260,180 480,210 700,200 C920,190 1100,220 1300,200 C1450,186 1550,210 1600,200 L1600,240 L0,240 Z" fill="currentColor" opacity="0.5"/>
+        <!-- flagstick -->
+        <g transform="translate(1100,90)" fill="currentColor" opacity="0.85">
+          <rect x="0" y="0" width="2" height="100"/>
+          <path d="M2,0 L40,10 L2,20 Z"/>
+        </g>
+      </svg>
     </section>
 
-    <!-- ─── Live ticker ──────────────────────────────────────────────── -->
-    <section class="section" style="padding-top:var(--s-6);padding-bottom:var(--s-5)">
+    <!-- ─── Live ticker ───────────────────────────────────────────── -->
+    <section class="section">
       <div class="container">
         <div class="card">
           <div class="card__header">
             <div>
-              <h3>Clubs running sweeps right now</h3>
-              <p class="text-muted" style="font-size:.9rem;margin-top:4px">Truist Championship 2026 — 8–11 May · Quail Hollow Club, Charlotte</p>
+              <h3>Live across the network</h3>
+              <p class="text-muted" style="font-size:.9rem;margin-top:4px">A snapshot of clubs running sweepstakes right now.</p>
             </div>
-            <a class="btn btn--ghost btn--sm" href="main-leaderboard.html">Open Truist scoreboard →</a>
+            <a class="btn btn--ghost btn--sm" href="main-leaderboard.html">Open scoreboard →</a>
           </div>
           <div class="ticker" id="live-ticker" role="list" aria-label="Active leagues"></div>
         </div>
       </div>
     </section>
 
-    <!-- ─── Features ──────────────────────────────────────────────────── -->
+    <!-- ─── Features ─────────────────────────────────────────────── -->
     <section class="section" id="features">
       <div class="container">
         <div class="text-center mb-6">
@@ -196,19 +87,13 @@
           <p class="lead" style="margin:12px auto 0;max-width:60ch">From the bar staff scanning a QR code to the captain checking the standings on the back nine, every surface earns its keep.</p>
         </div>
 
-        <div class="feature-grid">
+        <div class="grid grid-3">
           <article class="feature">
-            <div class="feature-text">
-              <div class="feature__icon" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
-              </div>
-              <h3>Live leaderboards</h3>
-              <p>Powered by ESPN data. Refreshes every 60 seconds during play with rank movement, tiebreakers and round-by-round picks. Every club has its own private scoreboard.</p>
+            <div class="feature__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
             </div>
-            <div class="feature-img">
-              <img src="https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=480&q=80&fit=crop"
-                   alt="Golf leaderboard on mobile" width="480" height="300" loading="lazy">
-            </div>
+            <h3>Live leaderboards</h3>
+            <p>Powered by ESPN data. Refreshes every 60 seconds during play with rank movement, tiebreakers and round-by-round picks.</p>
           </article>
 
           <article class="feature">
@@ -224,7 +109,7 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M17 20v1M20 17v4"/></svg>
             </div>
             <h3>Printable QR posters</h3>
-            <p>Single-sheet A4 poster for the clubhouse. Scan, enter, done. Branded with your club crest and tournament logo.</p>
+            <p>Single-sheet A4 poster for the clubhouse notice board. Scan, enter, done. Branded with your club crest and tournament logo.</p>
           </article>
 
           <article class="feature">
@@ -248,76 +133,48 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
             </div>
             <h3>GDPR-compliant</h3>
-            <p>Built for the EU. Explicit consent, right-to-erasure, 30-day retention. Hosted on Google's infrastructure under your club's control.</p>
+            <p>Built for the EU. Explicit consent, right-to-erasure, 30-day post-event retention. Hosted on Google's infrastructure under your club's control.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ─── How it works ──────────────────────────────────────────────── -->
-    <section class="section" id="how" style="background:var(--surface);">
+    <!-- ─── How it works ─────────────────────────────────────────── -->
+    <section class="section" id="how">
       <div class="container">
         <div class="text-center mb-6">
           <span class="eyebrow">From zero to live in minutes</span>
           <h2 style="margin-top:8px">Three steps. No code.</h2>
-          <p class="lead" style="margin:12px auto 0;max-width:52ch">You send us the details. We handle everything else. Your members are entering picks within the hour.</p>
         </div>
 
-        <div class="how-grid">
-          <div class="how-img">
-            <img src="https://images.unsplash.com/photo-1535132011086-b8818f016104?w=600&q=80&fit=crop"
-                 alt="Golf tournament atmosphere" width="600" height="450" loading="lazy">
+        <div class="grid grid-3">
+          <div class="step">
+            <span class="step__num">1</span>
+            <h3>We provision your league</h3>
+            <p>Send us your club name, tournament and prize. We spin up a private league page, an admin link and a member entry link.</p>
           </div>
-          <div class="how-steps">
-            <div class="step">
-              <span class="step__num">1</span>
-              <h3>We provision your league</h3>
-              <p>Send us your club name, tournament and prize. We spin up a private league page, an admin link and a member entry link within the hour.</p>
-            </div>
-            <div class="step">
-              <span class="step__num">2</span>
-              <h3>Members enter on their phone</h3>
-              <p>Share the QR code or WhatsApp link. Players pick 2 golfers from each of 4 brackets and submit a tiebreaker. Entry takes under 2 minutes.</p>
-            </div>
-            <div class="step">
-              <span class="step__num">3</span>
-              <h3>Watch it play out live</h3>
-              <p>The leaderboard updates every minute. Withdrawals are swapped automatically. The captain has the trophy waiting on Sunday.</p>
-            </div>
+          <div class="step">
+            <span class="step__num">2</span>
+            <h3>Members enter on their phone</h3>
+            <p>Share the QR code or WhatsApp link. Players pick 2 golfers from each of 4 brackets and submit a tiebreaker.</p>
+          </div>
+          <div class="step">
+            <span class="step__num">3</span>
+            <h3>Watch it play out live</h3>
+            <p>The leaderboard updates every minute. Withdrawals are swapped automatically. The captain has the trophy waiting on Sunday.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ─── Stats band ─────────────────────────────────────────────── -->
-    <section class="section" style="padding-top:var(--s-6);padding-bottom:var(--s-6)">
+    <!-- ─── Contact / CTA band ───────────────────────────────────── -->
+    <section class="section" id="contact">
       <div class="container">
-        <div class="stats">
-          <div class="stat">
-            <span class="stat__num">9+</span>
-            <span class="stat__lbl">Cork clubs active</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num">60s</span>
-            <span class="stat__lbl">Score refresh rate</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num">€0</span>
-            <span class="stat__lbl">Setup fee, first event</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── Contact / CTA band ─────────────────────────────────────── -->
-    <section class="section contact-section" id="contact">
-      <div class="contact-section__bg" role="presentation" aria-hidden="true"></div>
-      <div class="container contact-section__inner">
-        <div class="card card--feature" style="text-align:center;max-width:680px;margin:0 auto">
-          <span class="eyebrow">Set up your club · US Open 2026</span>
-          <h2 style="margin:12px 0">Ready for Oakmont?</h2>
-          <p class="lead" style="max-width:52ch;margin:0 auto var(--s-5)">We'll have your league live in under an hour. No setup fee for the first event. Tee off 12 June.</p>
-          <a class="btn btn--lg" href="mailto:badenmaher@gmail.com?subject=SnipeGolf%20enquiry">Email Baden →</a>
+        <div class="card card--feature" style="text-align:center">
+          <span class="eyebrow">Set up your club</span>
+          <h2 style="margin:12px 0">Ready for your next major?</h2>
+          <p class="lead" style="max-width:60ch;margin:0 auto var(--s-5)">We'll have your league live in under an hour. No setup fee for the first event.</p>
+          <a class="btn btn--lg" href="mailto:badenmaher@gmail.com?subject=SnipeGolf%20—%20club%20enquiry">Email Baden →</a>
         </div>
       </div>
     </section>
@@ -328,15 +185,16 @@
     <div class="container">
       <div class="site-footer__grid">
         <div>
-          <a class="brand" href="index.html" aria-label="SnipeGolf home" style="display:inline-flex;align-items:center;gap:10px">
-            <img src="assets/snipe-logo.png" alt="SnipeGolf" height="28" loading="lazy" style="height:28px;width:auto">
+          <a class="brand" href="index.html" aria-label="SnipeGolf home">
+            <span class="brand__mark" aria-hidden="true">S</span>
+            <span class="serif">SNIPEGOLF</span>
           </a>
           <p style="margin-top:12px;max-width:36ch">A platform for clubs to run smarter, fairer, more elegant golf sweepstakes.</p>
         </div>
         <div>
           <h4>Product</h4>
           <ul>
-            <li><a href="main-leaderboard.html">Truist live scores</a></li>
+            <li><a href="main-leaderboard.html">Live leaderboard</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#how">How it works</a></li>
           </ul>
@@ -365,7 +223,7 @@
   </footer>
 
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-  <script src="leagues/_template/js/themes.js"></script>
+  <script src="assets/js/themes.js"></script>
   <script src="leagues/_template/js/app.js"></script>
 </body>
 </html>
