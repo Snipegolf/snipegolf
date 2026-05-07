@@ -2,29 +2,26 @@
  * SnipeGolf — app.js (v4)
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
- * Fixed v4:
- *  - apiUrl() now passes both ?gc= AND ?league= for full Apps Script compatibility
- *  - leaderboard mode correctly calls mode=leaderboard
- *  - config mode added
- *  - picks form redirect uses correct URL with gc param
+ * League: baydos-test-truist-championship-2026
+ * API: https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec
  */
 
 (function () {
   'use strict';
 
-  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBlOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
+  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
   var SLUG     = 'baydos-test-truist-championship-2026';
   var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
                  (!/\{\{/.test('401811945') ? '401811945' : '401580354');
 
   var REFRESH_MS  = 60000;
-  var FAIL_TEXT   = 'Connection lost — retrying…';
+  var FAIL_TEXT   = 'Connection lost — retrying\u2026';
 
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
 
   function fmtScore(n) {
-    if (n === null || n === undefined || n === '') return '—';
+    if (n === null || n === undefined || n === '') return '\u2014';
     var num = Number(n);
     if (isNaN(num)) return String(n);
     if (num === 0) return 'E';
@@ -39,7 +36,6 @@
       .replace(/"/g, '&quot;');
   }
 
-  // Pass BOTH gc= and league= so it works regardless of which param doGet checks
   function apiUrl(mode, extra) {
     var base = API_BASE;
     if (!base || /\{\{|^$/.test(base)) return null;
@@ -174,7 +170,7 @@
       ? ['B1 Pick A','B1 Pick B','B2 Pick A','B2 Pick B','B3 Pick A','B3 Pick B','B4 Pick A','B4 Pick B']
       : ['Pick 1','Pick 2','Pick 3','Pick 4'];
     for (var i = 0; i < Math.max(picks.length, labels.length); i++) {
-      grid += '<div><span>' + esc(labels[i] || ('Pick ' + (i+1))) + '</span><strong>' + esc(picks[i] || '—') + '</strong></div>';
+      grid += '<div><span>' + esc(labels[i] || ('Pick ' + (i+1))) + '</span><strong>' + esc(picks[i] || '\u2014') + '</strong></div>';
     }
     grid += '</div>';
     cell.innerHTML = '<div class="lb-detail">' + grid + '</div>';
@@ -196,8 +192,8 @@
       if (elLeader) elLeader.textContent = (entries[0].name || '').split(' ').pop();
       if (elScore)  elScore.textContent  = fmtScore(entries[0].total);
     } else {
-      if (elLeader) elLeader.textContent = '—';
-      if (elScore)  elScore.textContent  = '—';
+      if (elLeader) elLeader.textContent = '\u2014';
+      if (elScore)  elScore.textContent  = '\u2014';
     }
     if (elUpd) {
       var ts = data && data.lastUpdated ? new Date(data.lastUpdated) : new Date();
@@ -208,7 +204,7 @@
     if (!entries.length) {
       wrap.innerHTML =
         '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px">' +
-        esc((data && data.message) || 'No entries yet — check back once picks are submitted.') +
+        esc((data && data.message) || 'No entries yet \u2014 check back once picks are submitted.') +
         '</td></tr>';
       return;
     }
@@ -219,16 +215,14 @@
       var medal  = rank === 1 ? 'medal-1' : rank === 2 ? 'medal-2' : rank === 3 ? 'medal-3' : '';
       var move   = Number(r.move || 0);
       var mvCls  = move > 0 ? 'move-up' : move < 0 ? 'move-down' : 'move-same';
-      var mvTxt  = move > 0 ? '▲' + move : move < 0 ? '▼' + Math.abs(move) : '—';
+      var mvTxt  = move > 0 ? '\u25b2' + move : move < 0 ? '\u25bc' + Math.abs(move) : '\u2014';
 
-      // Build picks array from flat fields (b1pick1, b1score1 ... b4pick2, b4score2)
       var picks = [
         r.b1pick1 || '', r.b1pick2 || '',
         r.b2pick1 || '', r.b2pick2 || '',
         r.b3pick1 || '', r.b3pick2 || '',
         r.b4pick1 || '', r.b4pick2 || ''
       ].filter(function(p){ return p; });
-      // Legacy: if data has picks array directly use that
       if (Array.isArray(r.picks) && r.picks.length) picks = r.picks;
 
       var scores = [
@@ -238,12 +232,11 @@
         r.b4score1, r.b4score2
       ];
 
-      // Best = lowest score, worst = highest
       var scoredPairs = picks.map(function(p, i) { return { name: p, score: scores[i] }; })
         .filter(function(x){ return x.score !== null && x.score !== undefined && x.score !== ''; });
       scoredPairs.sort(function(a,b){ return Number(a.score) - Number(b.score); });
-      var best  = scoredPairs.length ? scoredPairs[0].name : (picks[0] || '—');
-      var worst = scoredPairs.length ? scoredPairs[scoredPairs.length-1].name : (picks[picks.length-1] || '—');
+      var best  = scoredPairs.length ? scoredPairs[0].name : (picks[0] || '\u2014');
+      var worst = scoredPairs.length ? scoredPairs[scoredPairs.length-1].name : (picks[picks.length-1] || '\u2014');
 
       html += '<tr class="expandable" data-picks="' + esc(JSON.stringify(picks)) + '">';
       html += '<td class="col-rank ' + medal + '">' + rank + '</td>';
@@ -280,14 +273,13 @@
     if (!wrap) return;
     var url = apiUrl('leaderboard');
     if (!url) {
-      wrap.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Awaiting deployment configuration…</td></tr>';
+      wrap.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Awaiting deployment configuration\u2026</td></tr>';
       return;
     }
 
     function load() {
       fetchJson(url, function (err, data) {
         if (err) { showLbError(wrap, err); return; }
-        // Handle error object returned from Apps Script
         if (data && data.error) { showLbError(wrap, { message: data.error }); return; }
         renderLeaderboard(data);
       });
@@ -343,10 +335,10 @@
         competitors.slice(0, 80).forEach(function (c) {
           var ath  = c.athlete || {};
           var stats= c.statistics || [];
-          var pos  = (c.status && c.status.position && c.status.position.displayName) || '—';
-          var thru = (c.status && (c.status.thru || (c.status.type && c.status.type.shortDetail))) || '—';
-          var today= '—';
-          var total= c.score || '—';
+          var pos  = (c.status && c.status.position && c.status.position.displayName) || '\u2014';
+          var thru = (c.status && (c.status.thru || (c.status.type && c.status.type.shortDetail))) || '\u2014';
+          var today= '\u2014';
+          var total= c.score || '\u2014';
           stats.forEach(function (s) {
             if (s.name === 'scoreToPar') total = s.displayValue;
             if (s.name === 'currentRoundScore' || s.name === 'todaysPar') today = s.displayValue;
@@ -355,7 +347,7 @@
 
           html += '<tr>';
           html += '<td class="col-rank">' + esc(pos) + '</td>';
-          html += '<td class="col-name"><strong>' + esc(ath.displayName || '—') + '</strong></td>';
+          html += '<td class="col-name"><strong>' + esc(ath.displayName || '\u2014') + '</strong></td>';
           html += '<td class="hide-sm">' + esc(country) + '</td>';
           html += '<td class="col-score">' + esc(total) + '</td>';
           html += '<td class="hide-sm">' + esc(today) + '</td>';
@@ -378,7 +370,6 @@
   /* ── Picks form ────────────────────────────────────────────────────── */
 
   function initPicksForm() {
-    // Update the "Open picks form" button href dynamically in case slug differs
     var formLink = $('#form-link');
     if (formLink) {
       formLink.href = API_BASE + '?mode=enter&gc=' + encodeURIComponent(SLUG)
@@ -433,7 +424,7 @@
       }
 
       var btn = form.querySelector('button[type="submit"]');
-      if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Submitting\u2026'; }
     });
   }
 
@@ -507,26 +498,6 @@
     });
   }
 
-  /* ── Live ticker ───────────────────────────────────────────────────── */
-
-  function initTicker() {
-    var ticker = $('#live-ticker');
-    if (!ticker) return;
-    var clubs = [
-      { club: 'SAAS 10, Dublin',        leader: 'Rory McIlroy',    score: 'TBC' },
-      { club: 'Cobh GC',                leader: 'Scottie Scheffler',score: 'TBC' },
-      { club: 'Baydos, Cork',           leader: 'Collin Morikawa', score: 'TBC' },
-      { club: 'Royal County Down GC',   leader: 'Shane Lowry',     score: 'TBC' },
-      { club: 'Portmarnock GC',         leader: 'Jon Rahm',        score: 'TBC' }
-    ];
-    var html = '';
-    clubs.forEach(function (d) {
-      html += '<span class="ticker__pill"><span class="live-dot"></span>' +
-              esc(d.club) + ' · ' + esc(d.leader) + ' <strong>' + esc(d.score) + '</strong></span>';
-    });
-    ticker.innerHTML = html;
-  }
-
   /* ── Page router ────────────────────────────────────────────────────── */
 
   function init() {
@@ -539,7 +510,6 @@
       case 'qr':                initQr();              loadConfig(); break;
       case 'index':             initLeaderboard();     loadConfig(); break;
       case 'main-leaderboard':  initMainLeaderboard(); break;
-      case 'landing':           initTicker(); break;
       default: loadConfig();
     }
   }
