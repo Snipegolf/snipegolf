@@ -18,6 +18,10 @@
   var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
                  (!/\{\{/.test('401811945') ? '401811945' : '401580354');
 
+  // ── Expose to picks-form.js (runs in same page, needs these globals) ──
+  window.SG_API_BASE = API_BASE;
+  window.SG_SLUG     = SLUG;
+
   var REFRESH_MS  = 60000;
   var FAIL_TEXT   = 'Connection lost — retrying…';
 
@@ -387,7 +391,7 @@
         var n = Number(tb.value);
         if (tb.value === '' || isNaN(n) || n < -40 || n > 40) {
           e.preventDefault();
-          showError('Enter the winner\'s score to par, e.g. -10. Must be between -40 and +40.');
+          showError("Enter the winner's score to par, e.g. -10. Must be between -40 and +40.");
           return;
         }
       }
