@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <!--
-  SnipeGolf — League admin dashboard (v3)
-  All action links now use ?mode=admin&gc=BAYDOS1 (PIN-gated) to match doGet().
-  Old token= URLs removed.
+  SnipeGolf — League admin dashboard (v2)
+  Token-gated. Real CRUD lives in the Apps Script web app; this page is the
+  branded shell with the deep-linked actions.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0a">
+  <meta name="default-theme" content="quail-hollow">
   <title>Admin — Baydos Test — Truist Championship 2026 | SnipeGolf</title>
   <meta name="robots" content="noindex,nofollow">
 
@@ -38,10 +39,10 @@
       <div class="league-logos">
         <img src="https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:R000.png/tournaments/logos/R480.png" alt="Baydos Test" onerror="this.style.display='none'">
         <span class="league-logos__divider" aria-hidden="true"></span>
-        <img src="https://res.cloudinary.com/pgatour-prod/image/upload/v1/tournaments/logos/R480.png" alt="Truist Championship 2026" onerror="this.style.display='none'">
+        <img src="{{TOURNAMENT_LOGO_URL}}" alt="Truist Championship 2026" onerror="this.style.display='none'">
       </div>
       <div class="league-title">
-        <span data-tournament>Truist Championship 2026 &middot; Admin</span>
+        <span data-tournament>Truist Championship 2026 · Admin</span>
         <small data-club-name>Baydos Test</small>
       </div>
     </div>
@@ -54,32 +55,37 @@
         <header class="mb-6">
           <span class="eyebrow">Admin dashboard</span>
           <h1 style="margin-top:8px">Run the show.</h1>
-          <p class="lead">Add players, manage entries, mark payments, and view standings. Your admin console is PIN-protected.</p>
+          <p class="lead">Add players, send entry links, lock entries, and print posters. Your secure dashboard is below.</p>
         </header>
 
-        <!-- Open admin console — PIN gate via doGet ?mode=admin&gc=BAYDOS1 -->
+        <!-- Stats overview -->
+        <div class="grid grid-4 mb-6">
+          <div class="stat"><span class="stat__num" id="stat-players">—</span><span class="stat__lbl">Players</span></div>
+          <div class="stat"><span class="stat__num" id="stat-submitted">—</span><span class="stat__lbl">Picks in</span></div>
+          <div class="stat"><span class="stat__num" id="stat-missing">—</span><span class="stat__lbl">Missing</span></div>
+          <div class="stat"><span class="stat__num" id="stat-wd">—</span><span class="stat__lbl">WDs swapped</span></div>
+        </div>
+
+        <!-- Open dashboard CTA -->
         <div class="card mb-5">
           <div class="card__header">
-            <h2>Admin console</h2>
+            <h2>Live dashboard</h2>
             <span id="status-badge" class="badge badge-live">LIVE</span>
           </div>
-          <p class="text-muted mb-4">Opens the PIN-gated admin dashboard. You will need your 4-digit admin PIN.</p>
-          <a class="btn btn--lg" id="admin-console-btn"
-             href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=admin&gc=BAYDOS1">
-            Open admin console &rarr;
+          <p class="text-muted mb-4">Your token-gated admin console runs inside Apps Script. Bookmark the link emailed to you on setup.</p>
+          <a class="btn btn--lg" href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=baydos-test-truist-championship-2026&mode=admin&token=6WeUAvSVDksfJuJyReeMc7pkD9RHTwQT">
+            Open admin console →
           </a>
         </div>
 
-        <!-- Quick actions -->
+        <!-- Quick actions grid -->
         <div class="grid grid-3 mb-5">
-
-          <a class="feature"
-             href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=admin&gc=BAYDOS1">
+          <a class="feature" href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=baydos-test-truist-championship-2026&mode=admin&token=6WeUAvSVDksfJuJyReeMc7pkD9RHTwQT&action=addplayer">
             <div class="feature__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="4"/><path d="M3 21a6 6 0 0 1 12 0"/><path d="M19 8v6M16 11h6"/></svg>
             </div>
-            <h3>Add entry</h3>
-            <p>Add a new participant to your group via the secure admin console.</p>
+            <h3>Add player</h3>
+            <p>Name, email, phone. Sends the personal entry link automatically.</p>
           </a>
 
           <a class="feature" href="qr.html">
@@ -91,30 +97,28 @@
           </a>
 
           <a class="feature" target="_blank" rel="noopener"
-             href="https://wa.me/?text=Baydos Test — Truist Championship 2026 Golf Sweep%0A%0AEnter your picks: https://snipegolf.github.io/snipegolf/leagues/baydos-test-truist-championship-2026/picks.html">
+             href="https://wa.me/?text=Baydos Test — Truist Championship 2026%20Golf%20Sweep%0A%0AEnter%20your%20picks%3A%20https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec%3Fleague%3Dbaydos-test-truist-championship-2026%26mode%3Dpicks">
             <div class="feature__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.3-4.5A9 9 0 1 1 21 12z"/></svg>
             </div>
             <h3>WhatsApp share</h3>
-            <p>Pre-filled message with the picks link for your members chat.</p>
+            <p>Pre-filled message with the picks link for your members' chat.</p>
           </a>
 
-          <a class="feature"
-             href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=admin&gc=BAYDOS1&action=pay">
+          <a class="feature" href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=baydos-test-truist-championship-2026&mode=admin&token=6WeUAvSVDksfJuJyReeMc7pkD9RHTwQT&action=emailall">
             <div class="feature__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
             </div>
-            <h3>Mark payments</h3>
-            <p>Update paid/pending status for entrants.</p>
+            <h3>Email all entrants</h3>
+            <p>Resend personal links, send a tournament reminder, share leaderboard.</p>
           </a>
 
-          <a class="feature"
-             href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=admin&gc=BAYDOS1">
+          <a class="feature" href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=baydos-test-truist-championship-2026&mode=admin&token=6WeUAvSVDksfJuJyReeMc7pkD9RHTwQT&action=lock">
             <div class="feature__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
             </div>
-            <h3>View all entries</h3>
-            <p>See every entry, payment status, and picks for this group.</p>
+            <h3>Lock entries</h3>
+            <p>Stop new picks once the tournament tees off Thursday morning.</p>
           </a>
 
           <a class="feature" href="leaderboard.html">
@@ -126,6 +130,35 @@
           </a>
         </div>
 
+        <!-- Players table -->
+        <div class="card mb-5" style="padding:0;overflow:hidden">
+          <div style="padding:var(--s-4) var(--s-4) 0">
+            <div class="card__header">
+              <h2>Players</h2>
+              <span class="text-muted" style="font-size:.85rem">Edit / delete via the admin console.</span>
+            </div>
+          </div>
+          <div class="lb-wrap" style="border:none;border-radius:0;max-height:50vh">
+            <table class="lb" id="players-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th class="hide-sm">Email</th>
+                  <th class="hide-sm">Phone</th>
+                  <th>Picks</th>
+                  <th class="hide-xs">TB</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="players-body">
+                <tr><td colspan="6" style="padding:32px;text-align:center;color:var(--muted)">
+                  Player list available in the secure admin console — open the dashboard above.
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- League info -->
         <div class="card">
           <h3 class="mb-3">League details</h3>
@@ -133,10 +166,9 @@
             <tbody>
               <tr><td class="text-muted" style="padding:6px 0;width:160px">Tournament</td><td><span data-tournament>Truist Championship 2026</span></td></tr>
               <tr><td class="text-muted" style="padding:6px 0">Club</td><td data-club-name>Baydos Test</td></tr>
-              <tr><td class="text-muted" style="padding:6px 0">Group code</td><td>BAYDOS1</td></tr>
               <tr><td class="text-muted" style="padding:6px 0">Year</td><td>2026</td></tr>
-              <tr><td class="text-muted" style="padding:6px 0">Prize</td><td data-prize>—</td></tr>
-              <tr><td class="text-muted" style="padding:6px 0">Public URL</td><td><a href="index.html">snipegolf.github.io/snipegolf/leagues/baydos-test-truist-championship-2026/</a></td></tr>
+              <tr><td class="text-muted" style="padding:6px 0">Prize</td><td data-prize>$500</td></tr>
+              <tr><td class="text-muted" style="padding:6px 0">Public URL</td><td><a href="index.html">https://snipegolf.github.io/snipegolf/leagues/baydos-test-truist-championship-2026/</a></td></tr>
             </tbody>
           </table>
         </div>
@@ -148,8 +180,8 @@
   <footer class="site-footer">
     <div class="container">
       <div class="site-footer__bottom" style="border:none;padding-top:0">
-        <span>Baydos Test &middot; Admin</span>
-        <span><a href="terms.html">Terms</a> &middot; <a href="privacy.html">Privacy</a></span>
+        <span>Baydos Test · Admin</span>
+        <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></span>
       </div>
     </div>
   </footer>
