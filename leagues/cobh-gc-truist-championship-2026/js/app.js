@@ -17,8 +17,10 @@
   var SLUG     = 'cobh-gc-truist-championship-2026';
   var ESPN_ID  = '401811945';
 
-  var REFRESH_MS  = 60000;
+  var REFRESH_MS  = 60000;        // 60 s
   var FAIL_TEXT   = 'Connection lost — retrying…';
+
+  /* ── Utility helpers ────────────────────────────────────────────────── */
 
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -41,7 +43,7 @@
 
   function apiUrl(mode, extra) {
     var base = API_BASE;
-    if (!base || /\{\{|^$/.test(base)) return null;
+    if (!base || /\{\{|^$/.test(base)) return null; // not yet substituted
     var url = base + '?league=' + encodeURIComponent(SLUG) + '&mode=' + mode;
     if (extra) url += '&' + extra;
     return url;
@@ -68,12 +70,13 @@
     xhr.send();
   }
 
-  /* ── Theme picker ───────────────────────────────────────────────────── */
+  /* ── Theme picker (depends on themes.js) ───────────────────────────── */
 
   function initThemePicker() {
     if (!window.SnipeThemes) return;
     var current = window.SnipeThemes.init();
     buildThemeFab(current);
+    // Listen for system colour preference changes? Skipped — themes are user-driven.
   }
 
   function buildThemeFab(currentTheme) {
@@ -261,7 +264,7 @@
     }
 
     load();
-    setInterval(function () {
+    var iv = setInterval(function () {
       if (document.visibilityState === 'visible') load();
     }, REFRESH_MS);
 
@@ -273,7 +276,7 @@
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Public main leaderboard (ESPN) ────────────────────────────────── */
+  /* ── Public main leaderboard (ESPN scoreboard) ─────────────────────── */
 
   function initMainLeaderboard() {
     var tbody = $('#scoreboard-body');
@@ -310,7 +313,7 @@
         competitors.slice(0, 80).forEach(function (c) {
           var ath  = c.athlete || {};
           var stats= c.statistics || [];
-          var pos  = (c.status && c.status.position && c.status.position.displayName) || '—';
+          var pos  = (c.status && c.status.position && c.status.position.displayName) || c.status && c.status.position && c.status.position.id || '—';
           var thru = (c.status && (c.status.thru || (c.status.type && c.status.type.shortDetail))) || '—';
           var today= '—';
           var total= c.score || (c.statistics && c.statistics[0] && c.statistics[0].displayValue) || '—';
@@ -334,7 +337,7 @@
     }
 
     load();
-    setInterval(function () {
+    var iv = setInterval(function () {
       if (document.visibilityState === 'visible') load();
     }, REFRESH_MS);
 
@@ -365,6 +368,7 @@
         return;
       }
 
+      // Duplicate check
       var seen = {};
       for (var j = 0; j < values.length; j++) {
         if (seen[values[j]]) {
@@ -375,17 +379,18 @@
         seen[values[j]] = true;
       }
 
-      // Tiebreaker — score to par (e.g. -23), NOT a 72-hole stroke total
+      // Tiebreaker numeric range
       var tb = form.querySelector('input[name="tiebreaker"]');
       if (tb) {
         var n = Number(tb.value);
-        if (tb.value === '' || isNaN(n) || n < -40 || n > 40) {
+        if (!tb.value || isNaN(n) || n < 200 || n > 350) {
           e.preventDefault();
-          showError('Enter the winner\'s score to par, e.g. -23. Must be between -40 and +40.');
+          showError('Tiebreaker must be a number between 200 and 350 (winning 72-hole score).');
           return;
         }
       }
 
+      // GDPR consent
       var gdpr = form.querySelector('input[name="gdpr"]');
       if (gdpr && !gdpr.checked) {
         e.preventDefault();
@@ -417,18 +422,30 @@
     if (!wrap) return;
     var url = wrap.getAttribute('data-url') || window.location.href;
 
-    if (typeof QRCode !== 'undefined') {
-      new QRCode(wrap, {
-        text: url, width: 360, height: 360,
-        colorDark: '#000000', colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
-      });
-    } else {
+    function fallbackImg(){
       var img = document.createElement('img');
-      img.src = 'https://chart.googleapis.com/chart?chs=360x360&cht=qr&chl=' + encodeURIComponent(url) + '&choe=UTF-8';
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&ecc=H&data=' + encodeURIComponent(url);
       img.alt = 'Picks QR code';
       img.width = 360; img.height = 360;
+      img.onerror = function(){
+        // Last-resort: Google Charts (may be deprecated but worth trying)
+        img.onerror = null;
+        img.src = 'https://quickchart.io/qr?text=' + encodeURIComponent(url) + '&size=360';
+      };
+      wrap.innerHTML = '';
       wrap.appendChild(img);
+    }
+    if (typeof QRCode !== 'undefined') {
+      try {
+        wrap.innerHTML = '';
+        new QRCode(wrap, {
+          text: url, width: 360, height: 360,
+          colorDark: '#000000', colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } catch(e){ fallbackImg(); }
+    } else {
+      fallbackImg();
     }
     var lbl = $('#qr-url-label');
     if (lbl) lbl.textContent = url;
@@ -455,11 +472,12 @@
     });
   }
 
-  /* ── Live ticker ───────────────────────────────────────────────────── */
+  /* ── Live ticker (landing page) ────────────────────────────────────── */
 
   function initTicker() {
     var ticker = $('#live-ticker');
     if (!ticker) return;
+    // Static demo pills until a real /api/leagues/active endpoint exists.
     var demo = [
       { club: 'Royal County Down GC', score: '-12', leader: 'Lowry' },
       { club: 'Lahinch GC',           score: '-9',  leader: 'McIlroy' },
@@ -478,8 +496,11 @@
   /* ── Page router ───────────────────────────────────────────────────── */
 
   function init() {
+    // Themes first to avoid layout shift
     initThemePicker();
+
     var page = (document.body.getAttribute('data-page') || '').toLowerCase();
+
     switch (page) {
       case 'leaderboard':       initLeaderboard(); loadConfig(); break;
       case 'picks':             initPicksForm();  loadConfig(); break;

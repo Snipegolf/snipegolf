@@ -249,6 +249,14 @@
   function init() {
     var stored = load();
     var theme = stored ? getById(stored) : null;
+    if (!theme) {
+      // Per-league default: <meta name="default-theme" content="augusta">
+      var meta = document.querySelector('meta[name="default-theme"]');
+      if (meta) {
+        var leagueDefault = (meta.getAttribute('content') || '').trim();
+        if (leagueDefault) theme = getById(leagueDefault);
+      }
+    }
     if (!theme) theme = defaultTheme();
     apply(theme);
     return theme;
