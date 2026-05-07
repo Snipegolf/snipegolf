@@ -3,7 +3,6 @@
   SnipeGolf — League picks entry (v2)
   Static shell. The Apps Script web app handles the actual form posting
   via ?mode=enter&gc=GROUPCODE
-  This page provides the branded shell + redirect for users coming via QR / WhatsApp.
 -->
 <html lang="en">
 <head>
@@ -35,11 +34,6 @@
 
   <div class="league-header">
     <div class="league-header__row">
-      <div class="league-logos">
-        <img src="" alt="Baydos Test" onerror="this.style.display='none'">
-        <span class="league-logos__divider" aria-hidden="true"></span>
-        <img src="" alt="Truist Championship 2026" onerror="this.style.display='none'">
-      </div>
       <div class="league-title">
         <span data-tournament>Truist Championship 2026</span>
         <small data-club-name>Baydos Test</small>
@@ -71,97 +65,11 @@
           <h3 style="margin-bottom:var(--s-3)">Open the secure form</h3>
           <p class="text-muted mb-4">Use the entry link your pub admin sent you (email or WhatsApp) — it includes your group code. If you don't have it yet, ask your admin.</p>
           <a class="btn btn--block btn--lg" id="form-link"
-             href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBlOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=enter&gc=baydos-test-truist-championship-2026">
+             href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?mode=enter&gc=baydos-test-truist-championship-2026"
+             target="_blank" rel="noopener noreferrer">
             Open picks form →
           </a>
         </div>
-
-        <!-- Visual preview of what the Apps Script form renders -->
-        <details class="card">
-          <summary style="cursor:pointer;font-weight:600;font-family:var(--font-display);font-size:1.1rem">
-            What the form looks like
-          </summary>
-
-          <form id="picks-form" style="margin-top:var(--s-4)" onsubmit="return false">
-            <div class="input-row">
-              <div>
-                <label for="pf-first">First name</label>
-                <input id="pf-first" name="first" autocomplete="given-name" placeholder="e.g. Padraig" disabled>
-              </div>
-              <div>
-                <label for="pf-last">Last name</label>
-                <input id="pf-last" name="last" autocomplete="family-name" placeholder="e.g. Harrington" disabled>
-              </div>
-            </div>
-            <div class="input-row">
-              <div>
-                <label for="pf-email">Email</label>
-                <input id="pf-email" name="email" type="email" autocomplete="email" placeholder="you@club.ie" disabled>
-              </div>
-              <div>
-                <label for="pf-phone">Phone (optional)</label>
-                <input id="pf-phone" name="phone" type="tel" autocomplete="tel" placeholder="+353…" disabled>
-              </div>
-            </div>
-
-            <div class="bracket mt-5">
-              <div class="bracket__header">
-                <span class="bracket__title">Bracket 1 · Top favourites</span>
-                <span class="bracket__hint">Pick 2</span>
-              </div>
-              <div class="input-row">
-                <div><label for="b1-1">Pick A</label><select id="b1-1" required disabled><option value="">—</option></select></div>
-                <div><label for="b1-2">Pick B</label><select id="b1-2" required disabled><option value="">—</option></select></div>
-              </div>
-            </div>
-
-            <div class="bracket">
-              <div class="bracket__header">
-                <span class="bracket__title">Bracket 2 · Contenders</span>
-                <span class="bracket__hint">Pick 2</span>
-              </div>
-              <div class="input-row">
-                <div><label for="b2-1">Pick A</label><select id="b2-1" required disabled><option value="">—</option></select></div>
-                <div><label for="b2-2">Pick B</label><select id="b2-2" required disabled><option value="">—</option></select></div>
-              </div>
-            </div>
-
-            <div class="bracket">
-              <div class="bracket__header">
-                <span class="bracket__title">Bracket 3 · Outsiders</span>
-                <span class="bracket__hint">Pick 2</span>
-              </div>
-              <div class="input-row">
-                <div><label for="b3-1">Pick A</label><select id="b3-1" required disabled><option value="">—</option></select></div>
-                <div><label for="b3-2">Pick B</label><select id="b3-2" required disabled><option value="">—</option></select></div>
-              </div>
-            </div>
-
-            <div class="bracket">
-              <div class="bracket__header">
-                <span class="bracket__title">Bracket 4 · Longshots</span>
-                <span class="bracket__hint">Pick 2</span>
-              </div>
-              <div class="input-row">
-                <div><label for="b4-1">Pick A</label><select id="b4-1" required disabled><option value="">—</option></select></div>
-                <div><label for="b4-2">Pick B</label><select id="b4-2" required disabled><option value="">—</option></select></div>
-              </div>
-            </div>
-
-            <div class="mt-5" style="max-width:240px">
-              <label for="pf-tiebreaker">Tiebreaker · winner's score to par</label>
-              <input id="pf-tiebreaker" name="tiebreaker" type="number" min="-40" max="40" placeholder="e.g. -10" disabled>
-              <p style="font-size:0.78rem;color:var(--muted);margin-top:6px">Enter the winner's final score relative to par (e.g. -10 means ten under par). Nearest prediction wins the tiebreaker; under beats over if equidistant.</p>
-            </div>
-
-            <div class="consent">
-              <input id="pf-gdpr" name="gdpr" type="checkbox" disabled>
-              <label for="pf-gdpr">I'm 18+ and I agree to the <a href="terms.html">terms</a> and the <a href="privacy.html">privacy notice</a>. I consent to my entry being processed by Baydos Test and SnipeGolf.</label>
-            </div>
-
-            <button class="btn btn--lg btn--block mt-5" type="submit" disabled>Submit picks (open the secure form above)</button>
-          </form>
-        </details>
 
         <div class="card mt-5">
           <h3>What happens next</h3>
