@@ -1,11 +1,11 @@
 /**
- * SnipeGolf — app.js (v3)
+ * SnipeGolf — app.js (v2)
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
  * Template variables (substituted by Apps Script on provisioning):
  *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec           Apps Script web-app URL
- *   old-head-truist-championship-2026               league group code (gc param)
- *   401811945            ESPN tournament event id (falls back to body[data-espn-id])
+ *   old-head-truist-championship-2026               league slug
+ *   401811945            ESPN tournament event id
  *
  * Page router: <body data-page="leaderboard|picks|admin|index|qr|main-leaderboard|landing|terms|privacy">
  */
@@ -15,11 +15,12 @@
 
   var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
   var SLUG     = 'old-head-truist-championship-2026';
-  var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
-                 (!/\{\{/.test('401811945') ? '401811945' : '401580354');
+  var ESPN_ID  = '401811945';
 
-  var REFRESH_MS  = 60000;
+  var REFRESH_MS  = 60000;        // 60 s
   var FAIL_TEXT   = 'Connection lost — retrying…';
+
+  /* ── Utility helpers ────────────────────────────────────────────────── */
 
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -42,9 +43,8 @@
 
   function apiUrl(mode, extra) {
     var base = API_BASE;
-    if (!base || /\{\{|^$/.test(base)) return null;
-    // Support both old ?league=SLUG&mode=X and new ?mode=X&gc=SLUG patterns
-    var url = base + '?mode=' + mode + '&gc=' + encodeURIComponent(SLUG) + '&format=json';
+    if (!base || /\{\{|^$/.test(base)) return null; // not yet substituted
+    var url = base + '?league=' + encodeURIComponent(SLUG) + '&mode=' + mode;
     if (extra) url += '&' + extra;
     return url;
   }
@@ -70,12 +70,13 @@
     xhr.send();
   }
 
-  /* ── Theme picker ────────────────────────────────────────────────── */
+  /* ── Theme picker (depends on themes.js) ───────────────────────────── */
 
   function initThemePicker() {
     if (!window.SnipeThemes) return;
     var current = window.SnipeThemes.init();
     buildThemeFab(current);
+    // Listen for system colour preference changes? Skipped — themes are user-driven.
   }
 
   function buildThemeFab(currentTheme) {
@@ -168,12 +169,8 @@
     var cell = document.createElement('td');
     cell.colSpan = tr.children.length;
     var grid = '<div class="lb-detail-grid">';
-    // Support both 4-pick (legacy) and 8-pick bracket format
-    var labels = picks.length > 4
-      ? ['B1 Pick A','B1 Pick B','B2 Pick A','B2 Pick B','B3 Pick A','B3 Pick B','B4 Pick A','B4 Pick B']
-      : ['Pick 1','Pick 2','Pick 3','Pick 4'];
-    for (var i = 0; i < Math.max(picks.length, labels.length); i++) {
-      grid += '<div><span>' + esc(labels[i] || ('Pick ' + (i+1))) + '</span><strong>' + esc(picks[i] || '—') + '</strong></div>';
+    for (var i = 0; i < 8; i++) {
+      grid += '<div><span>Pick ' + (i + 1) + '</span><strong>' + esc(picks[i] || '—') + '</strong></div>';
     }
     grid += '</div>';
     cell.innerHTML = '<div class="lb-detail">' + grid + '</div>';
@@ -253,7 +250,7 @@
   function initLeaderboard() {
     var wrap = $('#lb-body');
     if (!wrap) return;
-    var url = apiUrl('leaderboard');
+    var url = apiUrl('leaderboard', 'format=json');
     if (!url) {
       wrap.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Awaiting deployment configuration…</td></tr>';
       return;
@@ -267,7 +264,7 @@
     }
 
     load();
-    setInterval(function () {
+    var iv = setInterval(function () {
       if (document.visibilityState === 'visible') load();
     }, REFRESH_MS);
 
@@ -279,12 +276,12 @@
     if (counter) startCountdown(counter, REFRESH_MS);
   }
 
-  /* ── Public main leaderboard (ESPN) ─────────────────────────────── */
+  /* ── Public main leaderboard (ESPN scoreboard) ─────────────────────── */
 
   function initMainLeaderboard() {
     var tbody = $('#scoreboard-body');
     if (!tbody) return;
-    var url = ESPN_ID
+    var url = ESPN_ID && !/\{\{/.test(ESPN_ID)
       ? 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=' + encodeURIComponent(ESPN_ID)
       : 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard';
 
@@ -316,10 +313,10 @@
         competitors.slice(0, 80).forEach(function (c) {
           var ath  = c.athlete || {};
           var stats= c.statistics || [];
-          var pos  = (c.status && c.status.position && c.status.position.displayName) || '—';
+          var pos  = (c.status && c.status.position && c.status.position.displayName) || c.status && c.status.position && c.status.position.id || '—';
           var thru = (c.status && (c.status.thru || (c.status.type && c.status.type.shortDetail))) || '—';
           var today= '—';
-          var total= c.score || '—';
+          var total= c.score || (c.statistics && c.statistics[0] && c.statistics[0].displayValue) || '—';
           stats.forEach(function (s) {
             if (s.name === 'scoreToPar') total = s.displayValue;
             if (s.name === 'currentRoundScore' || s.name === 'todaysPar') today = s.displayValue;
@@ -340,7 +337,7 @@
     }
 
     load();
-    setInterval(function () {
+    var iv = setInterval(function () {
       if (document.visibilityState === 'visible') load();
     }, REFRESH_MS);
 
@@ -371,6 +368,7 @@
         return;
       }
 
+      // Duplicate check
       var seen = {};
       for (var j = 0; j < values.length; j++) {
         if (seen[values[j]]) {
@@ -381,17 +379,18 @@
         seen[values[j]] = true;
       }
 
-      // Tiebreaker — score to par (e.g. -10), NOT 72-hole stroke total
+      // Tiebreaker numeric range
       var tb = form.querySelector('input[name="tiebreaker"]');
       if (tb) {
         var n = Number(tb.value);
-        if (tb.value === '' || isNaN(n) || n < -40 || n > 40) {
+        if (!tb.value || isNaN(n) || n < 200 || n > 350) {
           e.preventDefault();
-          showError('Enter the winner\'s score to par, e.g. -10. Must be between -40 and +40.');
+          showError('Tiebreaker must be a number between 200 and 350 (winning 72-hole score).');
           return;
         }
       }
 
+      // GDPR consent
       var gdpr = form.querySelector('input[name="gdpr"]');
       if (gdpr && !gdpr.checked) {
         e.preventDefault();
@@ -423,12 +422,13 @@
     if (!wrap) return;
     var url = wrap.getAttribute('data-url') || window.location.href;
 
-    function fallbackImg() {
+    function fallbackImg(){
       var img = document.createElement('img');
       img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&ecc=H&data=' + encodeURIComponent(url);
       img.alt = 'Picks QR code';
       img.width = 360; img.height = 360;
-      img.onerror = function () {
+      img.onerror = function(){
+        // Last-resort: Google Charts (may be deprecated but worth trying)
         img.onerror = null;
         img.src = 'https://quickchart.io/qr?text=' + encodeURIComponent(url) + '&size=360';
       };
@@ -443,7 +443,7 @@
           colorDark: '#000000', colorLight: '#ffffff',
           correctLevel: QRCode.CorrectLevel.H
         });
-      } catch (e) { fallbackImg(); }
+      } catch(e){ fallbackImg(); }
     } else {
       fallbackImg();
     }
@@ -454,13 +454,13 @@
   /* ── Config / branding ─────────────────────────────────────────────── */
 
   function loadConfig() {
-    var url = apiUrl('config');
+    var url = apiUrl('config', 'format=json');
     if (!url) return;
     fetchJson(url, function (err, cfg) {
       if (err || !cfg) return;
       if (cfg.tournament) {
         var t = $('[data-tournament]'); if (t) t.textContent = cfg.tournament;
-        document.title = document.title.replace('Truist Championship 2026', cfg.tournament);
+        document.title = document.title.replace('Old Head — Truist Championship 2026', cfg.tournament);
       }
       var badge = $('#status-badge');
       if (badge && cfg.status) {
@@ -472,20 +472,21 @@
     });
   }
 
-  /* ── Live ticker ─────────────────────────────────────────────────── */
+  /* ── Live ticker (landing page) ────────────────────────────────────── */
 
   function initTicker() {
     var ticker = $('#live-ticker');
     if (!ticker) return;
-    var clubs = [
-      { club: 'SAAS 10, Dublin',        leader: 'Rory McIlroy',    score: 'TBC' },
-      { club: 'Cobh GC',                leader: 'Scottie Scheffler',score: 'TBC' },
-      { club: 'Baydos, Cork',           leader: 'Collin Morikawa', score: 'TBC' },
-      { club: 'Royal County Down GC',   leader: 'Shane Lowry',     score: 'TBC' },
-      { club: 'Portmarnock GC',         leader: 'Jon Rahm',        score: 'TBC' }
+    // Static demo pills until a real /api/leagues/active endpoint exists.
+    var demo = [
+      { club: 'Royal County Down GC', score: '-12', leader: 'Lowry' },
+      { club: 'Lahinch GC',           score: '-9',  leader: 'McIlroy' },
+      { club: 'Portmarnock',          score: '-7',  leader: 'Rahm' },
+      { club: 'The K Club',           score: '-6',  leader: 'Scheffler' },
+      { club: 'Ballybunion',          score: '-5',  leader: 'Hovland' }
     ];
     var html = '';
-    clubs.forEach(function (d) {
+    demo.forEach(function (d) {
       html += '<span class="ticker__pill"><span class="live-dot"></span>' +
               esc(d.club) + ' · ' + esc(d.leader) + ' <strong>' + esc(d.score) + '</strong></span>';
     });
@@ -495,8 +496,11 @@
   /* ── Page router ───────────────────────────────────────────────────── */
 
   function init() {
+    // Themes first to avoid layout shift
     initThemePicker();
+
     var page = (document.body.getAttribute('data-page') || '').toLowerCase();
+
     switch (page) {
       case 'leaderboard':       initLeaderboard(); loadConfig(); break;
       case 'picks':             initPicksForm();  loadConfig(); break;
