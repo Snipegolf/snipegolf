@@ -3,9 +3,9 @@
  * Single bundle: theme picker, leaderboard fetch, picks form, QR, config loader.
  *
  * Template variables (substituted by Apps Script on provisioning):
- *              Apps Script web-app URL
+ *   https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec           Apps Script web-app URL
  *   test-truist-2026               league slug
- *               ESPN tournament event id
+ *   401811945            ESPN tournament event id
  *
  * Page router: <body data-page="leaderboard|picks|admin|index|qr|main-leaderboard|landing|terms|privacy">
  */
@@ -13,9 +13,9 @@
 (function () {
   'use strict';
 
-  var API_BASE = '';
+  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
   var SLUG     = 'test-truist-2026';
-  var ESPN_ID  = '';
+  var ESPN_ID  = '401811945';
 
   var REFRESH_MS  = 60000;        // 60 s
   var FAIL_TEXT   = 'Connection lost — retrying…';
@@ -460,7 +460,7 @@
       if (err || !cfg) return;
       if (cfg.tournament) {
         var t = $('[data-tournament]'); if (t) t.textContent = cfg.tournament;
-        document.title = document.title.replace('Truist Championship 2026', cfg.tournament);
+        document.title = document.title.replace('Test — Truist', cfg.tournament);
       }
       var badge = $('#status-badge');
       if (badge && cfg.status) {
