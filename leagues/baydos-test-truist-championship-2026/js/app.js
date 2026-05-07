@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
+  var API_BASE = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBlOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
   var SLUG     = 'baydos-test-truist-championship-2026';
   var ESPN_ID  = document.body.getAttribute('data-espn-id') ||
                  (!/\{\{/.test('401811945') ? '401811945' : '401580354');
