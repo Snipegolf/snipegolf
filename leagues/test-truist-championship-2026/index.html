@@ -2,9 +2,9 @@
 <!--
   SnipeGolf — League home (v2)
   Template variables substituted by Apps Script:
-    Test — Truist Championship, Test, Truist Championship, 2026,
-    https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:R000.png/tournaments/logos/R480.png, , {{TOURNAMENT_LOGO_URL}},
-    https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec, test-truist-championship-2026, 40811945, https://snipegolf.github.io/snipegolf/leagues/test-truist-championship-2026/, QAR5dAf38XAfV3LnW5eYdrAhAwBZCJe8,
+    test-truist-championship-2026, Test, {{TOURNAMENT}}, {{YEAR}},
+    , {{LOGO_URL}}, {{TOURNAMENT_LOGO_URL}},
+    , test-truist-championship-2026, 2026, {{PUBLIC_URL}}, {{ADMIN_TOKEN}},
     {{TOURNAMENT_DATES}}
 -->
 <html lang="en">
@@ -12,9 +12,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="default-theme" content="snipe-default">
-  <meta name="description" content="Test — Truist Championship — Golf Sweepstakes powered by SnipeGolf">
-  <title>Test — Truist Championship | SnipeGolf</title>
+  <meta name="default-theme" content="{{THEME}}">
+  <meta name="description" content="test-truist-championship-2026 — Golf Sweepstakes powered by SnipeGolf">
+  <title>test-truist-championship-2026 | SnipeGolf</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,13 +42,13 @@
   <div class="league-header">
     <div class="league-header__row">
       <div class="league-logos" aria-label="League branding">
-        <img src="" alt="Test" onerror="this.style.display='none'">
+        <img src="{{LOGO_URL}}" alt="Test" onerror="this.style.display='none'">
         <span class="league-logos__divider" aria-hidden="true"></span>
-        <img src="{{TOURNAMENT_LOGO_URL}}" alt="Truist Championship" onerror="this.style.display='none'">
+        <img src="{{TOURNAMENT_LOGO_URL}}" alt="{{TOURNAMENT}}" onerror="this.style.display='none'">
       </div>
       <div class="league-title">
-        <span data-tournament>Truist Championship</span>
-        <small data-club-name>Test · 2026</small>
+        <span data-tournament>{{TOURNAMENT}}</span>
+        <small data-club-name>Test · {{YEAR}}</small>
       </div>
     </div>
   </div>
@@ -60,11 +60,11 @@
         <!-- Hero -->
         <div class="card card--feature" style="text-align:center;background:var(--surface);">
           <span class="eyebrow">Sweepstakes</span>
-          <h1 class="serif" style="margin:12px 0">Test — Truist Championship</h1>
-          <p class="lead" style="max-width:54ch;margin:0 auto var(--s-4)">Truist Championship · {{TOURNAMENT_DATES}}</p>
+          <h1 class="serif" style="margin:12px 0">test-truist-championship-2026</h1>
+          <p class="lead" style="max-width:54ch;margin:0 auto var(--s-4)">{{TOURNAMENT}} · {{TOURNAMENT_DATES}}</p>
           <span id="status-badge" class="badge badge-live" style="margin-bottom:var(--s-4)">LIVE</span>
 
-          <p style="font-size:1.05rem;color:var(--accent);font-weight:600;margin-top:var(--s-4)" data-prize>https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:R000.png/tournaments/logos/R480.png</p>
+          <p style="font-size:1.05rem;color:var(--accent);font-weight:600;margin-top:var(--s-4)" data-prize></p>
 
           <div class="hero__ctas" style="justify-content:center;margin-top:var(--s-5)">
             <a class="btn btn--lg" href="picks.html">Submit picks</a>
