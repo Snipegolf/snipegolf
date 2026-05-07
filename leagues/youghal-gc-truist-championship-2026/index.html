@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <!--
   SnipeGolf — League home (v2)
-  League: youghal-gc-truist-championship-2026
-  Tournament: Truist Championship 2026
-  Club: Youghal GC
-  API: https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBlOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec
+  Template variables substituted by Apps Script:
+    Youghal GC — Truist Championship 2026, Youghal GC, Truist Championship 2026, 2026,
+    €200 bar tab, https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:R000.png/tournaments/logos/R480.png, {{TOURNAMENT_LOGO_URL}},
+    https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec, youghal-gc-truist-championship-2026, 401811945, https://snipegolf.github.io/snipegolf/leagues/youghal-gc-truist-championship-2026/, q5r5ZvcejEpr7ZJTa8fUHZBdA44dKj3h,
+    {{TOURNAMENT_DATES}}
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="Truist Championship 2026 — Golf Sweepstakes powered by SnipeGolf">
-  <title>Truist Championship 2026 | SnipeGolf</title>
+  <meta name="default-theme" content="snipe-default">
+  <meta name="description" content="Youghal GC — Truist Championship 2026 — Golf Sweepstakes powered by SnipeGolf">
+  <title>Youghal GC — Truist Championship 2026 | SnipeGolf</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +24,7 @@
 </head>
 <body data-page="index">
 
+  <!-- Global brand bar -->
   <header class="site-header" role="banner">
     <div class="site-header__inner">
       <a class="brand" href="../../index.html" aria-label="SnipeGolf home">
@@ -30,16 +33,21 @@
       </a>
       <nav class="site-nav" aria-label="Primary">
         <a href="../../main-leaderboard.html" title="PGA Tour live scores (ESPN)">PGA live scores</a>
-        <a href="../../index.html#features">For clubs</a>
       </nav>
     </div>
   </header>
 
+  <!-- Per-league brand bar: club logo + tournament logo + name -->
   <div class="league-header">
     <div class="league-header__row">
+      <div class="league-logos" aria-label="League branding">
+        <img src="https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:R000.png/tournaments/logos/R480.png" alt="Youghal GC" onerror="this.style.display='none'">
+        <span class="league-logos__divider" aria-hidden="true"></span>
+        <img src="{{TOURNAMENT_LOGO_URL}}" alt="Truist Championship 2026" onerror="this.style.display='none'">
+      </div>
       <div class="league-title">
         <span data-tournament>Truist Championship 2026</span>
-        <small data-club-name>Youghal GC &middot; 2026</small>
+        <small data-club-name>Youghal GC · 2026</small>
       </div>
     </div>
   </div>
@@ -48,51 +56,55 @@
     <section class="section">
       <div class="container">
 
+        <!-- Hero -->
         <div class="card card--feature" style="text-align:center;background:var(--surface);">
           <span class="eyebrow">Sweepstakes</span>
-          <h1 class="serif" style="margin:12px 0">Truist Championship 2026</h1>
-          <p class="lead" style="max-width:54ch;margin:0 auto var(--s-4)">Truist Championship 2026 &middot; May 8&ndash;11, 2026</p>
+          <h1 class="serif" style="margin:12px 0">Youghal GC — Truist Championship 2026</h1>
+          <p class="lead" style="max-width:54ch;margin:0 auto var(--s-4)">Truist Championship 2026 · 2026</p>
           <span id="status-badge" class="badge badge-live" style="margin-bottom:var(--s-4)">LIVE</span>
 
-          <p style="font-size:1.05rem;color:var(--accent);font-weight:600;margin-top:var(--s-4)" data-prize></p>
+          <p style="font-size:1.05rem;color:var(--accent);font-weight:600;margin-top:var(--s-4)" data-prize>€200 bar tab</p>
 
           <div class="hero__ctas" style="justify-content:center;margin-top:var(--s-5)">
-            <a class="btn btn--lg" href="picks.html">Submit picks</a>
+            <a class="btn btn--lg" href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=youghal-gc-truist-championship-2026&amp;mode=picks">Submit picks</a>
             <a class="btn btn--ghost btn--lg" href="leaderboard.html">View leaderboard</a>
           </div>
         </div>
 
+        <!-- Tab nav -->
         <nav class="tab-nav" aria-label="League sections">
           <a href="index.html" class="active">Home</a>
           <a href="leaderboard.html">Leaderboard</a>
-          <a href="picks.html">Enter picks</a>
+          <a href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=youghal-gc-truist-championship-2026&amp;mode=picks">Enter picks</a>
           <a href="qr.html">QR poster</a>
         </nav>
 
+        <!-- Stats row -->
         <div class="stats mb-6">
           <div class="stat">
-            <span class="stat__num" id="stat-entries">&mdash;</span>
+            <span class="stat__num" id="stat-entries">—</span>
             <span class="stat__lbl">Entries</span>
           </div>
           <div class="stat">
-            <span class="stat__num" id="stat-leader">&mdash;</span>
+            <span class="stat__num" id="stat-leader">—</span>
             <span class="stat__lbl">Leader</span>
           </div>
           <div class="stat">
-            <span class="stat__num" id="stat-score">&mdash;</span>
+            <span class="stat__num" id="stat-score">—</span>
             <span class="stat__lbl">Top score</span>
           </div>
         </div>
 
+        <!-- Mini leaderboard -->
         <div class="card">
           <div class="card__header">
             <h2>Live top 10</h2>
-            <a class="btn btn--ghost btn--sm" href="leaderboard.html">Full board &rarr;</a>
+            <a class="btn btn--ghost btn--sm" href="leaderboard.html">Full board →</a>
           </div>
 
           <div class="refresh-bar">
             <span><span class="live-dot"></span>Auto-updating</span>
-            <span id="lb-updated">Loading&hellip;</span>
+            <span id="lb-updated">Loading…</span>
           </div>
 
           <div class="lb-wrap">
@@ -116,8 +128,9 @@
           </div>
         </div>
 
+        <!-- Admin link -->
         <p class="text-center mt-6 text-muted" style="font-size:.85rem">
-          Club admin? <a href="admin.html">Open the admin dashboard &rarr;</a>
+          Club admin? <a href="admin.html">Open the admin dashboard →</a>
         </p>
       </div>
     </section>
@@ -126,8 +139,8 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container">
       <div class="site-footer__bottom" style="border:none;padding-top:0">
-        <span>Youghal GC &middot; Sweepstakes operated under house rules</span>
-        <span><a href="terms.html">Terms</a> &middot; <a href="privacy.html">Privacy</a> &middot; 18+ Responsible gambling</span>
+        <span>Youghal GC · Sweepstakes operated under house rules</span>
+        <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · 18+ Responsible gambling</span>
       </div>
       <p class="text-muted mt-3" style="font-size:.74rem">
         Data Controller: Youghal GC. Processor: SnipeGolf. Retention: season + 30 days.
