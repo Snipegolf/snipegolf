@@ -309,6 +309,14 @@
           return;
         }
 
+        // Sort competitors by status.position.id (numeric leaderboard rank).
+        // ESPN feed isn't pre-sorted; without this, the page shows raw feed order.
+        competitors.sort(function(a, b) {
+          var pa = (a.status && a.status.position && a.status.position.id) || 9999;
+          var pb = (b.status && b.status.position && b.status.position.id) || 9999;
+          return Number(pa) - Number(pb);
+        });
+
         var html = '';
         competitors.slice(0, 80).forEach(function (c) {
           var ath  = c.athlete || {};
