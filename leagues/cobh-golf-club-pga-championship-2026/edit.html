@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Edit Picks — SnipeGolf</title>
+<style>
+:root{--bg:#0a0a0a;--surf:#121414;--surf2:#1c1f1e;--text:#f4f4f4;--muted:#8a8f8c;--acc:#00a86b;--acc2:#00ff87;--bad:#ff5a6b;--border:rgba(0,255,135,.12)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:Manrope,system-ui,-apple-system,Segoe UI,sans-serif;font-size:15px;line-height:1.55;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--acc);text-decoration:none}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.2;color:var(--text)}
+h1{font-size:clamp(1.4rem,4vw,2rem)}
+h2{font-size:1.15rem;color:var(--acc)}
+header{position:sticky;top:0;z-index:100;background:var(--surf);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.logo{color:var(--acc);font-weight:700;font-size:1.05rem}
+.tn{font-size:.78rem;color:var(--muted);margin-left:auto;text-align:right}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px}
+.card{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:20px 18px;margin-bottom:18px;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+label{display:block;color:var(--muted);font-size:.74rem;margin:14px 0 5px;text-transform:uppercase;letter-spacing:.6px}
+input,select{width:100%;background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:12px 13px;border-radius:8px;font-size:16px;min-height:48px;-webkit-appearance:none;appearance:none;font-family:inherit}
+input:focus,select:focus{outline:none;border-color:var(--acc)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.row{grid-template-columns:1fr;gap:0}}
+.btn{display:block;width:100%;background:var(--acc);color:var(--bg);font-weight:700;padding:14px 22px;border:none;border-radius:8px;cursor:pointer;font-size:.98rem;margin-top:16px;min-height:50px;font-family:inherit}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.5;cursor:wait}
+.msg-ok{background:rgba(0,255,135,.06);border:1px solid var(--acc2);color:var(--acc2);padding:13px 15px;border-radius:8px;margin-bottom:16px;font-size:.9rem}
+.msg-err{background:rgba(255,90,107,.06);border:1px solid var(--bad);color:var(--bad);padding:13px 15px;border-radius:8px;margin-bottom:16px;font-size:.9rem}
+.msg-info{background:rgba(255,255,255,.04);border:1px solid var(--acc2);color:var(--acc2);padding:13px 15px;border-radius:8px;margin-bottom:16px;font-size:.9rem}
+.b-head{margin-top:18px;color:var(--acc2);font-size:1rem;font-weight:600}
+.footer{text-align:center;margin-top:32px;padding:20px 14px;font-size:.74rem;color:var(--muted);border-top:1px solid var(--border)}
+.loading{text-align:center;padding:40px 20px;color:var(--muted)}
+.spin{display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--acc2);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header>
+  <a href="./" class="logo">⛳ SnipeGolf</a>
+  <span class="tn">Cobh GC — PGA Championship 2026</span>
+</header>
+<div class="wrap">
+  <div id="root">
+    <div class="card loading">
+      <div class="spin"></div>
+      <div>Loading your entry…</div>
+    </div>
+  </div>
+  <div class="footer">
+    <p>⛳ SnipeGolf Golf Sweepstakes Platform</p>
+    <p style="margin-top:6px">Data Controller: Club Admin · Processor: SnipeGolf · Retention: season + 30 days.</p>
+  </div>
+</div>
+<script>
+(function(){
+  // === CONFIG (set per league) ============================================
+  var SLUG = "cobh-golf-club-pga-championship-2026";
+  var API  = "https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec";
+  // ========================================================================
+
+  function qs(k){
+    var m = window.location.search.match(new RegExp("[?&]" + k + "=([^&]*)"));
+    return m ? decodeURIComponent(m[1].replace(/\+/g," ")) : "";
+  }
+  var email = qs("email");
+  var pin   = qs("pin");
+
+  var root = document.getElementById("root");
+  function html(h){ root.innerHTML = h; }
+  function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  if(!email || !pin){
+    html('<div class="card"><div class="msg-err">Missing email or PIN in URL. Use the link from your email.</div></div>');
+    return;
+  }
+
+  // JSONP helper — Apps Script blocks CORS for ContentService so we use JSONP
+  var cbSeq = 0;
+  function jsonp(params, done){
+    var cb = "sgcb_" + (++cbSeq) + "_" + Date.now();
+    var url = API + "?";
+    var parts = [];
+    for(var k in params){
+      if(params.hasOwnProperty(k)) parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(params[k]));
+    }
+    parts.push("callback=" + cb);
+    url += parts.join("&");
+    var s = document.createElement("script");
+    var timer = setTimeout(function(){
+      cleanup(); done({ok:false, msg:"Network timeout. Try again."});
+    }, 25000);
+    function cleanup(){
+      try{ delete window[cb]; }catch(e){ window[cb] = undefined; }
+      if(s.parentNode) s.parentNode.removeChild(s);
+      clearTimeout(timer);
+    }
+    window[cb] = function(data){ cleanup(); done(data); };
+    s.onerror = function(){ cleanup(); done({ok:false, msg:"Network error. Check connection."}); };
+    s.src = url;
+    document.body.appendChild(s);
+  }
+
+  // Step 1: fetch entry + field
+  jsonp({api:"edit_get", league:SLUG, email:email, pin:pin}, function(d){
+    if(!d || !d.ok){
+      html('<div class="card"><div class="msg-err">' + esc((d&&d.msg) || "Could not load entry.") + '</div></div>');
+      return;
+    }
+    renderForm(d);
+  });
+
+  function pickSelect(name, current, list){
+    var opts = ['<option value="">— pick a golfer —</option>'];
+    var seen = {};
+    if(current && !seen[current]){
+      opts.push('<option value="' + esc(current) + '" selected>' + esc(current) + ' (current)</option>');
+      seen[current] = true;
+    }
+    for(var i=0;i<list.length;i++){
+      var nm = list[i];
+      if(!nm || seen[nm]) continue;
+      seen[nm] = true;
+      opts.push('<option value="' + esc(nm) + '">' + esc(nm) + '</option>');
+    }
+    return '<select name="' + name + '" required>' + opts.join("") + '</select>';
+  }
+
+  function renderForm(d){
+    var f = d.field || {b1:[],b2:[],b3:[],b4:[]};
+    var p = d.picks || {};
+    var tb = (d.tiebreaker === 0 || d.tiebreaker) ? d.tiebreaker : "";
+    var lockedMsg = d.locked ? '<div class="msg-err">⚠️ League is locked. You cannot edit picks anymore.</div>' : '';
+
+    html(
+      '<div class="card">' +
+        '<h2>✏️ Update Picks — ' + esc(d.name || "") + '</h2>' +
+        '<p style="color:var(--muted);font-size:.85rem;margin-top:4px">' + esc(d.email || email) + '</p>' +
+        lockedMsg +
+        '<div id="msg"></div>' +
+        '<form id="f">' +
+          '<div class="b-head">Bracket 1</div>' +
+          '<div class="row"><div><label>Pick 1</label>' + pickSelect("b1p1", p.b1p1, f.b1) + '</div>' +
+                          '<div><label>Pick 2</label>' + pickSelect("b1p2", p.b1p2, f.b1) + '</div></div>' +
+          '<div class="b-head">Bracket 2</div>' +
+          '<div class="row"><div><label>Pick 1</label>' + pickSelect("b2p1", p.b2p1, f.b2) + '</div>' +
+                          '<div><label>Pick 2</label>' + pickSelect("b2p2", p.b2p2, f.b2) + '</div></div>' +
+          '<div class="b-head">Bracket 3</div>' +
+          '<div class="row"><div><label>Pick 1</label>' + pickSelect("b3p1", p.b3p1, f.b3) + '</div>' +
+                          '<div><label>Pick 2</label>' + pickSelect("b3p2", p.b3p2, f.b3) + '</div></div>' +
+          '<div class="b-head">Bracket 4</div>' +
+          '<div class="row"><div><label>Pick 1</label>' + pickSelect("b4p1", p.b4p1, f.b4) + '</div>' +
+                          '<div><label>Pick 2</label>' + pickSelect("b4p2", p.b4p2, f.b4) + '</div></div>' +
+          '<label style="margin-top:18px">Tiebreaker (winner\'s score vs par, e.g. -22)</label>' +
+          '<input type="number" name="tiebreaker" value="' + esc(tb) + '" required>' +
+          '<button type="submit" class="btn" id="sbm"' + (d.locked ? ' disabled' : '') + '>' +
+            (d.locked ? 'Locked' : 'Save changes') +
+          '</button>' +
+        '</form>' +
+      '</div>'
+    );
+
+    var form = document.getElementById("f");
+    var msg  = document.getElementById("msg");
+    var sbm  = document.getElementById("sbm");
+
+    // Live dedup
+    function dedup(){
+      var sels = form.querySelectorAll("select");
+      var chosen = {};
+      for(var i=0;i<sels.length;i++){ var v=sels[i].value; if(v) chosen[v]=true; }
+      for(var i=0;i<sels.length;i++){
+        var sel = sels[i]; var cur = sel.value;
+        for(var j=0;j<sel.options.length;j++){
+          var o = sel.options[j];
+          o.disabled = !!(o.value && o.value !== cur && chosen[o.value]);
+        }
+      }
+    }
+    var sels = form.querySelectorAll("select");
+    for(var i=0;i<sels.length;i++) sels[i].addEventListener("change", dedup);
+    dedup();
+
+    form.addEventListener("submit", function(ev){
+      ev.preventDefault();
+      msg.innerHTML = '<div class="msg-info">Saving…</div>';
+      sbm.disabled = true; sbm.textContent = "Saving…";
+
+      var data = new FormData(form);
+      var params = {api:"edit_save", league:SLUG, email:email, pin:pin};
+      data.forEach(function(v,k){ params[k] = v; });
+
+      jsonp(params, function(r){
+        if(r && r.ok){
+          msg.innerHTML = '<div class="msg-ok">✓ Picks saved. <a href="./leaderboard.html">View leaderboard →</a></div>';
+          sbm.disabled = false; sbm.textContent = "Save changes";
+          window.scrollTo(0,0);
+        } else {
+          msg.innerHTML = '<div class="msg-err">' + esc((r&&r.msg) || "Save failed.") + '</div>';
+          sbm.disabled = false; sbm.textContent = "Save changes";
+        }
+      });
+      return false;
+    });
+  }
+})();
+</script>
+</body>
+</html>
