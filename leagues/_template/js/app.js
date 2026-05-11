@@ -528,3 +528,47 @@
   }
 
 }());
+
+/* === Monday cleanup additions === */
+(function(){
+  // 1. Render winners banner when leaderboard.json reports frozen=true
+  if (typeof window === "undefined") return;
+  function renderWinners(data){
+    var el = document.getElementById("winners-banner");
+    if (!el || !data || !data.frozen) return;
+    var html = '<div class="winners-card" style="background:linear-gradient(135deg,#caa14a,#8f6e26);color:#fff;padding:18px 20px;border-radius:14px;margin-bottom:20px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.18)"><h2 style="margin:0 0 10px;font-family:Fraunces,serif">🏆 Competition closed</h2>';
+    if (data.winners && data.winners.length){
+      html += '<div style="display:grid;gap:6px;margin-bottom:12px">';
+      data.winners.forEach(function(w,i){
+        var medal = ["🥇","🥈","🥉"][i] || "•";
+        html += '<div><strong>'+medal+' '+(w.name||"—")+'</strong> · '+(w.total!=null?w.total:"—")+' · '+((data.prizes && data.prizes[i])||"")+'</div>';
+      });
+      html += '</div>';
+    }
+    if (data.prizes && data.prizes[3]) html += '<div style="opacity:.85;font-size:.92rem">✨ Special: '+data.prizes[3]+'</div>';
+    html += '</div>';
+    el.innerHTML = html;
+    el.style.display = "block";
+  }
+  // 2. Hide Enter picks tab when lock-mode in JSON
+  function applyLock(data){
+    if (!data || !data.lockMode) return;
+    if (data.lockMode === "admin-only"){
+      var t = document.querySelector("[data-sg-picks-tab]");
+      if (t) t.style.display = "none";
+    }
+  }
+  // Hook fetch so anywhere a leaderboard.json is loaded we render extras
+  var origFetch = window.fetch;
+  window.fetch = function(u,opts){
+    return origFetch.apply(this, arguments).then(function(r){
+      try{
+        if (typeof u === "string" && u.indexOf("leaderboard.json") >= 0){
+          var clone = r.clone();
+          clone.json().then(function(d){ renderWinners(d); applyLock(d); }).catch(function(){});
+        }
+      }catch(e){}
+      return r;
+    });
+  };
+})();
