@@ -2,115 +2,119 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PGA live scores — Cobh Golf Club</title>
-<link rel="stylesheet" href="../../assets/css/style.css">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>PGA live scores — Cobh Golf Club | SnipeGolf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 <style>
-  .scores-wrap { max-width: 980px; margin: 0 auto; padding: 16px }
-  .scores-meta { display:flex; flex-wrap:wrap; gap:14px; margin:10px 0 18px; align-items:center }
-  .scores-meta .pill { background:#f3f3f3; padding:6px 12px; border-radius:999px; font-size:13px }
-  .scores-meta .live { background:#d8f1de; color:#0a6f2b }
-  .scores-table { width:100%; border-collapse:collapse }
-  .scores-table th, .scores-table td { padding:8px 6px; text-align:left; border-bottom:1px solid #eee; font-size:14px }
-  .scores-table th { background:#fafafa; font-size:12px; text-transform:uppercase; letter-spacing:.04em }
-  .scores-table td.right { text-align:right; font-variant-numeric:tabular-nums }
-  .scores-table .pos { width:48px; color:#666 }
-  .scores-table .score-red { color:#b21f1f; font-weight:600 }
-  .scores-table .score-green { color:#0a6f2b; font-weight:600 }
-  .scores-cut { background:#fff8e0 }
-  .scores-cut td { font-style:italic; color:#7a5a00 }
-  .scores-loading, .scores-error { padding:24px; text-align:center; color:#666 }
-  .scores-error { color:#b21f1f }
-  .refresh-note { text-align:right; font-size:12px; color:#999; margin-top:8px }
+  .scores-wrap{max-width:980px;margin:0 auto;padding:20px 16px}
+  .scores-meta{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 22px;align-items:center}
+  .scores-meta .pill{background:rgba(255,255,255,.06);color:#cfd6e4;padding:6px 12px;border-radius:999px;font-size:13px;border:1px solid rgba(255,255,255,.08)}
+  .scores-meta .live{background:rgba(0,255,135,.1);color:#00ff87;border-color:rgba(0,255,135,.3)}
+  .scores-table{width:100%;border-collapse:collapse;background:rgba(255,255,255,.02);border-radius:12px;overflow:hidden}
+  .scores-table th,.scores-table td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;color:#e6ecf5}
+  .scores-table th{background:rgba(255,255,255,.04);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#8a8f8c;font-weight:600}
+  .scores-table td.right{text-align:right;font-variant-numeric:tabular-nums}
+  .scores-table .pos{width:48px;color:#8a8f8c}
+  .scores-table .score-red{color:#ff5a6b;font-weight:600}
+  .scores-table .score-green{color:#00ff87;font-weight:600}
+  .scores-cut td{font-style:italic;color:#8a8f8c}
+  .scores-empty{padding:48px 24px;text-align:center;color:#8a8f8c;background:rgba(255,255,255,.02);border-radius:12px;border:1px solid rgba(255,255,255,.06)}
+  .scores-empty h2{font-family:Fraunces,Georgia,serif;color:#e6ecf5;margin:0 0 8px;font-size:1.4rem}
+  .scores-empty p{margin:4px 0;color:#cfd6e4}
+  .scores-empty .firsttee{margin-top:14px;color:#00ff87;font-weight:600}
+  .refresh-note{text-align:right;font-size:12px;color:#8a8f8c;margin-top:12px}
+  .back-strip{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .back-link{color:#00ff87;text-decoration:none;font-size:.9rem}
 </style>
 </head>
 <body>
 <header class="site-header">
-  <div class="container">
-    <a class="brand" href="../../index.html" aria-label="SnipeGolf home">
-      <img src="../../assets/img/logo.svg" alt="SnipeGolf" height="32">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html" aria-label="SnipeGolf home">
+      <span class="brand__mark">S</span><span class="serif">SNIPEGOLF</span>
     </a>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="field.html">Field</a>
+    </nav>
   </div>
 </header>
 <div class="back-strip"><a href="leaderboard.html" class="back-link">← Back to Cobh Golf Club leaderboard</a></div>
-<main class="scores-wrap">
-  <h1 id="tourn-title" style="font-family:Fraunces,serif;margin:8px 0 4px"></h1>
+<main>
+<div class="scores-wrap">
+  <h1 class="serif" style="font-family:Fraunces,Georgia,serif;color:#e6ecf5;margin:8px 0 4px;font-size:clamp(1.6rem,4vw,2.2rem)">PGA Championship 2026</h1>
   <div class="scores-meta">
-    <span class="pill" id="round-pill">Loading…</span>
-    <span class="pill" id="status-pill"></span>
-    <span class="pill live" id="live-pill" style="display:none">LIVE</span>
+    <span class="pill" id="meta-status">Loading…</span>
+    <span class="pill" id="meta-round"></span>
+    <span class="pill" id="meta-cut"></span>
   </div>
-  <div id="scores-body" class="scores-loading">Loading live scores…</div>
-  <div class="refresh-note" id="refresh-note"></div>
+  <div id="scores-content">
+    <div class="scores-empty"><h2>Loading…</h2><p>Fetching live scores from ESPN.</p></div>
+  </div>
+  <p class="refresh-note">Auto-refresh 60s · source: ESPN</p>
+</div>
 </main>
+<footer class="site-footer">
+  <div class="container" style="padding:18px 16px;text-align:center;color:#8a8f8c;font-size:.82rem">
+    ⛳ SnipeGolf · Cobh Golf Club
+  </div>
+</footer>
 <script>
 (function(){
   var EVENT_ID = "401811947";
-  var API = "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga&event=" + EVENT_ID;
-  var REFRESH_MS = 60000;
-  function fmtScore(s){ if(s===0||s==="0")return "E"; if(s>0)return "+"+s; return ""+s; }
-  function scoreClass(s){ if(s<0)return "score-red"; if(s>0)return "score-green"; return ""; }
-  function render(data){
-    try {
-      var ev = data.events && data.events[0];
-      if (!ev) { document.getElementById("scores-body").innerHTML = "<div class=\"scores-error\">No event data</div>"; return; }
-      document.getElementById("tourn-title").textContent = ev.name || "";
-      var comp = ev.competitions && ev.competitions[0]; if (!comp) return;
-      var st = comp.status && comp.status.type;
-      document.getElementById("round-pill").textContent = (comp.status && comp.status.period ? "Round " + comp.status.period : (st && st.description) || "");
-      document.getElementById("status-pill").textContent = (st && st.shortDetail) || "";
-      if (st && st.state === "in") document.getElementById("live-pill").style.display = "inline-block";
-      var competitors = comp.competitors || [];
-      var stateVal = (st && st.state) || "";
-      var isPre = stateVal === "pre" || competitors.length === 0 || (competitors.length && (!competitors[0].score && competitors[0].score!==0) && !competitors[0].linescores);
-      if (isPre) {
-        var startTxt = (ev.date ? new Date(ev.date).toLocaleString(undefined,{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}) : "");
-        var venue = (comp.venue && (comp.venue.fullName || comp.venue.name)) || "";
-        var fieldCount = competitors.length;
-        var preHtml = "<div style=\"padding:32px 20px;text-align:center;background:#fafafa;border:1px solid #eee;border-radius:8px\">";
-        preHtml += "<div style=\"font-size:22px;font-family:Fraunces,serif;margin-bottom:8px\">Tournament not started</div>";
-        preHtml += "<div style=\"color:#666;margin-bottom:14px\">Live scores will appear here once Round 1 begins.</div>";
-        if (startTxt) preHtml += "<div style=\"margin:6px 0\"><strong>First tee:</strong> " + startTxt + "</div>";
-        if (venue) preHtml += "<div style=\"margin:6px 0\"><strong>Venue:</strong> " + venue + "</div>";
-        if (fieldCount) preHtml += "<div style=\"margin:6px 0\"><strong>Field:</strong> " + fieldCount + " players</div>";
-        preHtml += "<div style=\"margin-top:16px\"><a class=\"btn btn--ghost btn--sm\" href=\"field.html\">View field & brackets →</a></div>";
-        preHtml += "</div>";
-        document.getElementById("scores-body").innerHTML = preHtml;
-        document.getElementById("refresh-note").textContent = "Checked " + new Date().toLocaleTimeString() + " · auto-refresh 60s · source: ESPN";
+  var URL = "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=" + EVENT_ID;
+  function $(id){return document.getElementById(id)}
+  function fmt(v){var n=Number(v);if(isNaN(n))return v||"";if(n===0)return "E";return n>0?"+"+n:""+n}
+  function pad(n){return n<10?"0"+n:n}
+  function load(){
+    fetch(URL).then(function(r){return r.json()}).then(function(j){
+      var ev = j && j.events && j.events[0];
+      var comp = ev && ev.competitions && ev.competitions[0];
+      var status = ev && ev.status && ev.status.type;
+      var state = status && status.state || "pre";
+      var statusName = status && (status.shortDetail || status.description) || "Scheduled";
+      var firstTee = ev && ev.date;
+      $("meta-status").textContent = statusName;
+      if(state==="in"){$("meta-status").className="pill live"}
+      if(state==="pre"){
+        var d = firstTee?new Date(firstTee):null;
+        var when = d?d.toLocaleString("en-IE",{weekday:"long",month:"long",day:"numeric",hour:"numeric",minute:"2-digit"}):"TBA";
+        $("scores-content").innerHTML =
+          '<div class="scores-empty">'+
+          '<h2>Tournament not started</h2>'+
+          '<p>Live scores will appear here once Round 1 begins.</p>'+
+          '<p class="firsttee">First tee: '+when+'</p>'+
+          '<p style="margin-top:18px"><a href="field.html" class="btn btn--ghost">View field &amp; brackets &rarr;</a></p>'+
+          '</div>';
         return;
       }
-      competitors.sort(function(a,b){ var pa=parseInt(a.status&&a.status.position&&a.status.position.id,10)||999; var pb=parseInt(b.status&&b.status.position&&b.status.position.id,10)||999; return pa-pb; });
-      var html = "<table class=\"scores-table\"><thead><tr><th class=\"pos\">Pos</th><th>Player</th><th class=\"right\">Today</th><th class=\"right\">Thru</th><th class=\"right\">Total</th></tr></thead><tbody>";
-      var seenCut = false;
-      for (var i=0;i<competitors.length;i++){
-        var c = competitors[i];
-        var ath = c.athlete || {};
-        var pos = (c.status && c.status.position && c.status.position.displayName) || "";
-        var today = c.linescores && c.linescores.length ? (c.linescores[c.linescores.length-1].displayValue || "") : "";
-        var thru = c.status && c.status.thru ? c.status.thru : (c.status && c.status.type && c.status.type.shortDetail) || "";
-        var total = (c.score !== undefined ? c.score : "");
-        var isCut = c.status && c.status.type && (c.status.type.name === "STATUS_CUT" || c.status.type.completed && pos === "CUT");
-        if (isCut && !seenCut) { html += "<tr class=\"scores-cut\"><td colspan=\"5\">— PROJECTED CUT LINE —</td></tr>"; seenCut = true; }
-        html += "<tr><td class=\"pos\">" + pos + "</td><td>" + (ath.displayName || ath.shortName || "") + "</td><td class=\"right " + scoreClass(parseInt(today,10)) + "\">" + (today||"—") + "</td><td class=\"right\">" + (thru||"—") + "</td><td class=\"right " + scoreClass(parseInt(total,10)) + "\">" + fmtScore(total) + "</td></tr>";
+      var competitors = (comp && comp.competitors) || [];
+      if(!competitors.length){
+        $("scores-content").innerHTML = '<div class="scores-empty"><h2>No scores yet</h2></div>';return;
       }
-      html += "</tbody></table>";
-      document.getElementById("scores-body").innerHTML = html;
-      document.getElementById("refresh-note").textContent = "Updated " + new Date().toLocaleTimeString() + " · auto-refresh 60s · source: ESPN";
-    } catch(e) {
-      document.getElementById("scores-body").innerHTML = "<div class=\"scores-error\">Render error: " + e.message + "</div>";
-    }
-  }
-  function load(){
-    if (!EVENT_ID || EVENT_ID === "" || EVENT_ID.indexOf("{{") === 0) {
-      document.getElementById("scores-body").innerHTML = "<div class=\"scores-error\">No ESPN event ID configured for this league.</div>";
-      return;
-    }
-    fetch(API).then(function(r){ return r.json(); }).then(render).catch(function(e){
-      document.getElementById("scores-body").innerHTML = "<div class=\"scores-error\">Could not load scores: " + e.message + "</div>";
+      competitors.sort(function(a,b){return (a.status&&a.status.position&&a.status.position.id||999)-(b.status&&b.status.position&&b.status.position.id||999)});
+      var rows = competitors.slice(0,80).map(function(c){
+        var ath = c.athlete||{};
+        var nm = ath.displayName||"";
+        var pos = c.status&&c.status.position&&c.status.position.displayName||"";
+        var tot = c.statistics && (c.statistics.find(function(s){return s.name==="scoreToPar"})||{}).displayValue;
+        var thru = c.status&&c.status.thru||"";
+        var today = c.linescores && c.linescores.length && c.linescores[c.linescores.length-1].value;
+        var tot2 = tot||fmt(c.score);
+        var cls = tot2 && tot2.charAt(0)==="-"?"score-red":(tot2 && tot2.charAt(0)==="+"?"":"score-green");
+        return '<tr><td class="pos">'+pos+'</td><td>'+nm+'</td><td class="right '+cls+'">'+(tot2||"E")+'</td><td class="right">'+(thru||"—")+'</td><td class="right">'+(today!=null?fmt(today):"—")+'</td></tr>';
+      }).join("");
+      $("scores-content").innerHTML = '<table class="scores-table"><thead><tr><th>POS</th><th>PLAYER</th><th class="right">TOTAL</th><th class="right">THRU</th><th class="right">TODAY</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    }).catch(function(e){
+      $("scores-content").innerHTML = '<div class="scores-empty"><h2>Could not load scores</h2><p>'+(e&&e.message||e)+'</p></div>';
     });
   }
-  load();
-  setInterval(load, REFRESH_MS);
+  load(); setInterval(load,60000);
 })();
 </script>
 </body>
