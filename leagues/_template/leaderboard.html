@@ -31,6 +31,7 @@
     </div>
   </header>
 
+  <div class="back-strip" data-sg-back><a href="index.html" class="back-link">← Back to {{CLUB_NAME}} home</a></div>
   <div class="league-header">
     <div class="league-header__row">
       <div class="league-logos">
@@ -52,7 +53,7 @@
         <nav class="tab-nav" aria-label="League sections">
           <a href="index.html">Home</a>
           <a href="leaderboard.html" class="active">Leaderboard</a>
-          <a href="picks.html">Enter picks</a>
+          <a href="picks.html" data-sg-picks-tab>Enter picks</a>
           <a href="qr.html">QR poster</a>
         </nav>
 
@@ -67,6 +68,7 @@
           </button>
         </div>
 
+        <div id="winners-banner" style="display:none"></div>
         <div class="stats mb-5">
           <div class="stat"><span class="stat__num" id="stat-entries">—</span><span class="stat__lbl">Entries</span></div>
           <div class="stat"><span class="stat__num" id="stat-leader">—</span><span class="stat__lbl">Leader</span></div>
