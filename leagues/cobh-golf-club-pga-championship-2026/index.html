@@ -170,5 +170,26 @@
 
   <script src="js/themes.js"></script>
   <script src="js/app.js"></script>
+  <script>
+(function(){
+  if (window.__sgLbFallback__) return;
+  window.__sgLbFallback__ = true;
+  var origFetch = window.fetch.bind(window);
+  function isLb(u){var s=(typeof u==="string")?u:(u&&u.url)||"";return /script\.google\.com\/macros\/.*\/exec\?.*mode=leaderboard/i.test(s);}
+  window.fetch = function(u, opts){
+    if (!isLb(u)) return origFetch(u, opts);
+    return origFetch("data/leaderboard.json?_=" + Date.now(), {cache:"no-cache"})
+      .then(function(r){ if(!r.ok) throw new Error("404"); return r.clone().json(); })
+      .then(function(d){
+        if (d && d.entries && d.entries.length > 0) {
+          d.status = d.status || "open";
+          return new Response(JSON.stringify(d), {status:200, headers:{"Content-Type":"application/json"}});
+        }
+        return origFetch(u, opts);
+      })
+      .catch(function(){ return origFetch(u, opts); });
+  };
+})();
+</script>
 </body>
 </html>
