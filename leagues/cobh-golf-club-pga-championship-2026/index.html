@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--
+  SnipeGolf — League home (v2)
+  Template variables substituted by Apps Script:
+    Cobh Golf Club — PGA Championship 2026, Cobh Golf Club, PGA Championship 2026, 2026,
+    TBA, https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:r000.png/tournaments/logos/r033.png, {{TOURNAMENT_LOGO_URL}},
+    https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec, cobh-golf-club-pga-championship-2026, 401811947, https://snipegolf.github.io/snipegolf/leagues/cobh-golf-club-pga-championship-2026/, VymNEEypg6GXJ8SHvTng8C6jpvzqquAJ,
+    {{TOURNAMENT_DATES}}
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="default-theme" content="{{THEME}}">
+  <meta name="description" content="Cobh Golf Club — PGA Championship 2026 — Golf Sweepstakes powered by SnipeGolf">
+  <title>Cobh Golf Club — PGA Championship 2026 | SnipeGolf</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="index">
+
+  <!-- Global brand bar -->
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a class="brand" href="../../index.html" aria-label="SnipeGolf home">
+        <span class="brand__mark" aria-hidden="true">S</span>
+        <span class="serif">SNIPEGOLF</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="../../main-leaderboard.html" title="PGA Tour live scores (ESPN)">PGA live scores</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Per-league brand bar: club logo + tournament logo + name -->
+  <div class="league-header">
+    <div class="league-header__row">
+      <div class="league-logos" aria-label="League branding">
+        <img src="https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:r000.png/tournaments/logos/r033.png" alt="Cobh Golf Club" onerror="this.style.display='none'">
+        <span class="league-logos__divider" aria-hidden="true"></span>
+        <img src="{{TOURNAMENT_LOGO_URL}}" alt="PGA Championship 2026" onerror="this.style.display='none'">
+      </div>
+      <div class="league-title">
+        <span data-tournament>PGA Championship 2026</span>
+        <small data-club-name>Cobh Golf Club · 2026</small>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="section">
+      <div class="container">
+
+        <!-- Hero -->
+        <div class="card card--feature" style="text-align:center;background:var(--surface);">
+          <span class="eyebrow">Sweepstakes</span>
+          <h1 class="serif" style="margin:12px 0">Cobh Golf Club — PGA Championship 2026</h1>
+          <p class="lead" style="max-width:54ch;margin:0 auto var(--s-4)">PGA Championship 2026 · 2026</p>
+          <span id="status-badge" class="badge badge-live" style="margin-bottom:var(--s-4)">LIVE</span>
+
+          <p style="font-size:1.05rem;color:var(--accent);font-weight:600;margin-top:var(--s-4)" data-prize>TBA</p>
+
+          <div class="hero__ctas" style="justify-content:center;margin-top:var(--s-5)">
+            <a class="btn btn--lg" href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=cobh-golf-club-pga-championship-2026&amp;mode=picks">Submit picks</a>
+            <a class="btn btn--ghost btn--lg" href="leaderboard.html">View leaderboard</a>
+          </div>
+        </div>
+
+        <!-- Tab nav -->
+        <nav class="tab-nav" aria-label="League sections">
+          <a href="index.html" class="active">Home</a>
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec?league=cobh-golf-club-pga-championship-2026&amp;mode=picks">Enter picks</a>
+          <a href="qr.html">QR poster</a>
+        </nav>
+
+        <!-- Stats row -->
+        <div class="stats mb-6">
+          <div class="stat">
+            <span class="stat__num" id="stat-entries">—</span>
+            <span class="stat__lbl">Entries</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num" id="stat-leader">—</span>
+            <span class="stat__lbl">Leader</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num" id="stat-score">—</span>
+            <span class="stat__lbl">Top score</span>
+          </div>
+        </div>
+
+        <!-- Mini leaderboard -->
+        <div class="card">
+          <div class="card__header">
+            <h2>Live top 10</h2>
+            <a class="btn btn--ghost btn--sm" href="leaderboard.html">Full board →</a>
+          </div>
+
+          <div class="refresh-bar">
+            <span><span class="live-dot"></span>Auto-updating</span>
+            <span id="lb-updated">Loading…</span>
+          </div>
+
+          <div class="lb-wrap">
+            <table class="lb" aria-label="League leaderboard top 10">
+              <thead>
+                <tr>
+                  <th class="col-rank">#</th>
+                  <th>Player</th>
+                  <th>Total</th>
+                  <th class="hide-sm">Best pick</th>
+                  <th class="hide-sm">Worst pick</th>
+                  <th class="hide-xs">Move</th>
+                </tr>
+              </thead>
+              <tbody id="lb-body">
+                <tr><td colspan="6" style="padding:32px;text-align:center;color:var(--muted)">
+                  <span class="skeleton" style="width:40%"></span>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Admin link -->
+        <p class="text-center mt-6 text-muted" style="font-size:.85rem">
+          Club admin? <a href="admin.html">Open the admin dashboard →</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="site-footer__bottom" style="border:none;padding-top:0">
+        <span>Cobh Golf Club · Sweepstakes operated under house rules</span>
+        <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · 18+ Responsible gambling</span>
+      </div>
+      <p class="text-muted mt-3" style="font-size:.74rem">
+        Data Controller: Cobh Golf Club. Processor: SnipeGolf. Retention: season + 30 days.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/themes.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
