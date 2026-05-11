@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Field — The Anchor Bar | SnipeGolf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:16px}
+.bracket-card{background:var(--surface,#0f0f0f);border:1px solid var(--border,#222);border-radius:14px;padding:16px}
+.bracket-card h3{margin:0 0 12px;font-family:Fraunces,serif;font-size:1.2rem;color:var(--accent,#caa14a);border-bottom:1px solid var(--border);padding-bottom:8px}
+.golfer-row{display:flex;justify-content:space-between;padding:6px 0;font-size:.95rem;border-bottom:1px solid rgba(255,255,255,.04)}
+.golfer-row:last-child{border-bottom:none}
+.golfer-name{flex:1}
+.golfer-status{font-size:.78rem;padding:2px 8px;border-radius:999px;margin-left:8px}
+.golfer-status.WD,.golfer-status.MC,.golfer-status.DQ{background:#592020;color:#ffb4b4}
+.golfer-topar{color:var(--muted,#888);min-width:40px;text-align:right;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body data-page="field">
+<div class="back-strip"><a href="index.html" class="back-link">← Back to The Anchor Bar home</a></div>
+<header class="site-header"><div class="site-header__inner">
+<a class="brand" href="../../index.html"><span class="brand__mark">S</span><span class="serif">SNIPEGOLF</span></a>
+</div></header>
+<div class="league-header"><div class="league-header__row"><div class="league-title">
+<span>Field — Truist Championship 2026</span><small>The Anchor Bar</small>
+</div></div></div>
+<main><section class="section"><div class="container">
+<nav class="tab-nav" aria-label="League sections">
+<a href="index.html">Home</a>
+<a href="leaderboard.html">Leaderboard</a>
+<a href="field.html" class="active">Field</a>
+<a href="qr.html">QR poster</a>
+</nav>
+<h1>Field of golfers</h1>
+<p class="text-muted" style="font-size:.9rem">WD/MC/DQ marked automatically as ESPN updates.</p>
+<div id="field-wrap"><p class="text-muted">Loading field…</p></div>
+</div></section></main>
+<script>
+(function(){
+  fetch("data/brackets.json?_=" + Date.now()).then(function(r){return r.json();}).then(function(data){
+    var wrap = document.getElementById("field-wrap");
+    if (!data || !data.brackets){ wrap.innerHTML = "<p>Field not yet imported.</p>"; return; }
+    var html = '<div class="field-grid">';
+    data.brackets.forEach(function(b){
+      html += '<div class="bracket-card"><h3>' + b.name + '</h3>';
+      (b.golfers || []).forEach(function(g){
+        var st = g.status ? '<span class="golfer-status ' + g.status + '">' + g.status + '</span>' : "";
+        var tp = g.toPar ? '<span class="golfer-topar">' + g.toPar + '</span>' : "";
+        html += '<div class="golfer-row' + (g.status ? " mc-wd" : "") + '"><span class="golfer-name">' + g.name + '</span>' + tp + st + '</div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<p class="text-muted" style="font-size:.78rem;margin-top:16px">Updated: ' + new Date(data.updatedAt).toLocaleString() + '</p>';
+    wrap.innerHTML = html;
+  }).catch(function(){
+    document.getElementById("field-wrap").innerHTML = "<p>Couldn\'t load field. Try refresh.</p>";
+  });
+})();
+</script>
+</body></html>
