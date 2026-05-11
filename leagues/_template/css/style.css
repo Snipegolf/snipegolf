@@ -736,3 +736,8 @@ input:focus, select:focus, textarea:focus {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Back to homepage strip */
+.back-strip{background:var(--surface,#0f0f0f);border-bottom:1px solid var(--border,#222);padding:10px 16px;text-align:center}
+.back-link{color:var(--accent,#caa14a);text-decoration:none;font-size:.88rem;font-weight:500}
+.back-link:hover{text-decoration:underline}
