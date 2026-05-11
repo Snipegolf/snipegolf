@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0a">
   <meta name="default-theme" content="snipe-default">
-  <title>Leaderboard — Youghal GC — Truist Championship 2026 | SnipeGolf</title>
+  <title>Leaderboard — Youghal GC | SnipeGolf</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,12 +31,13 @@
     </div>
   </header>
 
+  <div class="back-strip" data-sg-back><a href="index.html" class="back-link">← Back to Youghal GC home</a></div>
   <div class="league-header">
     <div class="league-header__row">
       <div class="league-logos">
         <img src="https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:R000.png/tournaments/logos/R480.png" alt="Youghal GC" onerror="this.style.display='none'">
         <span class="league-logos__divider" aria-hidden="true"></span>
-        <img src="{{TOURNAMENT_LOGO_URL}}" alt="Truist Championship 2026" onerror="this.style.display='none'">
+        <img src="" alt="Truist Championship 2026" onerror="this.style.display='none'">
       </div>
       <div class="league-title">
         <span data-tournament>Truist Championship 2026</span>
@@ -52,7 +53,7 @@
         <nav class="tab-nav" aria-label="League sections">
           <a href="index.html">Home</a>
           <a href="leaderboard.html" class="active">Leaderboard</a>
-          <a href="picks.html">Enter picks</a>
+          <a href="picks.html" data-sg-picks-tab>Enter picks</a>
           <a href="qr.html">QR poster</a>
         </nav>
 
@@ -67,6 +68,7 @@
           </button>
         </div>
 
+        <div id="winners-banner" style="display:none"></div>
         <div class="stats mb-5">
           <div class="stat"><span class="stat__num" id="stat-entries">—</span><span class="stat__lbl">Entries</span></div>
           <div class="stat"><span class="stat__num" id="stat-leader">—</span><span class="stat__lbl">Leader</span></div>
