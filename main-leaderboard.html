@@ -1,97 +1,30 @@
 <!DOCTYPE html>
-<!--
-  SnipeGolf — Cross-league public leaderboard (v2)
-  Pulls live data from ESPN's public golf API.
--->
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a0a">
-  <title>Live Leaderboard — SnipeGolf</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body data-page="main-leaderboard">
-
-  <header class="site-header" role="banner">
-    <div class="site-header__inner">
-      <a class="brand" href="index.html" aria-label="SnipeGolf home">
-        <span class="brand__mark" aria-hidden="true">S</span>
-        <span class="serif">SNIPEGOLF</span>
-      </a>
-      <nav class="site-nav" aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="main-leaderboard.html" class="active">Leaderboard</a>
-        <a href="index.html#features">Features</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <section class="section">
-      <div class="container">
-
-        <div class="mb-6">
-          <span class="eyebrow">Tournament leaderboard</span>
-          <h1 id="tournament-name" style="margin-top:8px">Loading tournament…</h1>
-          <p class="lead" style="margin-top:8px">
-            <span id="course-name">—</span>
-            &nbsp;·&nbsp;
-            <span id="round-status">—</span>
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="refresh-bar">
-            <span><span class="live-dot"></span><span id="last-updated">Loading live data…</span></span>
-            <span id="refresh-counter" class="text-muted">Refresh in 60s</span>
-          </div>
-
-          <div class="lb-wrap" style="max-height:75vh">
-            <table class="lb" aria-label="Live tournament leaderboard">
-              <thead>
-                <tr>
-                  <th class="col-rank">Pos</th>
-                  <th>Player</th>
-                  <th class="hide-sm">Country</th>
-                  <th>Score</th>
-                  <th class="hide-sm">Today</th>
-                  <th>Thru</th>
-                </tr>
-              </thead>
-              <tbody id="scoreboard-body">
-                <tr><td colspan="6" style="padding:32px;text-align:center;color:var(--muted)">
-                  <span class="skeleton" style="width:40%"></span>
-                </td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <p class="text-muted mt-4" style="font-size:.82rem">
-          Data from ESPN's public golf scoreboard, refreshed every minute while this tab is visible. Times shown in your local timezone.
-        </p>
-
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      <div class="site-footer__bottom" style="border:none;padding:0">
-        <span>© <span id="year"></span> SnipeGolf</span>
-        <span><a href="leagues/_template/terms.html">Terms</a> · <a href="leagues/_template/privacy.html">Privacy</a></span>
-      </div>
-    </div>
-  </footer>
-
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-  <script src="assets/js/themes.js"></script>
-  <script src="leagues/_template/js/app.js"></script>
-</body>
-</html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Global leaderboard — coming soon | SnipeGolf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="leagues/_template/css/style.css">
+</head><body>
+<header class="site-header"><div class="site-header__inner">
+<a class="brand" href="index.html"><span class="brand__mark">S</span><span class="serif">SNIPEGOLF</span></a>
+<nav class="site-nav"><a href="index.html">Home</a></nav>
+</div></header>
+<main><section class="section"><div class="container">
+<div class="card" style="max-width:640px;margin:48px auto;text-align:center;padding:40px 28px">
+<span class="eyebrow">Coming soon</span>
+<h1 style="font-family:Fraunces,serif;margin:12px 0 12px">Global leaderboard</h1>
+<p class="text-muted" style="line-height:1.7;font-size:1.02rem">When live, this page will show every SnipeGolf club competition currently in play — with leaders, top picks, and prize pools updated every 60 seconds.</p>
+<p class="text-muted" style="line-height:1.6;margin-top:14px;font-size:.92rem">In the meantime, find your club's leaderboard via the link your admin shared, or visit your club's SnipeGolf page directly.</p>
+<div style="margin-top:24px">
+<a class="btn" href="index.html">← Back to SnipeGolf</a>
+</div>
+</div>
+</div></section></main>
+<footer class="site-footer"><div class="container" style="padding:24px 0;text-align:center;color:var(--muted,#888);font-size:.85rem">
+SnipeGolf · <a href="mailto:snipegolfclothing@gmail.com" style="color:inherit">snipegolfclothing@gmail.com</a>
+</div></footer>
+</body></html>
