@@ -61,6 +61,24 @@
       document.getElementById("status-pill").textContent = (st && st.shortDetail) || "";
       if (st && st.state === "in") document.getElementById("live-pill").style.display = "inline-block";
       var competitors = comp.competitors || [];
+      var stateVal = (st && st.state) || "";
+      var isPre = stateVal === "pre" || competitors.length === 0 || (competitors.length && (!competitors[0].score && competitors[0].score!==0) && !competitors[0].linescores);
+      if (isPre) {
+        var startTxt = (ev.date ? new Date(ev.date).toLocaleString(undefined,{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}) : "");
+        var venue = (comp.venue && (comp.venue.fullName || comp.venue.name)) || "";
+        var fieldCount = competitors.length;
+        var preHtml = "<div style=\"padding:32px 20px;text-align:center;background:#fafafa;border:1px solid #eee;border-radius:8px\">";
+        preHtml += "<div style=\"font-size:22px;font-family:Fraunces,serif;margin-bottom:8px\">Tournament not started</div>";
+        preHtml += "<div style=\"color:#666;margin-bottom:14px\">Live scores will appear here once Round 1 begins.</div>";
+        if (startTxt) preHtml += "<div style=\"margin:6px 0\"><strong>First tee:</strong> " + startTxt + "</div>";
+        if (venue) preHtml += "<div style=\"margin:6px 0\"><strong>Venue:</strong> " + venue + "</div>";
+        if (fieldCount) preHtml += "<div style=\"margin:6px 0\"><strong>Field:</strong> " + fieldCount + " players</div>";
+        preHtml += "<div style=\"margin-top:16px\"><a class=\"btn btn--ghost btn--sm\" href=\"field.html\">View field & brackets →</a></div>";
+        preHtml += "</div>";
+        document.getElementById("scores-body").innerHTML = preHtml;
+        document.getElementById("refresh-note").textContent = "Checked " + new Date().toLocaleTimeString() + " · auto-refresh 60s · source: ESPN";
+        return;
+      }
       competitors.sort(function(a,b){ var pa=parseInt(a.status&&a.status.position&&a.status.position.id,10)||999; var pb=parseInt(b.status&&b.status.position&&b.status.position.id,10)||999; return pa-pb; });
       var html = "<table class=\"scores-table\"><thead><tr><th class=\"pos\">Pos</th><th>Player</th><th class=\"right\">Today</th><th class=\"right\">Thru</th><th class=\"right\">Total</th></tr></thead><tbody>";
       var seenCut = false;
