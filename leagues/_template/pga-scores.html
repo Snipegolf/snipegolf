@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PGA live scores — {{CLUB_NAME}}</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  .scores-wrap { max-width: 980px; margin: 0 auto; padding: 16px }
+  .scores-meta { display:flex; flex-wrap:wrap; gap:14px; margin:10px 0 18px; align-items:center }
+  .scores-meta .pill { background:#f3f3f3; padding:6px 12px; border-radius:999px; font-size:13px }
+  .scores-meta .live { background:#d8f1de; color:#0a6f2b }
+  .scores-table { width:100%; border-collapse:collapse }
+  .scores-table th, .scores-table td { padding:8px 6px; text-align:left; border-bottom:1px solid #eee; font-size:14px }
+  .scores-table th { background:#fafafa; font-size:12px; text-transform:uppercase; letter-spacing:.04em }
+  .scores-table td.right { text-align:right; font-variant-numeric:tabular-nums }
+  .scores-table .pos { width:48px; color:#666 }
+  .scores-table .score-red { color:#b21f1f; font-weight:600 }
+  .scores-table .score-green { color:#0a6f2b; font-weight:600 }
+  .scores-cut { background:#fff8e0 }
+  .scores-cut td { font-style:italic; color:#7a5a00 }
+  .scores-loading, .scores-error { padding:24px; text-align:center; color:#666 }
+  .scores-error { color:#b21f1f }
+  .refresh-note { text-align:right; font-size:12px; color:#999; margin-top:8px }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="../../index.html" aria-label="SnipeGolf home">
+      <img src="../../assets/img/logo.svg" alt="SnipeGolf" height="32">
+    </a>
+  </div>
+</header>
+<div class="back-strip"><a href="leaderboard.html" class="back-link">← Back to {{CLUB_NAME}} leaderboard</a></div>
+<main class="scores-wrap">
+  <h1 id="tourn-title" style="font-family:Fraunces,serif;margin:8px 0 4px">{{TOURNAMENT}}</h1>
+  <div class="scores-meta">
+    <span class="pill" id="round-pill">Loading…</span>
+    <span class="pill" id="status-pill"></span>
+    <span class="pill live" id="live-pill" style="display:none">LIVE</span>
+  </div>
+  <div id="scores-body" class="scores-loading">Loading live scores…</div>
+  <div class="refresh-note" id="refresh-note"></div>
+</main>
+<script>
+(function(){
+  var EVENT_ID = "{{ESPN_ID}}";
+  var API = "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga&event=" + EVENT_ID;
+  var REFRESH_MS = 60000;
+  function fmtScore(s){ if(s===0||s==="0")return "E"; if(s>0)return "+"+s; return ""+s; }
+  function scoreClass(s){ if(s<0)return "score-red"; if(s>0)return "score-green"; return ""; }
+  function render(data){
+    try {
+      var ev = data.events && data.events[0];
+      if (!ev) { document.getElementById("scores-body").innerHTML = "<div class=\"scores-error\">No event data</div>"; return; }
+      document.getElementById("tourn-title").textContent = ev.name || "{{TOURNAMENT}}";
+      var comp = ev.competitions && ev.competitions[0]; if (!comp) return;
+      var st = comp.status && comp.status.type;
+      document.getElementById("round-pill").textContent = (comp.status && comp.status.period ? "Round " + comp.status.period : (st && st.description) || "");
+      document.getElementById("status-pill").textContent = (st && st.shortDetail) || "";
+      if (st && st.state === "in") document.getElementById("live-pill").style.display = "inline-block";
+      var competitors = comp.competitors || [];
+      competitors.sort(function(a,b){ var pa=parseInt(a.status&&a.status.position&&a.status.position.id,10)||999; var pb=parseInt(b.status&&b.status.position&&b.status.position.id,10)||999; return pa-pb; });
+      var html = "<table class=\"scores-table\"><thead><tr><th class=\"pos\">Pos</th><th>Player</th><th class=\"right\">Today</th><th class=\"right\">Thru</th><th class=\"right\">Total</th></tr></thead><tbody>";
+      var seenCut = false;
+      for (var i=0;i<competitors.length;i++){
+        var c = competitors[i];
+        var ath = c.athlete || {};
+        var pos = (c.status && c.status.position && c.status.position.displayName) || "";
+        var today = c.linescores && c.linescores.length ? (c.linescores[c.linescores.length-1].displayValue || "") : "";
+        var thru = c.status && c.status.thru ? c.status.thru : (c.status && c.status.type && c.status.type.shortDetail) || "";
+        var total = (c.score !== undefined ? c.score : "");
+        var isCut = c.status && c.status.type && (c.status.type.name === "STATUS_CUT" || c.status.type.completed && pos === "CUT");
+        if (isCut && !seenCut) { html += "<tr class=\"scores-cut\"><td colspan=\"5\">— PROJECTED CUT LINE —</td></tr>"; seenCut = true; }
+        html += "<tr><td class=\"pos\">" + pos + "</td><td>" + (ath.displayName || ath.shortName || "") + "</td><td class=\"right " + scoreClass(parseInt(today,10)) + "\">" + (today||"—") + "</td><td class=\"right\">" + (thru||"—") + "</td><td class=\"right " + scoreClass(parseInt(total,10)) + "\">" + fmtScore(total) + "</td></tr>";
+      }
+      html += "</tbody></table>";
+      document.getElementById("scores-body").innerHTML = html;
+      document.getElementById("refresh-note").textContent = "Updated " + new Date().toLocaleTimeString() + " · auto-refresh 60s · source: ESPN";
+    } catch(e) {
+      document.getElementById("scores-body").innerHTML = "<div class=\"scores-error\">Render error: " + e.message + "</div>";
+    }
+  }
+  function load(){
+    if (!EVENT_ID || EVENT_ID === "" || EVENT_ID.indexOf("{{") === 0) {
+      document.getElementById("scores-body").innerHTML = "<div class=\"scores-error\">No ESPN event ID configured for this league.</div>";
+      return;
+    }
+    fetch(API).then(function(r){ return r.json(); }).then(render).catch(function(e){
+      document.getElementById("scores-body").innerHTML = "<div class=\"scores-error\">Could not load scores: " + e.message + "</div>";
+    });
+  }
+  load();
+  setInterval(load, REFRESH_MS);
+})();
+</script>
+</body>
+</html>
