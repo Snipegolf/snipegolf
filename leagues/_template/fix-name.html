@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Set Display Name — SnipeGolf</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0f0f0f;color:#fff;margin:0;padding:24px;}
+.box{max-width:480px;margin:40px auto;background:#1a1a1a;padding:28px;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.4);}
+h1{margin:0 0 8px;font-size:22px;color:#facc15;}
+.sub{color:#888;font-size:14px;margin-bottom:20px;}
+.row{margin:14px 0;}
+label{display:block;color:#aaa;font-size:13px;margin-bottom:6px;}
+input[type=text]{width:100%;padding:14px;font-size:17px;border-radius:8px;border:1px solid #444;background:#0f0f0f;color:#fff;box-sizing:border-box;}
+input:focus{outline:none;border-color:#16a34a;}
+.preview{padding:14px;border-radius:8px;background:#0a2e1f;border:1px solid #16a34a;color:#86efac;font-weight:600;margin-top:12px;text-align:center;font-size:18px;}
+button{width:100%;padding:14px;border-radius:8px;border:none;background:#16a34a;color:#fff;font-weight:700;cursor:pointer;font-size:16px;margin-top:14px;}
+button:disabled{background:#333;cursor:not-allowed;}
+.err{color:#fca5a5;background:#3b0e0e;padding:12px;border-radius:8px;margin-top:12px;font-size:14px;}
+.ok{color:#86efac;background:#0a2e1f;padding:12px;border-radius:8px;margin-top:12px;font-size:14px;}
+.muted{color:#666;font-size:13px;margin-top:14px;line-height:1.5;}
+.locked{color:#fbbf24;background:#3b2710;padding:14px;border-radius:8px;margin:14px 0;text-align:center;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>Set Display Name</h1>
+  <p class="sub">Another entrant has the same name. Add a middle initial or short tag.</p>
+  <div id="loading" class="muted">Loading...</div>
+  <div id="content" style="display:none">
+    <div class="row">
+      <label>Your current name</label>
+      <div id="current" style="padding:12px;background:#0a0a0a;border-radius:8px;color:#ccc;"></div>
+    </div>
+    <div id="lockedBox" class="locked" style="display:none">🔒 Edits are locked for this tournament.</div>
+    <div id="editBox">
+      <div class="row">
+        <label for="tag">Middle initial or short tag</label>
+        <input id="tag" type="text" maxlength="10" placeholder="e.g. M or Jr or Cork" pattern="[A-Za-z. \-]{1,10}">
+      </div>
+      <div id="preview" class="preview" style="display:none"></div>
+      <button id="saveBtn">Save Display Name</button>
+      <div id="msg"></div>
+    </div>
+  </div>
+  <p class="muted">Your entry and picks are unchanged — this only affects how your name appears on the leaderboard.</p>
+</div>
+<script>
+(function(){
+  var APPS = 'https://script.google.com/macros/s/AKfycbzf26drG5RAVZTBIOVzOJbK7yyNOHZvvi6iaTOq0lre50coQR5sCztY3xBDj4CQDJl9mw/exec';
+  var qs = new URLSearchParams(location.search);
+  var slug = location.pathname.split('/').filter(Boolean);
+  var leagueSlug = '';
+  for (var i=0;i<slug.length;i++) if (slug[i]==='leagues' && slug[i+1]) leagueSlug = slug[i+1];
+  var email = qs.get('email') || '';
+  var token = qs.get('token') || '';
+  var loaded = null;
+
+  function show(id){document.getElementById(id).style.display='block';}
+  function hide(id){document.getElementById(id).style.display='none';}
+  function setMsg(html,cls){var m=document.getElementById('msg');m.innerHTML=html?('<div class="'+cls+'">'+html+'</div>'):'';}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+  function buildPreview(tag){
+    if (!loaded || !loaded.currentName) return '';
+    var parts = loaded.currentName.trim().split(/\s+/);
+    if (parts.length<=1) return loaded.currentName + ' ' + tag;
+    return parts.slice(0,parts.length-1).join(' ')+' '+tag+' '+parts[parts.length-1];
+  }
+
+  function init(){
+    if (!email || !token || !leagueSlug){
+      document.getElementById('loading').innerHTML='<div class="err">Invalid link. Please check the email.</div>';
+      return;
+    }
+    fetch(APPS+'?api=fix_get&league='+encodeURIComponent(leagueSlug)+'&email='+encodeURIComponent(email)+'&token='+encodeURIComponent(token))
+      .then(function(r){return r.json();})
+      .then(function(d){
+        hide('loading'); show('content');
+        if (!d.ok){
+          document.getElementById('current').innerHTML='<span style="color:#fca5a5">'+esc(d.error||'Error')+'</span>';
+          hide('editBox');
+          return;
+        }
+        loaded = d;
+        document.getElementById('current').textContent = d.currentDisplay || d.currentName;
+        if (d.locked){
+          show('lockedBox');
+          hide('editBox');
+        }
+      })
+      .catch(function(e){
+        hide('loading'); show('content');
+        setMsg('Network error: '+esc(e.message),'err');
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    init();
+    var tag = document.getElementById('tag');
+    tag.addEventListener('input', function(){
+      var v = tag.value.trim();
+      if (v){
+        document.getElementById('preview').textContent = buildPreview(v);
+        show('preview');
+      } else { hide('preview'); }
+    });
+    document.getElementById('saveBtn').addEventListener('click', function(){
+      var v = tag.value.trim();
+      if (!/^[A-Za-z. \-]{1,10}$/.test(v)){
+        setMsg('Use 1-10 letters, dots, spaces or hyphens.','err'); return;
+      }
+      setMsg('Saving...','ok');
+      document.getElementById('saveBtn').disabled = true;
+      fetch(APPS, {
+        method:'POST',
+        body: JSON.stringify({api:'fix_save', league:leagueSlug, email:email, token:token, tag:v}),
+        headers: {'Content-Type':'text/plain'}
+      })
+      .then(function(r){return r.json();})
+      .then(function(d){
+        document.getElementById('saveBtn').disabled = false;
+        if (d.ok){
+          setMsg('Saved as <b>'+esc(d.displayName)+'</b>. You can close this page.','ok');
+          document.getElementById('current').textContent = d.displayName;
+          tag.value=''; hide('preview');
+        } else if (d.conflict){
+          setMsg(esc(d.error||'That name is also taken — try a different tag.'),'err');
+        } else if (d.locked){
+          setMsg('Edits are now locked for this tournament.','err');
+        } else {
+          setMsg(esc(d.error||'Save failed.'),'err');
+        }
+      })
+      .catch(function(e){
+        document.getElementById('saveBtn').disabled = false;
+        setMsg('Network error: '+esc(e.message),'err');
+      });
+    });
+  });
+})();
+</script>
+</body></html>
