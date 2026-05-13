@@ -127,19 +127,5 @@
 
   <script src="js/themes.js"></script>
   <script src="js/app.js"></script>
-<script>
-(function(){
-  var TEE = new Date("2026-05-14T10:00:00-04:00");
-  function placeholder(){
-    var tb = document.getElementById('lb-body');
-    if (!tb) return;
-    var msg = 'Tournament starts Thursday, May 14 at 10:00 AM ET. Live leaderboard available once play begins.';
-    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px;font-style:italic">' + msg + '</td></tr>';
-  }
-  function tick(){ if (new Date() < TEE) placeholder(); }
-  tick();
-  setInterval(tick, 3000);
-})();
-</script>
 </body>
 </html>
