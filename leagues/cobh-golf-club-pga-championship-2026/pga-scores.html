@@ -97,17 +97,45 @@
       if(!competitors.length){
         $("scores-content").innerHTML = '<div class="scores-empty"><h2>No scores yet</h2></div>';return;
       }
-      competitors.sort(function(a,b){return (a.status&&a.status.position&&a.status.position.id||999)-(b.status&&b.status.position&&b.status.position.id||999)});
-      var rows = competitors.slice(0,80).map(function(c){
+      function stpVal(c){
+        if(!c.statistics) return null;
+        for(var i=0;i<c.statistics.length;i++){
+          var s=c.statistics[i];
+          if(s.name==="scoreToPar"){
+            if(s.value!=null && !isNaN(Number(s.value))) return Number(s.value);
+            if(s.displayValue==="E") return 0;
+            var n=parseInt(String(s.displayValue).replace("+",""),10);
+            return isNaN(n)?null:n;
+          }
+        }
+        return null;
+      }
+      function thruNum(c){var t=c.status&&c.status.thru;return (typeof t==="number"?t:0);}
+      competitors.sort(function(a,b){
+        var sa=stpVal(a), sb=stpVal(b);
+        var started_a = sa!==null && thruNum(a)>0;
+        var started_b = sb!==null && thruNum(b)>0;
+        if(started_a && !started_b) return -1;
+        if(!started_a && started_b) return 1;
+        if(started_a && started_b){
+          if(sa!==sb) return sa-sb;
+          return thruNum(b)-thruNum(a);
+        }
+        return 0;
+      });
+      var rows = competitors.slice(0,80).map(function(c,idx){
         var ath = c.athlete||{};
         var nm = ath.displayName||"";
         var pos = c.status&&c.status.position&&c.status.position.displayName||"";
-        var tot = c.statistics && (c.statistics.find(function(s){return s.name==="scoreToPar"})||{}).displayValue;
-        var thru = c.status&&c.status.thru||"";
+        var sv = stpVal(c);
+        var thru = c.status&&c.status.thru;
+        var started = sv!==null && thru>0;
+        var totDisp = started ? (sv===0?"E":(sv>0?"+"+sv:String(sv))) : "—";
+        var thruDisp = started ? (thru===18?"F":String(thru)) : "—";
         var today = c.linescores && c.linescores.length && c.linescores[c.linescores.length-1].value;
-        var tot2 = tot||fmt(c.score);
-        var cls = tot2 && tot2.charAt(0)==="-"?"score-red":(tot2 && tot2.charAt(0)==="+"?"":"score-green");
-        return '<tr><td class="pos">'+pos+'</td><td>'+nm+'</td><td class="right '+cls+'">'+(tot2||"E")+'</td><td class="right">'+(thru||"—")+'</td><td class="right">'+(today!=null?fmt(today):"—")+'</td></tr>';
+        var todayDisp = (started && today!=null) ? fmt(today) : "—";
+        var cls = (totDisp && totDisp.charAt(0)==="-") ? "score-red" : (totDisp==="E" ? "score-green" : "");
+        return '<tr><td class="pos">'+(pos||(started?"":"—"))+'</td><td>'+nm+'</td><td class="right '+cls+'">'+totDisp+'</td><td class="right">'+thruDisp+'</td><td class="right">'+todayDisp+'</td></tr>';
       }).join("");
       $("scores-content").innerHTML = '<table class="scores-table"><thead><tr><th>POS</th><th>PLAYER</th><th class="right">TOTAL</th><th class="right">THRU</th><th class="right">TODAY</th></tr></thead><tbody>'+rows+'</tbody></table>';
     }).catch(function(e){
