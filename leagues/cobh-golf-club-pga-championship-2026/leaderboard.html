@@ -124,7 +124,9 @@
 <script>
 (function(){
   var ESPN_URL = 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=401811947';
-  var PICKS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSspURQcmIsWDqRciouecPQ61cQXED09XszJopzbyyNmgBxojHAMxwr-tzfeFVj-ZuRKKx1RyACe_PZ/pub?gid=922314092&single=true&output=csv';
+  var WORKER_BASE = 'https://twilight-recipe-e213.badenmaher.workers.dev';
+  var LEAGUE_SLUG = 'cobh-golf-club-pga-championship-2026';
+  var ENTRIES_API = WORKER_BASE + '/api/league/' + LEAGUE_SLUG + '/entries';
   var BRACKET_URLS = [
     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSspURQcmIsWDqRciouecPQ61cQXED09XszJopzbyyNmgBxojHAMxwr-tzfeFVj-ZuRKKx1RyACe_PZ/pub?gid=955254154&single=true&output=csv',
     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSspURQcmIsWDqRciouecPQ61cQXED09XszJopzbyyNmgBxojHAMxwr-tzfeFVj-ZuRKKx1RyACe_PZ/pub?gid=1968252990&single=true&output=csv',
@@ -299,30 +301,28 @@
     setStatus('Refreshing…','');
     Promise.all([
       fetch(ESPN_URL,{cache:'no-store'}).then(function(r){return r.json();}),
-      fetch(PICKS_CSV+'&cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();})
+      fetch(ENTRIES_API+'?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})
     ]).then(function(results){
-      var espn=results[0], csv=results[1];
+      var espn=results[0], api=results[1];
       var scoreMap=buildScoreMap(espn);
       var lead=leaderScore(scoreMap);
       var espnStatus='Live';
       try { espnStatus=espn.events[0].status.type.description; } catch(e){}
 
-      var csvRows=parseCSV(csv);
+      var apiEntries=(api&&api.entries)||[];
       var entries=[];
-      for (var i=0;i<csvRows.length;i++){
-        var row=csvRows[i];
-        if (!row||row.length<13) continue;
-        var name=row[1];
-        if (!name||/^name$/i.test(name)) continue;
-        // CSV cols 4..11 are picks; spreadsheet order = B1P1, B1P2, B2P1, B2P2, B3P1, B3P2, B4P1, B4P2
+      for (var i=0;i<apiEntries.length;i++){
+        var ae=apiEntries[i];
+        if (!ae||!ae.name) continue;
+        var pk=ae.picks||[];
         var picks=[
-          {n:row[4], b:1}, {n:row[5], b:1},
-          {n:row[6], b:2}, {n:row[7], b:2},
-          {n:row[8], b:3}, {n:row[9], b:3},
-          {n:row[10], b:4}, {n:row[11], b:4}
+          {n:pk[0]||'', b:1},{n:pk[1]||'', b:1},
+          {n:pk[2]||'', b:2},{n:pk[3]||'', b:2},
+          {n:pk[4]||'', b:3},{n:pk[5]||'', b:3},
+          {n:pk[6]||'', b:4},{n:pk[7]||'', b:4}
         ];
-        var tb=parseInt(row[12],10); if (isNaN(tb)) tb=0;
-        entries.push({name:name,picks:picks,tiebreaker:tb});
+        var tb=Number(ae.tiebreaker); if (isNaN(tb)) tb=0;
+        entries.push({name:ae.name,picks:picks,tiebreaker:tb});
       }
 
       var rows=[];
