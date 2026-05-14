@@ -65,8 +65,16 @@
   var DQ_PENALTY = 5;
   var NOSHOW_PENALTY = 5; // player not in ESPN field at all
 
+  // Manual aliases: entrant pick name -> ESPN feed name (normalized form)
+  var NAME_ALIASES = {
+    'matthew fitzpatrick': 'matt fitzpatrick',
+    'daniel brown': 'dan brown'
+  };
+
   function normName(n){
-    return String(n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+    var s = String(n||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+    if (NAME_ALIASES[s]) return NAME_ALIASES[s];
+    return s;
   }
 
   function fmt(s){
