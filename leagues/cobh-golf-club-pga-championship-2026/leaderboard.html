@@ -334,8 +334,8 @@
           if (!pk.n) continue;
           var key=normName(pk.n);
           var info=scoreMap[key];
-          // Bracket from ESPN/sheet lookup overrides slot-position bracket; fallback to slot
-          var b = bracketOf(pk.n) || pk.b;
+          // STICKY: bracket is fixed by pick slot at entry time (B1 = picks 1-2, B2 = 3-4, B3 = 5-6, B4 = 7-8)
+          var b = pk.b;
           if (info){
             total+=info.score;
             detail.push({name:info.name,score:info.score,cut:info.cut,bracket:b});
