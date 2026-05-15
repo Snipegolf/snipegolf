@@ -4,19 +4,491 @@
   "brackets": [
     {
       "name": "Bracket 1",
-      "players": ["Scottie Scheffler","Rory McIlroy","Cameron Young","Collin Morikawa","Tommy Fleetwood","Justin Rose","Jon Rahm","J.J. Spaun","Russell Henley","Bryson DeChambeau","Chris Gotterup","Xander Schauffele","Robert MacIntyre","Joaquin Niemann","Sepp Straka","Ben Griffin","Ludvig Åberg","Brooks Koepka","Justin Thomas","Tyrrell Hatton","Hideki Matsuyama","Alex Noren","Jacob Bridgeman","Cameron Smith","Harris English","Si Woo Kim","Akshay Bhatia","Patrick Reed","Kristoffer Reitan","Viktor Hovland","Nicolai Højgaard","Patrick Cantlay","Min Woo Lee","Keegan Bradley","Dustin Johnson","Maverick McNealy","Kurt Kitayama","Sam Burns","Jason Day"]
+      "golfers": [
+        {
+          "name": "Scottie Scheffler"
+        },
+        {
+          "name": "Rory McIlroy"
+        },
+        {
+          "name": "Cameron Young"
+        },
+        {
+          "name": "Collin Morikawa"
+        },
+        {
+          "name": "Tommy Fleetwood"
+        },
+        {
+          "name": "Justin Rose"
+        },
+        {
+          "name": "Jon Rahm"
+        },
+        {
+          "name": "J.J. Spaun"
+        },
+        {
+          "name": "Russell Henley"
+        },
+        {
+          "name": "Bryson DeChambeau"
+        },
+        {
+          "name": "Chris Gotterup"
+        },
+        {
+          "name": "Xander Schauffele"
+        },
+        {
+          "name": "Robert MacIntyre"
+        },
+        {
+          "name": "Joaquin Niemann"
+        },
+        {
+          "name": "Sepp Straka"
+        },
+        {
+          "name": "Ben Griffin"
+        },
+        {
+          "name": "Ludvig Åberg"
+        },
+        {
+          "name": "Brooks Koepka"
+        },
+        {
+          "name": "Justin Thomas"
+        },
+        {
+          "name": "Tyrrell Hatton"
+        },
+        {
+          "name": "Hideki Matsuyama"
+        },
+        {
+          "name": "Alex Noren"
+        },
+        {
+          "name": "Jacob Bridgeman"
+        },
+        {
+          "name": "Cameron Smith"
+        },
+        {
+          "name": "Harris English"
+        },
+        {
+          "name": "Si Woo Kim"
+        },
+        {
+          "name": "Akshay Bhatia"
+        },
+        {
+          "name": "Patrick Reed"
+        },
+        {
+          "name": "Kristoffer Reitan"
+        },
+        {
+          "name": "Viktor Hovland"
+        },
+        {
+          "name": "Nicolai Højgaard"
+        },
+        {
+          "name": "Patrick Cantlay"
+        },
+        {
+          "name": "Min Woo Lee"
+        },
+        {
+          "name": "Keegan Bradley"
+        },
+        {
+          "name": "Dustin Johnson"
+        },
+        {
+          "name": "Maverick McNealy"
+        },
+        {
+          "name": "Kurt Kitayama"
+        },
+        {
+          "name": "Sam Burns"
+        },
+        {
+          "name": "Jason Day"
+        }
+      ]
     },
     {
       "name": "Bracket 2",
-      "players": ["Ryan Gerard","Rickie Fowler","Shane Lowry","Jake Knapp","Marco Penge","Daniel Berger","Matt McCarty","Aaron Rai","Michael Kim","Adam Scott","Gary Woodland","Nico Echavarria","Sam Stevens","Corey Conners","Jordan Spieth","Michael Brennan","Brian Harman","Andrew Novak","Pierceson Coody","Ryan Fox","Harry Hall","Nick Taylor","Ryo Hisatsune","Sami Valimaki","Thomas Detry","David Puig","Michael Thorbjornsen","Rasmus Højgaard","Jayden Schaper","Bud Cauley","Sungjae Im","Jordan Smith","Matt Wallace","Max Greyserman","Wyndham Clark","Casey Jarvis","Patrick Rodgers","John Keefer","Aldrich Potgieter"]
+      "golfers": [
+        {
+          "name": "Ryan Gerard"
+        },
+        {
+          "name": "Rickie Fowler"
+        },
+        {
+          "name": "Shane Lowry"
+        },
+        {
+          "name": "Jake Knapp"
+        },
+        {
+          "name": "Marco Penge"
+        },
+        {
+          "name": "Daniel Berger"
+        },
+        {
+          "name": "Matt McCarty"
+        },
+        {
+          "name": "Aaron Rai"
+        },
+        {
+          "name": "Michael Kim"
+        },
+        {
+          "name": "Adam Scott"
+        },
+        {
+          "name": "Gary Woodland"
+        },
+        {
+          "name": "Nico Echavarria"
+        },
+        {
+          "name": "Sam Stevens"
+        },
+        {
+          "name": "Corey Conners"
+        },
+        {
+          "name": "Jordan Spieth"
+        },
+        {
+          "name": "Michael Brennan"
+        },
+        {
+          "name": "Brian Harman"
+        },
+        {
+          "name": "Andrew Novak"
+        },
+        {
+          "name": "Pierceson Coody"
+        },
+        {
+          "name": "Ryan Fox"
+        },
+        {
+          "name": "Harry Hall"
+        },
+        {
+          "name": "Nick Taylor"
+        },
+        {
+          "name": "Ryo Hisatsune"
+        },
+        {
+          "name": "Sami Valimaki"
+        },
+        {
+          "name": "Thomas Detry"
+        },
+        {
+          "name": "David Puig"
+        },
+        {
+          "name": "Michael Thorbjornsen"
+        },
+        {
+          "name": "Rasmus Højgaard"
+        },
+        {
+          "name": "Jayden Schaper"
+        },
+        {
+          "name": "Bud Cauley"
+        },
+        {
+          "name": "Sungjae Im"
+        },
+        {
+          "name": "Jordan Smith"
+        },
+        {
+          "name": "Matt Wallace"
+        },
+        {
+          "name": "Max Greyserman"
+        },
+        {
+          "name": "Wyndham Clark"
+        },
+        {
+          "name": "Casey Jarvis"
+        },
+        {
+          "name": "Patrick Rodgers"
+        },
+        {
+          "name": "John Keefer"
+        },
+        {
+          "name": "Aldrich Potgieter"
+        }
+      ]
     },
     {
       "name": "Bracket 3",
-      "players": ["Sahith Theegala","Rasmus Neergaard-Petersen","Alex Smalley","J.T. Poston","Haotong Li","Max McGreevy","Andrew Putnam","Alex Fitzpatrick","Austin Smotherman","Garrick Higgo","Martin Kaymer","Taylor Pendrith","John Parry","Rico Hoey","Ricky Castillo","David Lipsky","Christiaan Bezuidenhout","Lucas Glover","Elvis Smylie","Daniel Hillier","Matti Schmid","Chris Kirk","Denny McCarthy","Stephan Jaeger","Adrien Saddier","Brian Campbell","Sudarshan Yellamaraju","Andy Sullivan","Angel Ayora","Tom McKibbin","Keith Mitchell","Chandler Blanchet","Ian Holt","Emiliano Grillo","Billy Horschel","Max Homa","Jhonattan Vegas","Brandt Snedeker"]
+      "golfers": [
+        {
+          "name": "Sahith Theegala"
+        },
+        {
+          "name": "Rasmus Neergaard-Petersen"
+        },
+        {
+          "name": "Alex Smalley"
+        },
+        {
+          "name": "J.T. Poston"
+        },
+        {
+          "name": "Haotong Li"
+        },
+        {
+          "name": "Max McGreevy"
+        },
+        {
+          "name": "Andrew Putnam"
+        },
+        {
+          "name": "Alex Fitzpatrick"
+        },
+        {
+          "name": "Austin Smotherman"
+        },
+        {
+          "name": "Garrick Higgo"
+        },
+        {
+          "name": "Martin Kaymer"
+        },
+        {
+          "name": "Taylor Pendrith"
+        },
+        {
+          "name": "John Parry"
+        },
+        {
+          "name": "Rico Hoey"
+        },
+        {
+          "name": "Ricky Castillo"
+        },
+        {
+          "name": "David Lipsky"
+        },
+        {
+          "name": "Christiaan Bezuidenhout"
+        },
+        {
+          "name": "Lucas Glover"
+        },
+        {
+          "name": "Elvis Smylie"
+        },
+        {
+          "name": "Daniel Hillier"
+        },
+        {
+          "name": "Matti Schmid"
+        },
+        {
+          "name": "Chris Kirk"
+        },
+        {
+          "name": "Denny McCarthy"
+        },
+        {
+          "name": "Stephan Jaeger"
+        },
+        {
+          "name": "Adrien Saddier"
+        },
+        {
+          "name": "Brian Campbell"
+        },
+        {
+          "name": "Sudarshan Yellamaraju"
+        },
+        {
+          "name": "Andy Sullivan"
+        },
+        {
+          "name": "Angel Ayora"
+        },
+        {
+          "name": "Tom McKibbin"
+        },
+        {
+          "name": "Keith Mitchell"
+        },
+        {
+          "name": "Chandler Blanchet"
+        },
+        {
+          "name": "Ian Holt"
+        },
+        {
+          "name": "Emiliano Grillo"
+        },
+        {
+          "name": "Billy Horschel"
+        },
+        {
+          "name": "Max Homa"
+        },
+        {
+          "name": "Jhonattan Vegas"
+        },
+        {
+          "name": "Brandt Snedeker"
+        }
+      ]
     },
     {
       "name": "Bracket 4",
-      "players": ["William Mouw","Steven Fisk","Mikael Lindberg","Davis Riley","Travis Smyth","Joe Highsmith","Kazuki Higa","Adam Schenk","Kota Kaneko","Stewart Cink","Bernd Wiesberger","Pádraig Harrington","Jason Dufner","Jimmy Walker","Shaun Micheel","Y.E. Yang","Jordan Gumberg","Derek Berg","Francisco Bide","Michael Block","Tyler Collet","Luke Donald","Jesse Droemer","Bryce Fisher","Matthew Fitzpatrick","Chris Gabriele","Mark Geddes","Zach Haynes","Austin Hurt","Jared Jones","Michael Kartrude","Ben Kern","Ryan Lenahan","Paul McClure","Ben Polland","Garrett Sapp","Braden Shattuck","Ryan Vermeer","Timothy Wiseman","Daniel Brown"]
+      "golfers": [
+        {
+          "name": "William Mouw"
+        },
+        {
+          "name": "Steven Fisk"
+        },
+        {
+          "name": "Mikael Lindberg"
+        },
+        {
+          "name": "Davis Riley"
+        },
+        {
+          "name": "Travis Smyth"
+        },
+        {
+          "name": "Joe Highsmith"
+        },
+        {
+          "name": "Kazuki Higa"
+        },
+        {
+          "name": "Adam Schenk"
+        },
+        {
+          "name": "Kota Kaneko"
+        },
+        {
+          "name": "Stewart Cink"
+        },
+        {
+          "name": "Bernd Wiesberger"
+        },
+        {
+          "name": "Pádraig Harrington"
+        },
+        {
+          "name": "Jason Dufner"
+        },
+        {
+          "name": "Jimmy Walker"
+        },
+        {
+          "name": "Shaun Micheel"
+        },
+        {
+          "name": "Y.E. Yang"
+        },
+        {
+          "name": "Jordan Gumberg"
+        },
+        {
+          "name": "Derek Berg"
+        },
+        {
+          "name": "Francisco Bide"
+        },
+        {
+          "name": "Michael Block"
+        },
+        {
+          "name": "Tyler Collet"
+        },
+        {
+          "name": "Luke Donald"
+        },
+        {
+          "name": "Jesse Droemer"
+        },
+        {
+          "name": "Bryce Fisher"
+        },
+        {
+          "name": "Matthew Fitzpatrick"
+        },
+        {
+          "name": "Chris Gabriele"
+        },
+        {
+          "name": "Mark Geddes"
+        },
+        {
+          "name": "Zach Haynes"
+        },
+        {
+          "name": "Austin Hurt"
+        },
+        {
+          "name": "Jared Jones"
+        },
+        {
+          "name": "Michael Kartrude"
+        },
+        {
+          "name": "Ben Kern"
+        },
+        {
+          "name": "Ryan Lenahan"
+        },
+        {
+          "name": "Paul McClure"
+        },
+        {
+          "name": "Ben Polland"
+        },
+        {
+          "name": "Garrett Sapp"
+        },
+        {
+          "name": "Braden Shattuck"
+        },
+        {
+          "name": "Ryan Vermeer"
+        },
+        {
+          "name": "Timothy Wiseman"
+        },
+        {
+          "name": "Daniel Brown"
+        }
+      ]
     }
   ]
 }
