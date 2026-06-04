@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>You're in — SnipeGolf</title>
+<style>
+:root{
+  --bg:#0a0e14; --bg2:#0f1620; --card:#141c28; --line:#1f2a3a;
+  --ink:#e6edf6; --mute:#8aa0bd; --gold:#d4b24c; --green:#2dd4a4; --red:#ff5d6c;
+  --grad:linear-gradient(135deg,#0e7c5a 0%,#d4b24c 100%);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,Inter,Segoe UI,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:20px 16px 80px}
+.hero{background:var(--grad);border-radius:20px;padding:28px 22px;margin-bottom:18px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%, rgba(255,255,255,.18), transparent 50%);pointer-events:none}
+.brand{font-size:13px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;font-weight:600}
+.welcome{font-size:28px;font-weight:800;margin:8px 0 4px;line-height:1.15}
+.welcome span{color:#fff}
+.sub{font-size:14px;opacity:.92}
+.countdown{display:flex;gap:8px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.cd{background:rgba(0,0,0,.32);border-radius:12px;padding:8px 12px;min-width:64px}
+.cd b{display:block;font-size:22px;font-weight:800}
+.cd small{font-size:10px;letter-spacing:.1em;opacity:.85;text-transform:uppercase}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:17px;color:var(--gold);letter-spacing:.02em}
+.card p,.card li{color:#cdd9eb;font-size:14.5px;margin:6px 0}
+.card ul{padding-left:18px;margin:8px 0}
+.kv{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.kv:last-child{border-bottom:0}
+.kv span:first-child{color:var(--mute)}
+.kv span:last-child{font-weight:600}
+.cta{display:block;text-align:center;background:var(--gold);color:#1a1300;font-weight:800;padding:14px;border-radius:14px;text-decoration:none;margin:10px 0;letter-spacing:.02em}
+.cta.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.banner{background:#0e7c5a;color:#fff;padding:14px;border-radius:12px;text-align:center;font-weight:700;margin-bottom:14px}
+.banner.warn{background:#3a2a0e;color:var(--gold)}
+.pill{display:inline-block;font-size:11px;letter-spacing:.15em;text-transform:uppercase;background:rgba(212,178,76,.12);color:var(--gold);padding:4px 10px;border-radius:99px;margin-bottom:8px;font-weight:700}
+.bracket{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:14px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;font-weight:800;font-size:13px;flex-shrink:0}
+.tag.A{background:#d4b24c;color:#1a1300}
+.tag.B{background:#7c8df0;color:#0a0e14}
+.tag.C{background:#2dd4a4;color:#0a0e14}
+.tag.D{background:#4a5468;color:#fff}
+.foot{text-align:center;color:var(--mute);font-size:12px;margin-top:24px}
+.foot a{color:var(--gold);text-decoration:none}
+.fav{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.fav:last-child{border-bottom:0}
+.fav b{color:var(--gold);font-variant-numeric:tabular-nums}
+.skel{background:linear-gradient(90deg,#1a2333,#222d40,#1a2333);background-size:200% 100%;animation:sh 1.4s infinite;border-radius:6px;height:14px;margin:6px 0}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="brand">SnipeGolf</div>
+    <div class="welcome">You're in<span id="who"></span></div>
+    <div class="sub" id="leagueLine">Loading your league…</div>
+    <div class="countdown" id="cd">
+      <div class="cd"><b id="cdD">--</b><small>Days</small></div>
+      <div class="cd"><b id="cdH">--</b><small>Hours</small></div>
+      <div class="cd"><b id="cdM">--</b><small>Mins</small></div>
+    </div>
+    <div class="sub" id="cdLabel" style="margin-top:10px"></div>
+  </div>
+
+  <div id="picksOpenBanner" class="banner hidden">
+    Picks are OPEN. <a id="picksLink" href="#" style="color:#fff;text-decoration:underline">Make your picks now →</a>
+  </div>
+
+  <div id="payBanner" class="banner warn hidden">
+    Payment still pending. <a id="payLink" href="#" style="color:var(--gold);text-decoration:underline">Pay by Revolut →</a>
+  </div>
+
+  <div class="card">
+    <div class="pill">Tournament</div>
+    <h2 id="compName">US Open 2026</h2>
+    <div class="kv"><span>Course</span><span id="course">Shinnecock Hills, NY</span></div>
+    <div class="kv"><span>Dates</span><span id="dates">Jun 18 – 21, 2026</span></div>
+    <div class="kv"><span>Defending champ</span><span id="defending">J.J. Spaun</span></div>
+    <div class="kv"><span>Field size</span><span id="field">156</span></div>
+  </div>
+
+  <div class="card">
+    <div class="pill">How it works</div>
+    <h2>Pick 8. Lowest combined score wins.</h2>
+    <div class="bracket"><span class="tag A">A</span>2 picks from elite players (OWGR 1–15)</div>
+    <div class="bracket"><span class="tag B">B</span>2 picks from contenders (OWGR 16–50)</div>
+    <div class="bracket"><span class="tag C">C</span>2 picks from value plays (OWGR 51–150)</div>
+    <div class="bracket"><span class="tag D">D</span>2 picks from dark horses (OWGR 151+)</div>
+    <p style="margin-top:14px;color:var(--mute);font-size:13px">Your 8 strokes-to-par are summed live across all 4 rounds. Lowest wins. <b>Missed cuts, WDs and DQs are scored at the player's current score +5.</b> Tiebreaker: closest to actual winning score.</p>
+  </div>
+
+  <div class="card">
+    <div class="pill">Bookies fancy</div>
+    <h2>Pre-tournament favourites</h2>
+    <div id="favs">
+      <div class="skel" style="width:80%"></div>
+      <div class="skel" style="width:65%"></div>
+      <div class="skel" style="width:72%"></div>
+    </div>
+    <p style="color:var(--mute);font-size:12px;margin-top:10px">Odds via DataGolf, updated daily. Not investment advice. Pick with your gut.</p>
+  </div>
+
+  <div class="card">
+    <div class="pill">Past champions</div>
+    <h2>SnipeGolf hall of fame</h2>
+    <div id="past">
+      <p style="color:var(--mute);font-size:13px">First competition. Be the one they have to beat.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="pill">What happens next</div>
+    <h2>Your timeline</h2>
+    <ul>
+      <li><b>Monday tournament week</b> — field locks, you get an email with your picks link</li>
+      <li><b>Thursday tee-off</b> — leaderboard goes live, refreshes every few minutes</li>
+      <li><b>Sunday evening</b> — winner crowned, prize email sent</li>
+    </ul>
+    <p style="color:var(--mute);font-size:13px;margin-top:10px">Questions? <a id="contactAdmin" href="#" style="color:var(--gold)">Contact your league admin</a></p>
+  </div>
+
+  <div class="foot">
+    SnipeGolf · run by golfers, for golfers · <a href="https://snipegolf.github.io/snipegolf/">snipegolf.github.io</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  // ---- read URL params ----
+  var qs = {};
+  var s = location.search.replace(/^\?/, '').split('&');
+  for (var i=0;i<s.length;i++){ if(!s[i]) continue; var kv = s[i].split('='); qs[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]||''); }
+  var pid = qs.pid || '';
+  var token = qs.t || '';
+
+  // ---- state.json URL — same folder as this page ----
+  var STATE_URL = 'state.json';
+  // Optional: per-participant lookup via Apps Script JSON API (if pid present)
+  var API_URL = '';   // injected via state.json -> participant_api
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+
+  function startCountdown(targetIso, label){
+    if (!targetIso) { $('cd').style.display = 'none'; return; }
+    var target = new Date(targetIso).getTime();
+    $('cdLabel').textContent = label || 'until picks open';
+    function tick(){
+      var now = Date.now();
+      var diff = target - now;
+      if (diff <= 0) { $('cd').style.display = 'none'; $('cdLabel').textContent = 'It\u2019s on.'; return; }
+      var d = Math.floor(diff / 86400000);
+      var h = Math.floor((diff % 86400000) / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      $('cdD').textContent = d;
+      $('cdH').textContent = pad(h);
+      $('cdM').textContent = pad(m);
+    }
+    tick(); setInterval(tick, 30000);
+  }
+
+  function renderFavs(favs){
+    var el = $('favs');
+    if (!favs || !favs.length) {
+      el.innerHTML = '<p style="color:var(--mute);font-size:13px">Odds not posted yet. Check back closer to Thursday.</p>';
+      return;
+    }
+    el.innerHTML = '';
+    for (var i=0;i<favs.length && i<8;i++){
+      var f = favs[i];
+      var div = document.createElement('div');
+      div.className = 'fav';
+      var name = document.createElement('span');
+      name.textContent = (i+1) + '. ' + f.name;
+      var odds = document.createElement('b');
+      odds.textContent = f.odds || '';
+      div.appendChild(name); div.appendChild(odds);
+      el.appendChild(div);
+    }
+  }
+
+  function renderPast(past){
+    if (!past || !past.length) return;
+    var el = $('past');
+    el.innerHTML = '';
+    for (var i=0;i<past.length;i++){
+      var p = past[i];
+      var row = document.createElement('div');
+      row.className = 'kv';
+      var l = document.createElement('span'); l.textContent = p.comp || p.year;
+      var r = document.createElement('span'); r.textContent = p.winner + (p.score ? ' (' + p.score + ')' : '');
+      row.appendChild(l); row.appendChild(r);
+      el.appendChild(row);
+    }
+  }
+
+  function render(state, me){
+    var comp = state.competition || {};
+    if (comp.name) $('compName').textContent = comp.name;
+    if (comp.course) $('course').textContent = comp.course;
+    if (comp.dates) $('dates').textContent = comp.dates;
+    if (comp.defending_champ) $('defending').textContent = comp.defending_champ;
+    if (comp.field_size) $('field').textContent = comp.field_size;
+    if (comp.logo_url) {
+      // (logo could be slotted into hero later)
+    }
+
+    // Personalize
+    if (me && me.display_name) {
+      $('who').textContent = ', ' + me.display_name.split(' ')[0];
+    }
+    if (me && me.league_name) {
+      $('leagueLine').textContent = me.league_name + ' \u00b7 ' + (comp.name || 'this competition');
+    } else if (comp.name) {
+      $('leagueLine').textContent = comp.name;
+    }
+
+    // Picks-open banner
+    if (state.status === 'picks_open' && me && me.picks_url) {
+      $('picksOpenBanner').classList.remove('hidden');
+      $('picksLink').href = me.picks_url;
+    }
+
+    // Payment-pending banner
+    if (me && me.paid_status && me.paid_status !== 'paid' && me.revolut_link) {
+      $('payBanner').classList.remove('hidden');
+      $('payLink').href = me.revolut_link;
+    }
+
+    // Countdown to picks open
+    var target = comp.picks_open_iso || comp.start_iso;
+    startCountdown(target, comp.picks_open_iso ? 'until picks open' : 'until tee-off');
+
+    renderFavs(state.favourites);
+    renderPast(state.past_winners);
+
+    if (me && me.admin_email) {
+      $('contactAdmin').href = 'mailto:' + me.admin_email;
+    }
+  }
+
+  // ---- fetch state.json ----
+  fetch(STATE_URL + '?ts=' + Date.now())
+    .then(function(r){ return r.ok ? r.json() : {}; })
+    .then(function(state){
+      // If we have pid+token and a participant API, fetch personal data
+      if (pid && token && state.participant_api) {
+        var url = state.participant_api + (state.participant_api.indexOf('?') < 0 ? '?' : '&')
+          + 'route=me&pid=' + encodeURIComponent(pid) + '&t=' + encodeURIComponent(token);
+        return fetch(url).then(function(r){ return r.ok ? r.json() : {}; })
+          .then(function(me){ render(state, me); })
+          .catch(function(){ render(state, null); });
+      }
+      render(state, null);
+    })
+    .catch(function(){
+      // Hard fallback: show defaults already in HTML
+      render({}, null);
+    });
+})();
+</script>
+</body>
+</html>
