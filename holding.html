@@ -241,8 +241,12 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.5
     renderFavs(state.favourites);
     renderPast(state.past_winners);
 
-    if (me && me.admin_email) {
-      $('contactAdmin').href = 'mailto:' + me.admin_email;
+    var adminEmail = (me && me.admin_email) || state.fallback_admin_email || '';
+    if (adminEmail) {
+      $('contactAdmin').href = 'mailto:' + adminEmail + '?subject=' + encodeURIComponent('SnipeGolf — ' + (comp.name || 'query'));
+      $('contactAdmin').textContent = 'Email ' + adminEmail;
+    } else {
+      $('contactAdmin').style.display = 'none';
     }
   }
 
