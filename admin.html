@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Entry — SnipeGolf</title>
+<style>
+:root{
+  --bg:#0a0e14; --card:#141c28; --line:#1f2a3a;
+  --ink:#e6edf6; --mute:#8aa0bd; --gold:#d4b24c; --green:#2dd4a4; --red:#ff5d6c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,Inter,Segoe UI,sans-serif}
+.wrap{max-width:520px;margin:0 auto;padding:18px 16px 80px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--mute);font-size:13px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-size:12px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;margin:10px 0 4px}
+input,select,textarea{width:100%;background:#0a121d;border:1px solid var(--line);border-radius:10px;color:var(--ink);font:inherit;padding:11px 12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.row{display:flex;gap:10px}
+.row > *{flex:1}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg label{flex:1;min-width:80px;text-align:center;background:#0a121d;border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;font-size:14px;text-transform:none;letter-spacing:0;color:var(--ink);margin:0}
+.seg input{display:none}
+.seg input:checked + span{color:var(--gold)}
+.seg label:has(input:checked){border-color:var(--gold);background:rgba(212,178,76,.08)}
+.btn{display:block;width:100%;background:var(--gold);color:#1a1300;font-weight:800;padding:14px;border:0;border-radius:12px;font-size:16px;cursor:pointer;margin-top:14px;letter-spacing:.02em}
+.btn:disabled{opacity:.5}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.alert{padding:12px;border-radius:10px;margin:10px 0;font-size:14px}
+.alert.ok{background:#0e3a2a;color:#9be3c4}
+.alert.err{background:#3a1418;color:#ffb3bb}
+.alert.warn{background:#3a2a0e;color:var(--gold)}
+.feeHint{color:var(--mute);font-size:13px;margin-top:4px}
+.kgate{text-align:center;padding:60px 16px;color:var(--mute)}
+.hidden{display:none}
+.recent{font-size:13px;color:var(--mute);max-height:200px;overflow:auto;border-top:1px dashed var(--line);margin-top:10px;padding-top:10px}
+.recent div{padding:4px 0;border-bottom:1px dashed var(--line)}
+.recent div:last-child{border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div id="gate" class="kgate hidden">
+  <h1>No admin key</h1>
+  <p>Append <code>?key=YOUR_KEY</code> to the URL.</p>
+</div>
+
+<div id="app" class="hidden">
+  <h1>Add entry</h1>
+  <div class="sub" id="adminMeta">Loading…</div>
+
+  <div id="alertBox"></div>
+
+  <div class="card">
+    <label>Player name</label>
+    <input id="display_name" autocomplete="name" placeholder="e.g. Baden Maher">
+
+    <label>Email</label>
+    <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="player@example.com">
+
+    <label>Phone (optional)</label>
+    <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+353…">
+
+    <label>League</label>
+    <select id="league_slug"></select>
+    <div class="feeHint" id="feeHint"></div>
+
+    <label>Payment method</label>
+    <div class="seg" id="payMethod">
+      <label><input type="radio" name="paym" value="cash" checked><span>Cash / shop</span></label>
+      <label><input type="radio" name="paym" value="revolut"><span>Revolut</span></label>
+      <label><input type="radio" name="paym" value="iou"><span>IOU</span></label>
+    </div>
+
+    <label>Payment status</label>
+    <div class="seg" id="payStatus">
+      <label><input type="radio" name="pays" value="paid" checked><span>Paid</span></label>
+      <label><input type="radio" name="pays" value="unpaid"><span>Unpaid</span></label>
+    </div>
+
+    <label>Notes (optional)</label>
+    <textarea id="notes" rows="2" placeholder="Any context"></textarea>
+
+    <button class="btn" id="submitBtn">Add entry & send email</button>
+    <button class="btn ghost" id="clearBtn">Clear form</button>
+
+    <div class="recent" id="recent"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var qs = {};
+  var s = location.search.replace(/^\?/, '').split('&');
+  for (var i=0;i<s.length;i++){ if(!s[i]) continue; var kv = s[i].split('='); qs[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]||''); }
+  var key = qs.key || '';
+  if (!key) { document.getElementById('gate').classList.remove('hidden'); return; }
+  document.getElementById('app').classList.remove('hidden');
+
+  var $ = function(id){ return document.getElementById(id); };
+  var apiBase = '';  // injected from state.json
+
+  function alertMsg(kind, text){
+    var box = $('alertBox');
+    box.innerHTML = '<div class="alert ' + kind + '">' + text + '</div>';
+    if (kind === 'ok') setTimeout(function(){ box.innerHTML=''; }, 6000);
+  }
+
+  function loadState(){
+    return fetch('state.json?ts=' + Date.now()).then(function(r){ return r.json(); });
+  }
+
+  function fillLeagues(state, leagues){
+    var sel = $('league_slug');
+    sel.innerHTML = '';
+    if (!leagues || !leagues.length) {
+      var o = document.createElement('option');
+      o.value = ''; o.textContent = '(no leagues)';
+      sel.appendChild(o);
+      return;
+    }
+    for (var i=0;i<leagues.length;i++){
+      var L = leagues[i];
+      var o = document.createElement('option');
+      o.value = L.league_slug;
+      o.textContent = L.league_name + ' (\u20AC' + (L.entry_fee_eur || '?') + ')';
+      o.setAttribute('data-fee', L.entry_fee_eur || '');
+      sel.appendChild(o);
+    }
+    onLeagueChange();
+  }
+
+  function onLeagueChange(){
+    var opt = $('league_slug').options[$('league_slug').selectedIndex];
+    if (!opt) return;
+    var fee = opt.getAttribute('data-fee');
+    $('feeHint').textContent = fee ? ('Entry fee: \u20AC' + fee) : '';
+  }
+  $('league_slug').addEventListener('change', onLeagueChange);
+
+  // Boot
+  loadState().then(function(state){
+    apiBase = state.participant_api;
+    // Fetch leagues for this admin key
+    return fetch(apiBase + (apiBase.indexOf('?')<0 ? '?' : '&') + 'route=admin_leagues&key=' + encodeURIComponent(key))
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (res.error) {
+          alertMsg('err', 'Admin key invalid or revoked.');
+          $('adminMeta').textContent = 'No access.';
+          $('submitBtn').disabled = true;
+          return;
+        }
+        $('adminMeta').textContent = 'Signed in as ' + res.admin_name + ' \u00b7 ' + res.leagues.length + ' league(s)';
+        fillLeagues(state, res.leagues);
+      });
+  }).catch(function(e){
+    alertMsg('err', 'Failed to load: ' + e);
+  });
+
+  // Recent entries list (local only)
+  function pushRecent(name, league){
+    var key = 'sg_recent_v1';
+    var arr = [];
+    try { arr = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){}
+    arr.unshift({ name: name, league: league, ts: new Date().toISOString() });
+    arr = arr.slice(0, 12);
+    try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
+    renderRecent();
+  }
+  function renderRecent(){
+    var arr = [];
+    try { arr = JSON.parse(localStorage.getItem('sg_recent_v1') || '[]'); } catch(e){}
+    var el = $('recent');
+    if (!arr.length) { el.innerHTML=''; return; }
+    var h = '<b>Recent on this device:</b>';
+    for (var i=0;i<arr.length;i++){
+      var t = new Date(arr[i].ts);
+      h += '<div>' + arr[i].name + ' \u2014 ' + arr[i].league + ' \u00b7 ' + t.toLocaleTimeString() + '</div>';
+    }
+    el.innerHTML = h;
+  }
+  renderRecent();
+
+  function getRadio(name){
+    var els = document.getElementsByName(name);
+    for (var i=0;i<els.length;i++) if (els[i].checked) return els[i].value;
+    return '';
+  }
+
+  function doSubmit(force){
+    var name = $('display_name').value.trim();
+    var email = $('email').value.trim();
+    var phone = $('phone').value.trim();
+    var league = $('league_slug').value;
+    var paym = getRadio('paym');
+    var pays = getRadio('pays');
+    var notes = $('notes').value.trim();
+
+    if (!name || !email || !league) {
+      alertMsg('err', 'Name, email, league are required.');
+      return;
+    }
+
+    $('submitBtn').disabled = true;
+    $('submitBtn').textContent = 'Submitting…';
+
+    var payload = {
+      route: 'admin_entry',
+      key: key,
+      display_name: name,
+      email: email,
+      phone: phone,
+      league_slug: league,
+      paid_method: paym,
+      paid_status: pays,
+      notes: notes,
+      force_create: force ? '1' : ''
+    };
+
+    fetch(apiBase, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).then(function(r){ return r.json(); }).then(function(res){
+      $('submitBtn').disabled = false;
+      $('submitBtn').textContent = 'Add entry & send email';
+
+      if (res.error) {
+        alertMsg('err', res.error);
+        return;
+      }
+      if (res.duplicate && !force) {
+        var msg = 'Already entered: ' + res.existing.display_name + ' (' + res.existing.email + ') in ' + res.existing.league_name + '. Update / create anyway?';
+        if (confirm(msg)) {
+          doSubmit(true);
+        }
+        return;
+      }
+      alertMsg('ok', 'Added ' + name + '. Email ' + (res.email_queued ? 'queued' : 'sent') + '.');
+      pushRecent(name, league);
+      $('display_name').value = '';
+      $('email').value = '';
+      $('phone').value = '';
+      $('notes').value = '';
+      $('display_name').focus();
+    }).catch(function(e){
+      $('submitBtn').disabled = false;
+      $('submitBtn').textContent = 'Add entry & send email';
+      // Crash fallback — email the entry
+      var subj = encodeURIComponent('SnipeGolf admin entry CRASH: ' + name);
+      var body = encodeURIComponent('Form crashed. Please add manually:\n\n' + JSON.stringify(payload, null, 2));
+      alertMsg('err', 'Submit failed. <a style="color:#fff" href="mailto:snipegolfclothing@gmail.com?subject=' + subj + '&body=' + body + '">Tap here to email entry instead</a>');
+    });
+  }
+
+  $('submitBtn').addEventListener('click', function(){ doSubmit(false); });
+  $('clearBtn').addEventListener('click', function(){
+    $('display_name').value=''; $('email').value=''; $('phone').value=''; $('notes').value='';
+  });
+})();
+</script>
+</body>
+</html>
