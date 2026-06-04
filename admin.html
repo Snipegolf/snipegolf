@@ -61,9 +61,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     <label>Email</label>
     <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="player@example.com">
 
-    <label>Phone (optional)</label>
-    <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+353…">
-
     <label>League</label>
     <select id="league_slug"></select>
     <div class="feeHint" id="feeHint"></div>
@@ -194,7 +191,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
   function doSubmit(force){
     var name = $('display_name').value.trim();
     var email = $('email').value.trim();
-    var phone = $('phone').value.trim();
+    var phone = '';
     var league = $('league_slug').value;
     var paym = getRadio('paym');
     var pays = getRadio('pays');
@@ -234,17 +231,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
         return;
       }
       if (res.duplicate && !force) {
-        var msg = 'Already entered: ' + res.existing.display_name + ' (' + res.existing.email + ') in ' + res.existing.league_name + '. Update / create anyway?';
-        if (confirm(msg)) {
-          doSubmit(true);
-        }
+        showDupeModal(res.existing);
         return;
       }
       alertMsg('ok', 'Added ' + name + '. Email ' + (res.email_queued ? 'queued' : 'sent') + '.');
       pushRecent(name, league);
       $('display_name').value = '';
       $('email').value = '';
-      $('phone').value = '';
       $('notes').value = '';
       $('display_name').focus();
     }).catch(function(e){
@@ -257,9 +250,30 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     });
   }
 
+  function showDupeModal(existing){
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;z-index:99;padding:16px';
+    box.innerHTML = '<div style="background:#141c28;border:1px solid #1f2a3a;border-radius:14px;padding:20px;max-width:420px;width:100%">' +
+      '<h2 style="margin:0 0 8px;color:#d4b24c;font-size:18px">Already entered</h2>' +
+      '<p style="color:#cdd9eb;font-size:14px;margin:0 0 8px"><b>' + existing.display_name + '</b> (' + existing.email + ')<br>' + existing.league_name + ' \u00b7 ' + (existing.paid_status || 'unpaid') + '</p>' +
+      '<p style="color:#8aa0bd;font-size:13px;margin:0 0 16px">Update this entry with the new details, or cancel.</p>' +
+      '<div style="display:flex;gap:8px">' +
+        '<button id="dupeUpdate" style="flex:1;background:#d4b24c;color:#1a1300;border:0;border-radius:10px;padding:12px;font-weight:800;font-size:15px;cursor:pointer">Update</button>' +
+        '<button id="dupeCancel" style="flex:1;background:transparent;color:#e6edf6;border:1px solid #1f2a3a;border-radius:10px;padding:12px;font-size:15px;cursor:pointer">Cancel</button>' +
+      '</div></div>';
+    document.body.appendChild(box);
+    document.getElementById('dupeUpdate').addEventListener('click', function(){
+      document.body.removeChild(box);
+      doSubmit(true);
+    });
+    document.getElementById('dupeCancel').addEventListener('click', function(){
+      document.body.removeChild(box);
+    });
+  }
+
   $('submitBtn').addEventListener('click', function(){ doSubmit(false); });
   $('clearBtn').addEventListener('click', function(){
-    $('display_name').value=''; $('email').value=''; $('phone').value=''; $('notes').value='';
+    $('display_name').value=''; $('email').value=''; $('notes').value='';
   });
 })();
 </script>
