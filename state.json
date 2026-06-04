@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-04T18:20:00Z",
+  "generated_at": "2026-06-04T18:32:51.420Z",
   "status": "pre_picks",
   "competition": {
-    "slug": "usopen-cobhgc-2026",
+    "slug": "us-open-2026",
     "name": "US Open 2026",
-    "course": "Shinnecock Hills, NY",
-    "dates": "Jun 18 \u2013 21, 2026",
-    "start_iso": "2026-06-18T08:00:00-04:00",
-    "picks_open_iso": "2026-06-15T00:00:00+01:00",
-    "picks_lock_iso": "2026-06-18T08:00:00+01:00",
-    "defending_champ": "J.J. Spaun",
-    "field_size": "156",
-    "logo_url": "https://res.cloudinary.com/usga-single-app/image/upload/v1717591996/championships/logos/USO_Logo_FULL_COLOR_FINAL.png"
+    "course": "",
+    "dates": "",
+    "start_iso": "2026-06-17T23:00:00.000Z",
+    "picks_open_iso": "2026-06-14T23:00:00.000Z",
+    "picks_lock_iso": "2026-06-18T07:00:00.000Z",
+    "defending_champ": "",
+    "field_size": "",
+    "logo_url": "https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:r000.png/tournaments/logos/2026/r026.png"
   },
   "favourites": [],
   "past_winners": [],
-  "participant_api": ""
+  "participant_api": "https://script.google.com/macros/s/AKfycbyOyPYQKZYonF-o2rsE5iThmZkCDmXP1CFguAQFWzvwiCeAMd-oAWYdiO9HdnvE-mcu3A/exec"
 }
