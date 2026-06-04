@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SnipeGolf — Make Your Picks</title>
+<style>
+  :root {
+    --bg: #0a1628;
+    --bg2: #14243d;
+    --gold: #d4a247;
+    --ink: #f6f1e6;
+    --muted: #8aa0bd;
+    --ok: #34d399;
+    --err: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    color: var(--ink); min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  header { padding: 24px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  header h1 { margin: 0; font-size: 22px; letter-spacing: 0.5px; }
+  header .sub { color: var(--muted); font-size: 13px; margin-top: 6px; }
+  main { max-width: 640px; margin: 0 auto; padding: 24px 16px 80px; }
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,162,71,0.25);
+    border-radius: 14px; padding: 18px; margin-bottom: 16px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  }
+  .label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 600; }
+  select, input[type=number] {
+    width: 100%; padding: 14px; font-size: 16px; border-radius: 10px;
+    background: rgba(0,0,0,0.35); color: var(--ink); border: 1px solid rgba(255,255,255,0.12);
+    appearance: none; -webkit-appearance: none;
+  }
+  select:focus, input:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
+  .row { margin-bottom: 14px; }
+  button {
+    width: 100%; padding: 16px; font-size: 17px; font-weight: 700;
+    background: var(--gold); color: #1a1208; border: none; border-radius: 12px;
+    cursor: pointer; letter-spacing: 0.3px;
+    box-shadow: 0 4px 16px rgba(212,162,71,0.35);
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .status { padding: 12px; border-radius: 8px; margin: 12px 0; text-align: center; font-size: 14px; }
+  .status.ok { background: rgba(52,211,153,0.15); color: var(--ok); }
+  .status.err { background: rgba(248,113,113,0.15); color: var(--err); }
+  .meta { text-align: center; color: var(--muted); font-size: 13px; margin: 8px 0 20px; }
+  .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: rgba(212,162,71,0.15); color: var(--gold); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; }
+  a { color: var(--gold); }
+</style>
+</head>
+<body>
+<header>
+  <div class="pill" id="leaguePill">SnipeGolf</div>
+  <h1 id="compName">Loading…</h1>
+  <div class="sub" id="leagueName"></div>
+</header>
+<main>
+  <div class="meta" id="meta"></div>
+  <div id="statusBox"></div>
+  <form id="picksForm" style="display:none">
+    <div class="card">
+      <div class="label">Bracket A — Elite</div>
+      <select id="bracket_a" required></select>
+    </div>
+    <div class="card">
+      <div class="label">Bracket B — Contenders</div>
+      <select id="bracket_b" required></select>
+    </div>
+    <div class="card">
+      <div class="label">Bracket C — Dark Horses</div>
+      <select id="bracket_c" required></select>
+    </div>
+    <div class="card">
+      <div class="label">Bracket D — Long Shots</div>
+      <select id="bracket_d" required></select>
+    </div>
+    <div class="card">
+      <div class="label">Tiebreaker — Winning score vs par (e.g. -8)</div>
+      <div class="row"><input id="tiebreaker" type="number" step="1" min="-30" max="30" required></div>
+    </div>
+    <button type="submit" id="submitBtn">Save My Picks</button>
+  </form>
+</main>
+<footer>SnipeGolf · <a href="../">Back to leaderboards</a></footer>
+
+<script>
+(function () {
+  var qs = new URLSearchParams(location.search);
+  var pid = qs.get('pid');
+  var token = qs.get('t');
+
+  // Worker URL embedded at publish time, OR read from /config.json on the page
+  var WORKER = 'https://twilight-recipe-e213.badenmaher.workers.dev';
+
+  function api(path) { return WORKER + '/api' + path; }
+  function setStatus(msg, kind) {
+    var box = document.getElementById('statusBox');
+    box.innerHTML = '<div class="status ' + (kind || '') + '">' + msg + '</div>';
+  }
+
+  if (!pid || !token) {
+    setStatus('Missing or invalid edit link. Contact your league admin.', 'err');
+    return;
+  }
+
+  // Detect league_slug from URL path: /<league_slug>/picks
+  var pathParts = location.pathname.replace(/\/$/, '').split('/');
+  var leagueSlug = pathParts[pathParts.length - 2] || '';
+
+  Promise.all([
+    fetch(api('/league/' + leagueSlug)).then(function (r) { return r.json(); }),
+    fetch(api('/mypick?pid=' + encodeURIComponent(pid) + '&t=' + encodeURIComponent(token))).then(function (r) { return r.json(); })
+  ]).then(function (out) {
+    var leagueResp = out[0]; var myResp = out[1];
+    if (!leagueResp.ok || !myResp.ok) {
+      setStatus('Could not load your picks: ' + ((leagueResp.error || myResp.error) || 'unknown error'), 'err');
+      return;
+    }
+    var comp = leagueResp.comp || {};
+    var league = leagueResp.league || {};
+    document.getElementById('compName').textContent = comp.name || 'Competition';
+    document.getElementById('leagueName').textContent = league.league_name || '';
+    document.getElementById('leaguePill').textContent = league.league_name || 'SnipeGolf';
+
+    if (String(comp.status) === 'frozen') { setStatus('This competition is frozen. Picks are locked.', 'err'); return; }
+    if (comp.picks_lock_datetime) {
+      var lock = new Date(comp.picks_lock_datetime);
+      if (!isNaN(lock.getTime()) && new Date() > lock) { setStatus('Picks are locked. Lock time: ' + comp.picks_lock_datetime, 'err'); return; }
+      document.getElementById('meta').textContent = 'Lock: ' + comp.picks_lock_datetime;
+    }
+
+    return fetch(api('/brackets?comp=' + encodeURIComponent(comp.comp_slug))).then(function (r) { return r.json(); }).then(function (b) {
+      if (!b.ok) { setStatus('Could not load field.', 'err'); return; }
+      var letters = ['A', 'B', 'C', 'D'];
+      for (var i = 0; i < letters.length; i++) {
+        var L = letters[i];
+        var sel = document.getElementById('bracket_' + L.toLowerCase());
+        sel.innerHTML = '<option value="">— Select —</option>';
+        var list = b.brackets[L] || [];
+        for (var j = 0; j < list.length; j++) {
+          var p = list[j];
+          var opt = document.createElement('option');
+          opt.value = p.name;
+          opt.textContent = p.rank ? (p.name + ' (#' + p.rank + ')') : p.name;
+          sel.appendChild(opt);
+        }
+      }
+      var pick = myResp.pick || {};
+      if (pick.bracket_a) document.getElementById('bracket_a').value = pick.bracket_a;
+      if (pick.bracket_b) document.getElementById('bracket_b').value = pick.bracket_b;
+      if (pick.bracket_c) document.getElementById('bracket_c').value = pick.bracket_c;
+      if (pick.bracket_d) document.getElementById('bracket_d').value = pick.bracket_d;
+      if (pick.tiebreaker !== undefined && pick.tiebreaker !== '') document.getElementById('tiebreaker').value = pick.tiebreaker;
+      document.getElementById('picksForm').style.display = 'block';
+      setStatus('Welcome, ' + myResp.participant.display_name + '. Pick one player from each bracket.', '');
+    });
+  }).catch(function (e) {
+    setStatus('Network error: ' + e, 'err');
+  });
+
+  document.getElementById('picksForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    var body = {
+      route: 'submitPick',
+      pid: pid, t: token,
+      bracket_a: document.getElementById('bracket_a').value,
+      bracket_b: document.getElementById('bracket_b').value,
+      bracket_c: document.getElementById('bracket_c').value,
+      bracket_d: document.getElementById('bracket_d').value,
+      tiebreaker: document.getElementById('tiebreaker').value
+    };
+    fetch(api('/submitPick'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.ok) { setStatus('Picks saved. You can edit until lock time.', 'ok'); }
+      else { setStatus('Save failed: ' + (j.error || 'unknown'), 'err'); }
+      btn.disabled = false; btn.textContent = 'Save My Picks';
+    }).catch(function (e) {
+      setStatus('Network error: ' + e, 'err');
+      btn.disabled = false; btn.textContent = 'Save My Picks';
+    });
+  });
+})();
+</script>
+</body>
+</html>
