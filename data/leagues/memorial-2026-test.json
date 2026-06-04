@@ -1,0 +1,92 @@
+{
+  "league_slug": "memorial-2026-test",
+  "comp_slug": "memorial-2026",
+  "league_name": "Memorial Test",
+  "entry_fee_eur": 0,
+  "revolut_link": "https://revolut.me/badenimdn",
+  "logo_url": "https://a.espncdn.com/i/teamlogos/leagues/500/pga.png",
+  "status": "open",
+  "participants": [
+    {
+      "pid": "mem01baden",
+      "display_name": "Baden Maher",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "mem02lucy",
+      "display_name": "Lucy Maher",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "mem03alpha",
+      "display_name": "Alpha Tester",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "mem04bravo",
+      "display_name": "Bravo Tester",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "mem05charlie",
+      "display_name": "Charlie Tester",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "mem06delta",
+      "display_name": "Delta Tester",
+      "paid_status": "paid"
+    }
+  ],
+  "picks": [
+    {
+      "pid": "mem01baden",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Scottie Scheffler",
+      "bracket_c": "Justin Thomas",
+      "bracket_d": "Robert MacIntyre",
+      "tiebreaker": -12
+    },
+    {
+      "pid": "mem02lucy",
+      "bracket_a": "J.J. Spaun",
+      "bracket_b": "Xander Schauffele",
+      "bracket_c": "Matt Fitzpatrick",
+      "bracket_d": "Rickie Fowler",
+      "tiebreaker": -10
+    },
+    {
+      "pid": "mem03alpha",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Ludvig Aberg",
+      "bracket_c": "Sungjae Im",
+      "bracket_d": "Ben Griffin",
+      "tiebreaker": -8
+    },
+    {
+      "pid": "mem04bravo",
+      "bracket_a": "Shane Lowry",
+      "bracket_b": "Hideki Matsuyama",
+      "bracket_c": "Jason Day",
+      "bracket_d": "Brian Harman",
+      "tiebreaker": -9
+    },
+    {
+      "pid": "mem05charlie",
+      "bracket_a": "Jordan Spieth",
+      "bracket_b": "Adam Scott",
+      "bracket_c": "Cameron Young",
+      "bracket_d": "Tom Hoge",
+      "tiebreaker": -7
+    },
+    {
+      "pid": "mem06delta",
+      "bracket_a": "Sam Burns",
+      "bracket_b": "Daniel Berger",
+      "bracket_c": "Sepp Straka",
+      "bracket_d": "Sam Stevens",
+      "tiebreaker": -11
+    }
+  ],
+  "published_at": "2026-06-04T21:04:48.158Z"
+}
