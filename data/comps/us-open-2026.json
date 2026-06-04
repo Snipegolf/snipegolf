@@ -3,17 +3,17 @@
   "name": "US Open 2026",
   "espn_id": 401811952,
   "year": 2026,
-  "start_date": "",
-  "picks_open_date": "",
-  "picks_lock_datetime": "",
+  "start_date": "Thu Jun 18 2026 00:00:00 GMT+0100 (British Summer Time)",
+  "picks_open_date": "Mon Jun 15 2026 00:00:00 GMT+0100 (British Summer Time)",
+  "picks_lock_datetime": "2026-06-18T08:00:00+01:00",
   "status": "draft",
   "freeze_message": "Thanks everyone for playing ? see you at the next major. Entries open this week, picks Monday of tournament.",
-  "logo_url": "",
+  "logo_url": "https://res.cloudinary.com/usga-single-app/image/upload/v1717591996/championships/logos/USO_Logo_FULL_COLOR_FINAL.png",
   "brackets": {
     "A": [],
     "B": [],
     "C": [],
     "D": []
   },
-  "published_at": "2026-06-04T16:24:40.728Z"
+  "published_at": "2026-06-04T16:29:40.349Z"
 }
