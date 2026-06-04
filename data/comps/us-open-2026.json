@@ -1,0 +1,19 @@
+{
+  "comp_slug": "us-open-2026",
+  "name": "US Open 2026",
+  "espn_id": 401811952,
+  "year": 2026,
+  "start_date": "",
+  "picks_open_date": "",
+  "picks_lock_datetime": "",
+  "status": "draft",
+  "freeze_message": "Thanks everyone for playing ? see you at the next major. Entries open this week, picks Monday of tournament.",
+  "logo_url": "",
+  "brackets": {
+    "A": [],
+    "B": [],
+    "C": [],
+    "D": []
+  },
+  "published_at": "2026-06-04T16:24:40.728Z"
+}
