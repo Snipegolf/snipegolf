@@ -10,10 +10,114 @@
   "freeze_message": "Thanks everyone for playing ? see you at the next major. Entries open this week, picks Monday of tournament.",
   "logo_url": "https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:r000.png/tournaments/logos/2026/r026.png",
   "brackets": {
-    "A": [],
-    "B": [],
-    "C": [],
-    "D": []
+    "A": [
+      {
+        "name": "Scottie Scheffler",
+        "rank": 1,
+        "espn_id": ""
+      },
+      {
+        "name": "Rory McIlroy",
+        "rank": 2,
+        "espn_id": ""
+      },
+      {
+        "name": "Xander Schauffele",
+        "rank": 3,
+        "espn_id": ""
+      },
+      {
+        "name": "Collin Morikawa",
+        "rank": 4,
+        "espn_id": ""
+      },
+      {
+        "name": "Ludvig Aberg",
+        "rank": 5,
+        "espn_id": ""
+      }
+    ],
+    "B": [
+      {
+        "name": "Viktor Hovland",
+        "rank": 12,
+        "espn_id": ""
+      },
+      {
+        "name": "Bryson DeChambeau",
+        "rank": 14,
+        "espn_id": ""
+      },
+      {
+        "name": "Tommy Fleetwood",
+        "rank": 18,
+        "espn_id": ""
+      },
+      {
+        "name": "Patrick Cantlay",
+        "rank": 22,
+        "espn_id": ""
+      },
+      {
+        "name": "Shane Lowry",
+        "rank": 28,
+        "espn_id": ""
+      }
+    ],
+    "C": [
+      {
+        "name": "Sepp Straka",
+        "rank": 35,
+        "espn_id": ""
+      },
+      {
+        "name": "Russell Henley",
+        "rank": 42,
+        "espn_id": ""
+      },
+      {
+        "name": "Min Woo Lee",
+        "rank": 48,
+        "espn_id": ""
+      },
+      {
+        "name": "Tom Kim",
+        "rank": 55,
+        "espn_id": ""
+      },
+      {
+        "name": "Cameron Young",
+        "rank": 62,
+        "espn_id": ""
+      }
+    ],
+    "D": [
+      {
+        "name": "Nick Taylor",
+        "rank": 85,
+        "espn_id": ""
+      },
+      {
+        "name": "Davis Thompson",
+        "rank": 95,
+        "espn_id": ""
+      },
+      {
+        "name": "Akshay Bhatia",
+        "rank": 110,
+        "espn_id": ""
+      },
+      {
+        "name": "Ryan Fox",
+        "rank": 125,
+        "espn_id": ""
+      },
+      {
+        "name": "Stephan Jaeger",
+        "rank": 145,
+        "espn_id": ""
+      }
+    ]
   },
-  "published_at": "2026-06-04T19:54:41.005Z"
+  "published_at": "2026-06-04T19:59:43.702Z"
 }
