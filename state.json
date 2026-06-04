@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T18:43:52.786Z",
+  "generated_at": "2026-06-04T18:47:01.680Z",
   "status": "pre_picks",
   "competition": {
     "slug": "us-open-2026",
@@ -15,6 +15,11 @@
   },
   "fallback_admin_email": "Conorcoyne94@gmail.com",
   "favourites": [],
-  "past_winners": [],
+  "past_winners": [
+    {
+      "comp": "PGA Championship 2026",
+      "winner": "Kieran Gill"
+    }
+  ],
   "participant_api": "https://script.google.com/macros/s/AKfycbyOyPYQKZYonF-o2rsE5iThmZkCDmXP1CFguAQFWzvwiCeAMd-oAWYdiO9HdnvE-mcu3A/exec"
 }
