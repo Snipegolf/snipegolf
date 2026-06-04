@@ -16,8 +16,28 @@
       "pid": "1000d30c",
       "display_name": "Lucy Maher",
       "paid_status": "unpaid"
+    },
+    {
+      "pid": "fake0001",
+      "display_name": "Test Player One",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "fake0002",
+      "display_name": "Test Player Two",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "fake0003",
+      "display_name": "Test Player Three",
+      "paid_status": "unpaid"
+    },
+    {
+      "pid": "fake0004",
+      "display_name": "Test Player Four",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-04T19:49:43.360Z"
+  "published_at": "2026-06-04T19:54:43.359Z"
 }
