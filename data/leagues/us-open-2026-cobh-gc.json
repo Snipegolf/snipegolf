@@ -3,7 +3,7 @@
   "comp_slug": "us-open-2026",
   "league_name": "Cobh GC",
   "entry_fee_eur": 10,
-  "revolut_link": "Cash/Shop/Revolut",
+  "revolut_link": "@badenimdn",
   "logo_url": "",
   "status": "open",
   "participants": [
@@ -11,13 +11,8 @@
       "pid": "5mzv62t5bv",
       "display_name": "Baden Maher",
       "paid_status": "unpaid"
-    },
-    {
-      "pid": "c3d82bac",
-      "display_name": "Lucy Maher",
-      "paid_status": "unpaid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-04T19:19:43.377Z"
+  "published_at": "2026-06-04T19:24:42.922Z"
 }
