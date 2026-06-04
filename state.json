@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T18:32:51.420Z",
+  "generated_at": "2026-06-04T18:43:52.786Z",
   "status": "pre_picks",
   "competition": {
     "slug": "us-open-2026",
@@ -13,6 +13,7 @@
     "field_size": "",
     "logo_url": "https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:r000.png/tournaments/logos/2026/r026.png"
   },
+  "fallback_admin_email": "Conorcoyne94@gmail.com",
   "favourites": [],
   "past_winners": [],
   "participant_api": "https://script.google.com/macros/s/AKfycbyOyPYQKZYonF-o2rsE5iThmZkCDmXP1CFguAQFWzvwiCeAMd-oAWYdiO9HdnvE-mcu3A/exec"
