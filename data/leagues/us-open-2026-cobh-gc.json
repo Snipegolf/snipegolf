@@ -38,6 +38,15 @@
       "paid_status": "paid"
     }
   ],
-  "picks": [],
-  "published_at": "2026-06-04T20:49:42.014Z"
+  "picks": [
+    {
+      "pid": "1000d30c",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Viktor Hovland",
+      "bracket_c": "Russell Henley",
+      "bracket_d": "Davis Thompson",
+      "tiebreaker": -12
+    }
+  ],
+  "published_at": "2026-06-04T20:54:44.232Z"
 }
