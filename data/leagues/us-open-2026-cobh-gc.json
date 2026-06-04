@@ -11,8 +11,13 @@
       "pid": "5mzv62t5bv",
       "display_name": "Baden Maher",
       "paid_status": "unpaid"
+    },
+    {
+      "pid": "c3d82bac",
+      "display_name": "Lucy Maher",
+      "paid_status": "unpaid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-04T19:14:43.494Z"
+  "published_at": "2026-06-04T19:19:43.377Z"
 }
