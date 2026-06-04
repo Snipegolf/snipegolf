@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SnipeGolf — Live Leaderboard</title>
+<style>
+  :root {
+    --bg: #0a1628;
+    --bg2: #14243d;
+    --gold: #d4a247;
+    --ink: #f6f1e6;
+    --muted: #8aa0bd;
+    --ok: #34d399;
+    --warn: #fbbf24;
+    --err: #f87171;
+    --row: rgba(255,255,255,0.03);
+    --row-alt: rgba(255,255,255,0.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased;
+  }
+  header { padding: 20px 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  header h1 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }
+  header .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: rgba(212,162,71,0.15); color: var(--gold); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  main { max-width: 760px; margin: 0 auto; padding: 16px 12px 80px; }
+  .refresh-bar { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); padding: 8px 4px 12px; }
+  .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #34d399; margin-right: 6px; animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.35 } }
+  button.refresh {
+    background: none; border: 1px solid var(--gold); color: var(--gold);
+    padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 10px 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--gold); border-bottom: 1px solid rgba(212,162,71,0.3); text-align: left;
+  }
+  tbody td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; vertical-align: top; }
+  tbody tr:nth-child(odd) { background: var(--row); }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  .pos { font-weight: 700; width: 36px; }
+  .pos.medal-1 { color: var(--gold); }
+  .pos.medal-2 { color: #c0c0c0; }
+  .pos.medal-3 { color: #cd7f32; }
+  .name { font-weight: 600; }
+  .total { font-weight: 800; font-size: 18px; text-align: right; width: 64px; }
+  .total.under { color: var(--ok); }
+  .total.over { color: var(--err); }
+  .total.even { color: var(--ink); }
+  .picks { color: var(--muted); font-size: 11px; line-height: 1.4; }
+  .pick { display: inline-block; margin-right: 8px; }
+  .pick .pn { color: var(--ink); }
+  .pick .ps { color: var(--gold); margin-left: 3px; }
+  .pick .ps.cut { color: var(--err); }
+  .tb { color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .empty { padding: 40px 20px; text-align: center; color: var(--muted); }
+  .err-box { background: rgba(248,113,113,0.15); color: var(--err); padding: 12px; border-radius: 8px; margin: 12px 0; text-align: center; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; }
+  @media (max-width: 480px) {
+    .picks { display: none; }
+    .total { font-size: 16px; }
+    thead th.picks-col { display: none; }
+  }
+  .toggle-picks { color: var(--gold); font-size: 11px; cursor: pointer; display: none; margin-top: 4px; }
+  @media (max-width: 480px) { .toggle-picks { display: inline-block; } }
+  tr.expanded .picks { display: block !important; margin-top: 6px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="pill" id="leaguePill">SnipeGolf</div>
+  <h1 id="compName">Loading…</h1>
+  <div class="sub" id="leagueName"></div>
+</header>
+<main>
+  <div class="refresh-bar">
+    <span><span class="live-dot"></span><span id="liveLabel">Live</span></span>
+    <span id="lastUpdated">—</span>
+    <button class="refresh" id="refreshBtn">↻</button>
+  </div>
+  <div id="errBox"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Player</th>
+        <th class="picks-col">Picks (to par)</th>
+        <th style="text-align:right">Total</th>
+      </tr>
+    </thead>
+    <tbody id="lbBody">
+      <tr><td colspan="4" class="empty">Loading leaderboard…</td></tr>
+    </tbody>
+  </table>
+</main>
+<footer>SnipeGolf · Scores refresh every 90s</footer>
+
+<script>
+(function () {
+  var WORKER = 'https://twilight-recipe-e213.badenmaher.workers.dev';
+  var REFRESH_MS = 90 * 1000;
+
+  // detect league slug from path: /<league_slug>/leaderboard(.html)
+  var pathParts = location.pathname.replace(/\/$/, '').split('/');
+  // grab the slug = second-to-last path component (e.g. /snipegolf/memorial-2026-test/leaderboard.html → "memorial-2026-test")
+  var leagueSlug = '';
+  for (var i = pathParts.length - 1; i >= 0; i--) {
+    if (/^[a-z0-9][a-z0-9-]*$/i.test(pathParts[i]) && pathParts[i] !== 'leaderboard.html' && pathParts[i] !== 'leaderboard') {
+      leagueSlug = pathParts[i];
+      break;
+    }
+  }
+  // allow ?league= override
+  var qs = new URLSearchParams(location.search);
+  if (qs.get('league')) leagueSlug = qs.get('league');
+
+  function api(path) { return WORKER + '/api' + path; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]; }); }
+  function fmtScore(n) {
+    if (n == null) return '—';
+    if (n === 0) return 'E';
+    return (n > 0 ? '+' : '') + n;
+  }
+  function scoreClass(n) {
+    if (n == null) return '';
+    if (n < 0) return 'under';
+    if (n > 0) return 'over';
+    return 'even';
+  }
+  function showErr(msg) {
+    document.getElementById('errBox').innerHTML = '<div class="err-box">' + esc(msg) + '</div>';
+  }
+
+  function render(data) {
+    document.getElementById('errBox').innerHTML = '';
+    if (!data.ok) { showErr(data.error || 'Could not load leaderboard'); return; }
+    var comp = data.comp || {}, league = data.league || {};
+    document.getElementById('compName').textContent = comp.name || 'Competition';
+    document.getElementById('leagueName').textContent = league.league_name || '';
+    document.getElementById('leaguePill').textContent = league.league_name || 'SnipeGolf';
+    document.getElementById('lastUpdated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+    var entries = data.entries || [];
+    var body = document.getElementById('lbBody');
+    if (!entries.length) {
+      body.innerHTML = '<tr><td colspan="4" class="empty">No entries yet.</td></tr>';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      var posClass = '';
+      if (e.pos === 1) posClass = ' medal-1';
+      else if (e.pos === 2) posClass = ' medal-2';
+      else if (e.pos === 3) posClass = ' medal-3';
+      var picksHtml = '';
+      for (var j = 0; j < (e.picks || []).length; j++) {
+        var p = e.picks[j];
+        var cutFlag = (p.status && /WD|MDF|CUT|DQ|MC/i.test(p.status)) ? ' cut' : '';
+        picksHtml += '<span class="pick"><span class="pn">' + esc(p.bracket) + ': ' + esc(p.name || '—') + '</span>' +
+                     '<span class="ps' + cutFlag + '">' + (p.score == null ? '?' : fmtScore(p.score)) + '</span></span>';
+      }
+      html += '<tr>' +
+        '<td class="pos' + posClass + '">' + (e.pos || '-') + '</td>' +
+        '<td class="name">' + esc(e.name) +
+          '<div class="picks">' + picksHtml + '</div>' +
+          '<div class="tb">TB: ' + (e.tiebreaker == null ? '—' : fmtScore(e.tiebreaker)) + '</div>' +
+        '</td>' +
+        '<td class="picks-col picks">' + picksHtml + '</td>' +
+        '<td class="total ' + scoreClass(e.total) + '">' + fmtScore(e.total) + '</td>' +
+      '</tr>';
+    }
+    body.innerHTML = html;
+  }
+
+  function load() {
+    if (!leagueSlug) { showErr('No league slug detected in URL.'); return; }
+    fetch(api('/leaderboard?league=' + encodeURIComponent(leagueSlug)))
+      .then(function (r) { return r.json(); })
+      .then(render)
+      .catch(function (e) { showErr('Network error: ' + e); });
+  }
+  document.getElementById('refreshBtn').addEventListener('click', load);
+  load();
+  setInterval(load, REFRESH_MS);
+})();
+</script>
+</body>
+</html>
