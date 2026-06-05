@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SnipeGolf — Admin Console</title>
+<style>
+  :root {
+    --bg: #0a1628;
+    --bg2: #14243d;
+    --gold: #d4a247;
+    --ink: #f6f1e6;
+    --muted: #8aa0bd;
+    --ok: #34d399;
+    --warn: #fbbf24;
+    --err: #f87171;
+    --row: rgba(255,255,255,0.03);
+    --row-alt: rgba(255,255,255,0.07);
+    --paid: rgba(52,211,153,0.18);
+    --unpaid: rgba(251,191,36,0.18);
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); color: var(--ink); min-height: 100vh; }
+  header { padding: 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  header h1 { margin: 0; font-size: 20px; }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .post-lock-banner { background: rgba(248,113,113,0.18); color: var(--err); padding: 10px 16px; text-align: center; font-size: 13px; font-weight: 600; }
+  main { max-width: 1100px; margin: 0 auto; padding: 16px 12px 80px; }
+  .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .stat { flex: 1; min-width: 110px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; text-align: center; }
+  .stat .v { font-size: 24px; font-weight: 800; color: var(--gold); }
+  .stat .l { font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 1px; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .toolbar input { flex: 1; min-width: 200px; padding: 10px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--ink); font-size: 14px; }
+  .toolbar button { padding: 10px 14px; background: var(--gold); color: var(--bg); border: 0; border-radius: 6px; font-weight: 700; cursor: pointer; }
+  .toolbar button.ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { padding: 10px 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); border-bottom: 1px solid rgba(212,162,71,0.3); text-align: left; }
+  tbody td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
+  tbody tr:nth-child(odd) { background: var(--row); }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  .paid { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .paid.paid { background: var(--paid); color: var(--ok); }
+  .paid.unpaid { background: var(--unpaid); color: var(--warn); }
+  .pick-chip { display: inline-block; margin: 2px 3px 2px 0; padding: 2px 6px; background: rgba(212,162,71,0.12); color: var(--gold); border-radius: 3px; font-size: 11px; }
+  .actions { white-space: nowrap; }
+  .actions button { background: transparent; color: var(--ink); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer; margin-right: 4px; }
+  .actions button.edit { color: var(--gold); border-color: var(--gold); }
+  .actions button.del { color: var(--err); border-color: rgba(248,113,113,0.4); }
+
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; }
+  .modal-bg.show { display: flex; }
+  .modal { background: var(--bg2); border-radius: 10px; padding: 20px; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid rgba(212,162,71,0.3); }
+  .modal h2 { margin: 0 0 12px; font-size: 18px; color: var(--gold); }
+  .modal label { display: block; margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .modal input, .modal select, .modal textarea { width: 100%; padding: 8px 10px; margin-top: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; color: var(--ink); font-size: 14px; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .modal-actions button { flex: 1; padding: 10px; border: 0; border-radius: 6px; font-weight: 700; cursor: pointer; }
+  .modal-actions .save { background: var(--gold); color: var(--bg); }
+  .modal-actions .cancel { background: rgba(255,255,255,0.1); color: var(--ink); }
+  .modal-actions .del { background: var(--err); color: white; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 18px; background: var(--gold); color: var(--bg); font-weight: 700; border-radius: 6px; z-index: 200; }
+  .err-box { background: rgba(248,113,113,0.15); color: var(--err); padding: 12px; border-radius: 8px; margin: 12px 0; text-align: center; }
+  @media (max-width: 720px) {
+    table { font-size: 12px; }
+    .hide-mobile { display: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="leagueName">Admin Console</h1>
+  <div class="sub" id="compName"></div>
+</header>
+<div id="postLockBanner" class="post-lock-banner" style="display:none">⚠ TOURNAMENT STARTED — pick edits will be logged & owner notified</div>
+<main>
+  <div id="errBox"></div>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar">
+    <input id="search" placeholder="Search name or email…">
+    <button class="ghost" onclick="loadList()">↻ Refresh</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th class="hide-mobile">Email</th>
+        <th>Paid</th>
+        <th class="hide-mobile">Picks (A/B/C/D · TB)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="rows"><tr><td colspan="5" style="padding:30px;text-align:center;color:var(--muted)">Loading…</td></tr></tbody>
+  </table>
+</main>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h2 id="modalTitle">Edit entry</h2>
+    <label>Display name<input id="m_display_name"></label>
+    <label>Email<input id="m_email"></label>
+    <div class="field-row">
+      <label>Paid status
+        <select id="m_paid_status">
+          <option value="unpaid">unpaid</option>
+          <option value="paid">paid</option>
+        </select>
+      </label>
+      <label>Paid method
+        <select id="m_paid_method">
+          <option value="">—</option>
+          <option value="cash">cash</option>
+          <option value="revolut">revolut</option>
+          <option value="shop">shop</option>
+        </select>
+      </label>
+    </div>
+    <div class="field-row">
+      <label>Bracket A<input id="m_bracket_a"></label>
+      <label>Bracket B<input id="m_bracket_b"></label>
+    </div>
+    <div class="field-row">
+      <label>Bracket C<input id="m_bracket_c"></label>
+      <label>Bracket D<input id="m_bracket_d"></label>
+    </div>
+    <label>Tiebreaker (to par e.g. -12)<input id="m_tiebreaker"></label>
+    <label>Notes<input id="m_notes"></label>
+    <label id="reasonLabel" style="display:none">Reason for post-lock edit (required)<input id="m_reason" placeholder="e.g. picks lost in submission"></label>
+    <div class="modal-actions">
+      <button class="cancel" onclick="closeModal()">Cancel</button>
+      <button class="del" onclick="deleteEntry()">Delete</button>
+      <button class="save" onclick="saveEntry()">Save</button>
+    </div>
+    <div style="margin-top:8px;text-align:right">
+      <button onclick="resendEmail()" style="background:none;border:1px solid var(--gold);color:var(--gold);padding:6px 12px;border-radius:5px;cursor:pointer">✉ Resend email</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var WORKER = 'https://twilight-recipe-e213.badenmaher.workers.dev';
+  var qs = new URLSearchParams(location.search);
+  var leagueSlug = qs.get('league') || '';
+  var key = qs.get('key') || '';
+  var currentEntry = null;
+  var allEntries = [];
+  var postLock = false;
+
+  function api(path) { return WORKER + '/api' + path; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]; }); }
+  function toast(msg, isErr) {
+    var d = document.createElement('div'); d.className = 'toast'; d.textContent = msg;
+    if (isErr) { d.style.background = 'var(--err)'; d.style.color = 'white'; }
+    document.body.appendChild(d); setTimeout(function(){d.remove();}, 2500);
+  }
+  function showErr(m) { document.getElementById('errBox').innerHTML = '<div class="err-box">' + esc(m) + '</div>'; }
+
+  window.loadList = function () {
+    if (!key) { showErr('Missing ?key= in URL'); return; }
+    if (!leagueSlug) { showErr('Missing ?league= in URL'); return; }
+    fetch(api('/admin_list?league=' + encodeURIComponent(leagueSlug) + '&key=' + encodeURIComponent(key)))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { showErr(d.error || 'load_failed'); return; }
+        document.getElementById('leagueName').textContent = d.league.league_name + ' — Admin';
+        document.getElementById('compName').textContent = (d.comp && d.comp.name) || '';
+        postLock = !!d.post_lock;
+        document.getElementById('postLockBanner').style.display = postLock ? 'block' : 'none';
+        var s = d.stats || {};
+        document.getElementById('stats').innerHTML =
+          '<div class="stat"><div class="v">' + (s.total||0) + '</div><div class="l">Entries</div></div>' +
+          '<div class="stat"><div class="v" style="color:var(--ok)">' + (s.paid||0) + '</div><div class="l">Paid</div></div>' +
+          '<div class="stat"><div class="v" style="color:var(--warn)">' + (s.unpaid||0) + '</div><div class="l">Unpaid</div></div>' +
+          (s.deleted ? '<div class="stat"><div class="v" style="color:var(--err)">' + s.deleted + '</div><div class="l">Deleted</div></div>' : '');
+        allEntries = d.entries || [];
+        render(allEntries);
+      })
+      .catch(function (e) { showErr('Network: ' + e); });
+  };
+
+  function render(entries) {
+    var body = document.getElementById('rows');
+    if (!entries.length) { body.innerHTML = '<tr><td colspan="5" style="padding:30px;text-align:center;color:var(--muted)">No entries.</td></tr>'; return; }
+    var html = '';
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      var picks = '';
+      if (e.bracket_a) picks += '<span class="pick-chip">A:' + esc(e.bracket_a) + '</span>';
+      if (e.bracket_b) picks += '<span class="pick-chip">B:' + esc(e.bracket_b) + '</span>';
+      if (e.bracket_c) picks += '<span class="pick-chip">C:' + esc(e.bracket_c) + '</span>';
+      if (e.bracket_d) picks += '<span class="pick-chip">D:' + esc(e.bracket_d) + '</span>';
+      if (e.tiebreaker) picks += '<span class="pick-chip" style="background:rgba(255,255,255,0.1);color:var(--ink)">TB:' + esc(e.tiebreaker) + '</span>';
+      if (!picks) picks = '<span style="color:var(--muted);font-size:11px">no picks</span>';
+      html += '<tr>' +
+        '<td><strong>' + esc(e.display_name) + '</strong></td>' +
+        '<td class="hide-mobile">' + esc(e.email) + '</td>' +
+        '<td><span class="paid ' + (e.paid_status === 'paid' ? 'paid' : 'unpaid') + '">' + esc(e.paid_status || 'unpaid') + (e.paid_method ? ' · ' + esc(e.paid_method) : '') + '</span></td>' +
+        '<td class="hide-mobile">' + picks + '</td>' +
+        '<td class="actions"><button class="edit" onclick="openModal(\'' + esc(e.pid) + '\')">Edit</button></td>' +
+        '</tr>';
+    }
+    body.innerHTML = html;
+  }
+
+  document.getElementById('search').addEventListener('input', function (ev) {
+    var q = ev.target.value.toLowerCase();
+    var filtered = allEntries.filter(function (e) {
+      return (e.display_name + ' ' + e.email).toLowerCase().indexOf(q) >= 0;
+    });
+    render(filtered);
+  });
+
+  window.openModal = function (pid) {
+    currentEntry = allEntries.find(function (e) { return e.pid === pid; });
+    if (!currentEntry) return;
+    document.getElementById('modalTitle').textContent = 'Edit: ' + currentEntry.display_name;
+    document.getElementById('m_display_name').value = currentEntry.display_name || '';
+    document.getElementById('m_email').value = currentEntry.email || '';
+    document.getElementById('m_paid_status').value = currentEntry.paid_status || 'unpaid';
+    document.getElementById('m_paid_method').value = currentEntry.paid_method || '';
+    document.getElementById('m_bracket_a').value = currentEntry.bracket_a || '';
+    document.getElementById('m_bracket_b').value = currentEntry.bracket_b || '';
+    document.getElementById('m_bracket_c').value = currentEntry.bracket_c || '';
+    document.getElementById('m_bracket_d').value = currentEntry.bracket_d || '';
+    document.getElementById('m_tiebreaker').value = currentEntry.tiebreaker || '';
+    document.getElementById('m_notes').value = currentEntry.notes || '';
+    document.getElementById('m_reason').value = '';
+    document.getElementById('reasonLabel').style.display = postLock ? 'block' : 'none';
+    document.getElementById('modalBg').classList.add('show');
+  };
+  window.closeModal = function () { document.getElementById('modalBg').classList.remove('show'); };
+
+  window.saveEntry = function () {
+    if (!currentEntry) return;
+    var fields = {
+      display_name: document.getElementById('m_display_name').value.trim(),
+      email: document.getElementById('m_email').value.trim(),
+      paid_status: document.getElementById('m_paid_status').value,
+      paid_method: document.getElementById('m_paid_method').value,
+      bracket_a: document.getElementById('m_bracket_a').value.trim(),
+      bracket_b: document.getElementById('m_bracket_b').value.trim(),
+      bracket_c: document.getElementById('m_bracket_c').value.trim(),
+      bracket_d: document.getElementById('m_bracket_d').value.trim(),
+      tiebreaker: document.getElementById('m_tiebreaker').value.trim(),
+      notes: document.getElementById('m_notes').value.trim()
+    };
+    var reason = document.getElementById('m_reason').value.trim();
+    if (postLock && !reason) { toast('Reason required post-lock', true); return; }
+    fetch(WORKER + '/api/admin_update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ route: 'admin_update', key: key, pid: currentEntry.pid, fields: fields, reason: reason })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { toast(d.error || 'save failed', true); return; }
+        toast('Saved'); closeModal(); loadList();
+      })
+      .catch(function (e) { toast('Network: ' + e, true); });
+  };
+
+  window.deleteEntry = function () {
+    if (!currentEntry) return;
+    var reason = prompt('Reason for deletion?');
+    if (reason == null) return;
+    fetch(WORKER + '/api/admin_delete', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ route: 'admin_delete', key: key, pid: currentEntry.pid, reason: reason })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { toast(d.error || 'delete failed', true); return; }
+        toast('Deleted'); closeModal(); loadList();
+      });
+  };
+
+  window.resendEmail = function () {
+    if (!currentEntry) return;
+    fetch(WORKER + '/api/admin_resend', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ route: 'admin_resend', key: key, pid: currentEntry.pid })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { toast(d.error || 'resend failed', true); return; }
+        toast('Email sent');
+      });
+  };
+
+  loadList();
+})();
+</script>
+</body>
+</html>
