@@ -58,7 +58,7 @@
     {
       "pid": "mem03alpha",
       "bracket_a": "Tommy Fleetwood",
-      "bracket_b": "Ludvig Aberg",
+      "bracket_b": "",
       "bracket_c": "Sungjae Im",
       "bracket_d": "Ben Griffin",
       "tiebreaker": -8
@@ -66,7 +66,7 @@
     {
       "pid": "mem04bravo",
       "bracket_a": "Shane Lowry",
-      "bracket_b": "Hideki Matsuyama",
+      "bracket_b": "",
       "bracket_c": "Jason Day",
       "bracket_d": "Brian Harman",
       "tiebreaker": -9
@@ -88,5 +88,5 @@
       "tiebreaker": -11
     }
   ],
-  "published_at": "2026-06-05T15:54:46.835Z"
+  "published_at": "2026-06-05T15:59:50.459Z"
 }
