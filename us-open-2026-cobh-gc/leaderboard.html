@@ -55,6 +55,11 @@
       </p>
     </div>
   </section>
+
+  <section class="sg-section" id="prizesSection" style="display:none;margin-top:1.5rem">
+    <h2 style="margin:0 0 .75rem">Prizes</h2>
+    <div id="prizeList" class="prize-list"></div>
+  </section>
 </main>
 
 <script src="../shared/themes.js"></script>
@@ -172,6 +177,20 @@
       document.getElementById('sg-status').innerHTML = '<span class="sg-dot" style="background:var(--bad)"></span>No league';
       return;
     }
+    fetch(WORKER + '/api/prizes?league=' + encodeURIComponent(leagueSlug))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok && d.prizes && d.prizes.length) {
+          var html = '';
+          for (var i = 0; i < d.prizes.length; i++) {
+            var p = d.prizes[i];
+            html += '<div class="prize-row"><span class="prize-label">' + esc(p.label) + '</span><span class="prize-amount">' + esc(p.amount) + '</span></div>';
+          }
+          document.getElementById('prizeList').innerHTML = html;
+          document.getElementById('prizesSection').style.display = 'block';
+        }
+      }).catch(function () {});
+
     fetch(WORKER + '/api/leaderboard?league=' + encodeURIComponent(leagueSlug))
       .then(function (r) { return r.json(); })
       .then(render)

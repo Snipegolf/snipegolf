@@ -94,6 +94,8 @@
     var penalty = parseInt(cfg_('penalty_strokes') || '5', 10);
     if (isNaN(penalty)) penalty = 5;
 
+    var rosterSet = (typeof globalThis.getRosterNormSet_ === 'function') ? globalThis.getRosterNormSet_(comp.comp_slug) : null;
+
     var partsR = rows_(TAB.PARTICIPANTS);
     var parts = [];
     for (var i = 0; i < partsR.rows.length; i++) {
@@ -132,10 +134,14 @@
           continue;
         }
         hasAnyPick = true;
-        var match = sc.players[normName2_(name)];
+        var normNm = normName2_(name);
+        var match = sc.players[normNm];
         if (!match) {
-          // player not in ESPN field (withdrew before tee-off / wrong name) — apply penalty
-          detail.push({ bracket: L.toUpperCase(), name: name, score: fallbackScore, status: 'not_in_field', position_int: 999 });
+          // Distinguish MC (was in lock roster, gone now) vs invalid (never in roster)
+          var label = 'not_in_field';
+          if (rosterSet && rosterSet[normNm]) label = 'mc';
+          else if (rosterSet) label = 'invalid';
+          detail.push({ bracket: L.toUpperCase(), name: name, score: fallbackScore, status: label, position_int: 999 });
           positionsSorted.push(999);
           total += fallbackScore;
           continue;

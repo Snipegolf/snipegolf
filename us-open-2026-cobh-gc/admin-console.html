@@ -83,6 +83,16 @@
       </div>
     </div>
   </section>
+
+  <section class="sg-section" id="prizesSection" style="margin-top:1.5rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+      <h2 style="margin:0">Prizes</h2>
+      <button class="btn btn--ghost btn--sm" onclick="addPrizeRow()">+ Add prize</button>
+    </div>
+    <p style="color:var(--muted);font-size:.85rem;margin:.25rem 0 .75rem">Shown on landing page and below leaderboard. Free text — anything goes (1st, Bogey, Closest to TB, etc.).</p>
+    <div id="prizeRows"></div>
+    <button class="btn btn--primary" onclick="savePrizes()" style="margin-top:.75rem">Save prizes</button>
+  </section>
 </main>
 
 <div class="modal-bg" id="modalBg">
@@ -96,16 +106,16 @@
         <select id="m_paid_status"><option value="unpaid">unpaid</option><option value="paid">paid</option></select>
       </label>
       <label>Paid method
-        <select id="m_paid_method"><option value="">—</option><option value="cash">cash</option><option value="revolut">revolut</option><option value="shop">shop</option></select>
+        <select id="m_paid_method"><option value="">—</option><option value="cash">cash</option><option value="revolut">revolut</option><option value="bank_transfer">bank transfer</option><option value="shop">shop</option><option value="other">other</option></select>
       </label>
     </div>
     <div class="field-row">
-      <label>Bracket A<input id="m_bracket_a"></label>
-      <label>Bracket B<input id="m_bracket_b"></label>
+      <label>Bracket A<select id="m_bracket_a"><option value="">— pick player —</option></select></label>
+      <label>Bracket B<select id="m_bracket_b"><option value="">— pick player —</option></select></label>
     </div>
     <div class="field-row">
-      <label>Bracket C<input id="m_bracket_c"></label>
-      <label>Bracket D<input id="m_bracket_d"></label>
+      <label>Bracket C<select id="m_bracket_c"><option value="">— pick player —</option></select></label>
+      <label>Bracket D<select id="m_bracket_d"><option value="">— pick player —</option></select></label>
     </div>
     <label>Tiebreaker (e.g. -12)<input id="m_tiebreaker"></label>
     <label>Notes<input id="m_notes"></label>
@@ -143,6 +153,68 @@
   if (leagueSlug) {
     SGNav.init({ active: 'admin', league: leagueSlug, picksUrlOverride: 'picks.html' });
   }
+
+  var bracketsCache = null;
+  function loadBrackets() {
+    return fetch(api('/brackets?league=' + encodeURIComponent(leagueSlug)))
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d.ok) bracketsCache = d.brackets || {}; })
+      .catch(function () {});
+  }
+  function fillBracketSelect(id, letter, currentVal) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var list = (bracketsCache && bracketsCache[letter.toUpperCase()]) || [];
+    var html = '<option value="">— pick player —</option>';
+    var matched = false;
+    for (var i = 0; i < list.length; i++) {
+      var nm = list[i].name;
+      var sel = (nm === currentVal) ? ' selected' : '';
+      if (sel) matched = true;
+      html += '<option value="' + esc(nm) + '"' + sel + '>' + esc(nm) + '</option>';
+    }
+    if (currentVal && !matched) {
+      html += '<option value="' + esc(currentVal) + '" selected>' + esc(currentVal) + ' (legacy)</option>';
+    }
+    el.innerHTML = html;
+  }
+
+  var prizesCache = [];
+  function loadPrizes() {
+    return fetch(api('/prizes?league=' + encodeURIComponent(leagueSlug)))
+      .then(function (r) { return r.json(); })
+      .then(function (d) { prizesCache = (d.ok && d.prizes) ? d.prizes : []; renderPrizes(); })
+      .catch(function () { prizesCache = []; renderPrizes(); });
+  }
+  function renderPrizes() {
+    var box = document.getElementById('prizeRows');
+    if (!prizesCache.length) {
+      box.innerHTML = '<p style="color:var(--muted);font-size:.85rem;font-style:italic">No prizes set. Click + Add prize to begin.</p>';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < prizesCache.length; i++) {
+      var p = prizesCache[i];
+      html += '<div class="field-row" style="margin-bottom:.4rem" data-prize-idx="' + i + '">' +
+        '<label style="flex:2">Label<input value="' + esc(p.label) + '" onchange="updatePrize(' + i + ',\'label\',this.value)"></label>' +
+        '<label style="flex:1">Amount<input value="' + esc(p.amount) + '" onchange="updatePrize(' + i + ',\'amount\',this.value)"></label>' +
+        '<button type="button" class="btn btn--ghost btn--sm" style="align-self:flex-end;margin-bottom:.4rem;color:#f87171;border-color:#f87171" onclick="removePrize(' + i + ')">✕</button>' +
+        '</div>';
+    }
+    box.innerHTML = html;
+  }
+  window.addPrizeRow = function () { prizesCache.push({ label: '', amount: '' }); renderPrizes(); };
+  window.removePrize = function (i) { prizesCache.splice(i, 1); renderPrizes(); };
+  window.updatePrize = function (i, k, v) { if (prizesCache[i]) prizesCache[i][k] = v; };
+  window.savePrizes = function () {
+    fetch(api('/prizes_save'), {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ route:'prizes_save', key:key, league:leagueSlug, prizes:prizesCache })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d.ok) { toast(d.error || 'save failed', true); return; }
+      toast('Prizes saved'); prizesCache = d.prizes || []; renderPrizes();
+    }).catch(function (e) { toast('Network: ' + e, true); });
+  };
 
   window.loadList = function () {
     if (!key) { showErr('Missing ?key= in URL'); return; }
@@ -205,10 +277,10 @@
     document.getElementById('m_email').value = currentEntry.email || '';
     document.getElementById('m_paid_status').value = currentEntry.paid_status || 'unpaid';
     document.getElementById('m_paid_method').value = currentEntry.paid_method || '';
-    document.getElementById('m_bracket_a').value = currentEntry.bracket_a || '';
-    document.getElementById('m_bracket_b').value = currentEntry.bracket_b || '';
-    document.getElementById('m_bracket_c').value = currentEntry.bracket_c || '';
-    document.getElementById('m_bracket_d').value = currentEntry.bracket_d || '';
+    fillBracketSelect('m_bracket_a', 'A', currentEntry.bracket_a || '');
+    fillBracketSelect('m_bracket_b', 'B', currentEntry.bracket_b || '');
+    fillBracketSelect('m_bracket_c', 'C', currentEntry.bracket_c || '');
+    fillBracketSelect('m_bracket_d', 'D', currentEntry.bracket_d || '');
     document.getElementById('m_tiebreaker').value = currentEntry.tiebreaker || '';
     document.getElementById('m_notes').value = currentEntry.notes || '';
     document.getElementById('m_reason').value = '';
@@ -224,10 +296,10 @@
       email: document.getElementById('m_email').value.trim(),
       paid_status: document.getElementById('m_paid_status').value,
       paid_method: document.getElementById('m_paid_method').value,
-      bracket_a: document.getElementById('m_bracket_a').value.trim(),
-      bracket_b: document.getElementById('m_bracket_b').value.trim(),
-      bracket_c: document.getElementById('m_bracket_c').value.trim(),
-      bracket_d: document.getElementById('m_bracket_d').value.trim(),
+      bracket_a: document.getElementById('m_bracket_a').value,
+      bracket_b: document.getElementById('m_bracket_b').value,
+      bracket_c: document.getElementById('m_bracket_c').value,
+      bracket_d: document.getElementById('m_bracket_d').value,
       tiebreaker: document.getElementById('m_tiebreaker').value.trim(),
       notes: document.getElementById('m_notes').value.trim()
     };
@@ -267,6 +339,8 @@
   };
 
   loadList();
+  loadBrackets();
+  loadPrizes();
 })();
 </script>
 </body>

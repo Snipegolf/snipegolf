@@ -94,20 +94,18 @@
     document.getElementById('hero-sub').textContent = (comp.year || '') + (comp.picks_close ? ' · Picks close ' + comp.picks_close : '');
     document.getElementById('footer-club').textContent = league.league_name + ' · Sweepstakes operated under house rules';
 
-    var prizes = comp.prizes || league.prizes;
-    if (prizes) {
-      try {
-        var arr = typeof prizes === 'string' ? JSON.parse(prizes) : prizes;
-        if (arr && arr.length) {
-          var ph = '<section class="card mb-6"><h2 style="margin:0 0 12px;font-size:1.25rem">Prizes</h2><ol class="prize-list">';
-          for (var i = 0; i < arr.length; i++) {
-            ph += '<li><strong>' + esc(arr[i].place || (i+1)+'') + '</strong><span>' + esc(arr[i].prize) + '</span></li>';
-          }
-          ph += '</ol></section>';
-          document.getElementById('prizes-card').innerHTML = ph;
+    fetch(WORKER + '/api/prizes?league=' + encodeURIComponent(league.league_slug))
+      .then(function (r) { return r.json(); })
+      .then(function (pd) {
+        if (!pd || !pd.ok || !pd.prizes || !pd.prizes.length) return;
+        var ph = '<section class="sg-section" style="margin-top:1.5rem"><h2 style="margin:0 0 .75rem;font-size:1.25rem">Prizes</h2><div class="prize-list">';
+        for (var i = 0; i < pd.prizes.length; i++) {
+          var p = pd.prizes[i];
+          ph += '<div class="prize-row"><span class="prize-label">' + esc(p.label) + '</span><span class="prize-amount">' + esc(p.amount) + '</span></div>';
         }
-      } catch (e) {}
-    }
+        ph += '</div></section>';
+        document.getElementById('prizes-card').innerHTML = ph;
+      }).catch(function () {});
 
     loadLb(league.league_slug);
     if (pid && token) loadMyPicks(league.league_slug, pid, token);
