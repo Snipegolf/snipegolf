@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SnipeGolf — Tournament Leaderboard</title>
+<style>
+  :root {
+    --bg: #06101f;
+    --bg2: #0a1a30;
+    --bg3: #102544;
+    --gold: #d4a247;
+    --ink: #ffffff;
+    --muted: #7d92b3;
+    --green: #00c853;
+    --red: #ef5350;
+    --row: rgba(255,255,255,0.02);
+    --row-alt: rgba(255,255,255,0.05);
+    --row-hover: rgba(212,162,71,0.08);
+    --leader: rgba(212,162,71,0.12);
+    --cut: rgba(239,83,80,0.08);
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh; }
+
+  .hero { position: relative; background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+    border-bottom: 2px solid var(--gold); padding: 20px 16px 16px; }
+  .hero-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 16px; }
+  .hero-logo { width: 56px; height: 56px; border-radius: 10px; background: white; padding: 8px; flex-shrink: 0; }
+  .hero-title { flex: 1; }
+  .hero-title h1 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+  .hero-title .sub { margin-top: 2px; font-size: 13px; color: var(--muted); }
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+    background: rgba(0,200,83,0.15); color: var(--green); border-radius: 4px; font-size: 11px;
+    font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+
+  .meta-bar { background: var(--bg2); padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+  .meta-bar strong { color: var(--ink); }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 0 0 80px; }
+
+  .controls { display: flex; gap: 8px; padding: 12px 16px; flex-wrap: wrap; align-items: center; }
+  .controls input { flex: 1; min-width: 180px; padding: 8px 12px; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; color: var(--ink); font-size: 13px; }
+  .filter-btns { display: flex; gap: 4px; }
+  .filter-btns button { padding: 6px 12px; background: transparent; border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted); border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .filter-btns button.active { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 700; }
+
+  .last-updated { padding: 0 16px 8px; font-size: 11px; color: var(--muted); }
+
+  .lb-table { width: 100%; border-collapse: collapse; }
+  .lb-table thead { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+  .lb-table thead th { padding: 10px 8px; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--muted); border-bottom: 1px solid rgba(255,255,255,0.08); text-align: center; font-weight: 600; }
+  .lb-table thead th.left { text-align: left; padding-left: 16px; }
+  .lb-table tbody td { padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); text-align: center; font-size: 14px; }
+  .lb-table tbody td.left { text-align: left; padding-left: 16px; }
+  .lb-table tbody tr { transition: background 0.15s; }
+  .lb-table tbody tr:hover { background: var(--row-hover); }
+  .lb-table tbody tr.top10 td.pos { color: var(--gold); font-weight: 800; }
+  .lb-table tbody tr.top3 { background: var(--leader); }
+  .lb-table tbody tr.cut { background: var(--cut); opacity: 0.6; }
+  .lb-table tbody tr.cut td.player-name { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  .pos { font-weight: 700; font-size: 15px; width: 50px; }
+  .move { display: inline-block; width: 16px; font-size: 11px; }
+  .move.up { color: var(--green); }
+  .move.down { color: var(--red); }
+  .move.same { color: var(--muted); }
+
+  .player { display: flex; align-items: center; gap: 10px; }
+  .player-flag { width: 22px; height: 16px; border-radius: 2px; background: var(--bg3); flex-shrink: 0; object-fit: cover; }
+  .player-name { font-weight: 600; font-size: 14px; }
+  .player-name.featured { color: var(--gold); }
+
+  .score-cell { font-weight: 800; font-size: 17px; }
+  .score-cell.under { color: var(--green); }
+  .score-cell.over { color: var(--red); }
+  .score-cell.even { color: var(--ink); }
+  .today { font-size: 13px; font-weight: 700; }
+  .today.under { color: var(--green); }
+  .today.over { color: var(--red); }
+  .thru { font-size: 13px; color: var(--muted); }
+  .thru.f { color: var(--ink); }
+
+  .rd { font-size: 13px; color: var(--ink); }
+  .rd-cell { padding: 4px 0; }
+  .rd-score { display: inline-block; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+  .rd-score.under { background: rgba(0,200,83,0.12); color: var(--green); }
+  .rd-score.over { background: rgba(239,83,80,0.12); color: var(--red); }
+  .rd-score.even { background: rgba(255,255,255,0.05); color: var(--ink); }
+
+  .totals-strip { display: flex; gap: 14px; padding: 10px 16px; background: var(--bg2); border-bottom: 1px solid rgba(255,255,255,0.05); justify-content: center; flex-wrap: wrap; font-size: 12px; }
+  .totals-strip .item { color: var(--muted); }
+  .totals-strip .item strong { color: var(--gold); font-size: 16px; margin-right: 4px; }
+
+  @media (max-width: 720px) {
+    .hide-mobile { display: none; }
+    .lb-table tbody td { padding: 10px 4px; font-size: 13px; }
+    .pos { font-size: 14px; width: 42px; }
+    .score-cell { font-size: 15px; }
+    .player-flag { display: none; }
+    .hero-title h1 { font-size: 18px; }
+  }
+  @media (max-width: 480px) {
+    .hide-tablet { display: none; }
+  }
+
+  footer { text-align: center; color: var(--muted); font-size: 11px; padding: 20px; }
+  a.back { color: var(--gold); text-decoration: none; font-size: 13px; padding: 10px 16px; display: inline-block; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <img id="logo" class="hero-logo" alt="" src="https://a.espncdn.com/i/teamlogos/leagues/500/pga.png">
+    <div class="hero-title">
+      <h1 id="compName">the Memorial Tournament 2026</h1>
+      <div class="sub">
+        <span class="live-badge"><span class="live-dot"></span><span id="liveLabel">Live · Round 1</span></span>
+        <span style="margin-left:8px" id="venue">Muirfield Village GC</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="meta-bar">
+  <span>Par <strong id="metaPar">72</strong></span>
+  <span>Field <strong id="metaField">72</strong></span>
+  <span>Cut Line <strong id="metaCut">+2</strong></span>
+  <span>Leader Score <strong id="metaLeader">−5</strong></span>
+  <span><a class="back" href="leaderboard.html" style="padding:0">← Sweep Leaderboard</a></span>
+</div>
+
+<main>
+  <div class="controls">
+    <input id="search" placeholder="Search player…">
+    <div class="filter-btns">
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="top10">Top 10</button>
+      <button data-filter="favs">My Picks</button>
+      <button data-filter="cut">Cut</button>
+    </div>
+  </div>
+  <div class="last-updated">Updated <span id="lastUpdated">—</span> · auto-refresh 90s</div>
+
+  <table class="lb-table">
+    <thead>
+      <tr>
+        <th>POS</th>
+        <th class="left">PLAYER</th>
+        <th>TOT</th>
+        <th>TODAY</th>
+        <th>THRU</th>
+        <th class="hide-tablet">R1</th>
+        <th class="hide-tablet">R2</th>
+        <th class="hide-tablet">R3</th>
+        <th class="hide-tablet">R4</th>
+      </tr>
+    </thead>
+    <tbody id="lbBody"></tbody>
+  </table>
+</main>
+
+<footer>SnipeGolf · Data from ESPN</footer>
+
+<script>
+(function () {
+  var ESPN_EVENT = '401811950'; // memorial — will pass via ?event= soon
+  var qs = new URLSearchParams(location.search);
+  if (qs.get('event')) ESPN_EVENT = qs.get('event');
+  var myPicks = (qs.get('picks') || '').split(',').map(function(s){return s.trim().toLowerCase();}).filter(Boolean);
+
+  var allRows = [];
+  var currentFilter = 'all';
+
+  function num(s) {
+    if (s === 0 || s === '0') return 0;
+    if (s == null || s === '' || s === 'E' || s === '-') return s === 'E' ? 0 : null;
+    var str = String(s); var sign = 1;
+    if (str.charAt(0)==='+') str=str.substring(1);
+    else if (str.charAt(0)==='-') { sign=-1; str=str.substring(1); }
+    var n = parseInt(str,10); if (isNaN(n)) return null; return sign*n;
+  }
+  function fmt(n, dash) {
+    if (n == null) return dash || '—';
+    if (n === 0) return 'E';
+    return (n > 0 ? '+' : '') + n;
+  }
+  function cls(n) {
+    if (n == null) return '';
+    if (n < 0) return 'under';
+    if (n > 0) return 'over';
+    return 'even';
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]; }); }
+
+  function render() {
+    var q = (document.getElementById('search').value || '').toLowerCase();
+    var rows = allRows.filter(function (r) {
+      if (q && r.name.toLowerCase().indexOf(q) < 0) return false;
+      if (currentFilter === 'top10' && r.posInt > 10) return false;
+      if (currentFilter === 'favs' && myPicks.indexOf(r.name.toLowerCase()) < 0) return false;
+      if (currentFilter === 'cut' && !r.cut) return false;
+      return true;
+    });
+    var body = document.getElementById('lbBody');
+    if (!rows.length) { body.innerHTML = '<tr><td colspan="9" style="padding:40px;text-align:center;color:var(--muted)">No players match.</td></tr>'; return; }
+    var html = '';
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      var trCls = '';
+      if (r.cut) trCls = 'cut';
+      else if (r.posInt <= 3) trCls = 'top3';
+      else if (r.posInt <= 10) trCls = 'top10';
+      var nameCls = myPicks.indexOf(r.name.toLowerCase()) >= 0 ? 'featured' : '';
+      html += '<tr class="' + trCls + '">' +
+        '<td class="pos">' + esc(r.pos) + '</td>' +
+        '<td class="left"><div class="player"><div class="player-flag"></div><div class="player-name ' + nameCls + '">' + esc(r.name) + (nameCls ? ' ★' : '') + '</div></div></td>' +
+        '<td class="score-cell ' + cls(r.total) + '">' + fmt(r.total) + '</td>' +
+        '<td class="today ' + cls(r.today) + '">' + fmt(r.today) + '</td>' +
+        '<td class="thru ' + (r.thru === 'F' ? 'f' : '') + '">' + esc(r.thru || '—') + '</td>' +
+        '<td class="hide-tablet rd-cell">' + (r.r1 != null ? '<span class="rd-score ' + cls(r.r1Par) + '">' + r.r1 + '</span>' : '—') + '</td>' +
+        '<td class="hide-tablet rd-cell">' + (r.r2 != null ? '<span class="rd-score ' + cls(r.r2Par) + '">' + r.r2 + '</span>' : '—') + '</td>' +
+        '<td class="hide-tablet rd-cell">' + (r.r3 != null ? '<span class="rd-score ' + cls(r.r3Par) + '">' + r.r3 + '</span>' : '—') + '</td>' +
+        '<td class="hide-tablet rd-cell">' + (r.r4 != null ? '<span class="rd-score ' + cls(r.r4Par) + '">' + r.r4 + '</span>' : '—') + '</td>' +
+      '</tr>';
+    }
+    body.innerHTML = html;
+  }
+
+  function load() {
+    fetch('https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard?event=' + encodeURIComponent(ESPN_EVENT))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var ev = (d.events||[])[0]; if (!ev) return;
+        var comp = (ev.competitions||[])[0]; if (!comp) return;
+        var par = (comp.headers && comp.headers[0] && comp.headers[0].competitions && comp.headers[0].competitions[0] && comp.headers[0].competitions[0].course && comp.headers[0].competitions[0].course.totalPar) || 72;
+        document.getElementById('compName').textContent = ev.name || 'PGA Tour';
+        document.getElementById('venue').textContent = (ev.competitions && ev.competitions[0] && ev.competitions[0].venue && ev.competitions[0].venue.fullName) || '';
+        document.getElementById('liveLabel').textContent = (ev.status && ev.status.type && ev.status.type.description) || 'Live';
+        document.getElementById('metaPar').textContent = par;
+        document.getElementById('metaField').textContent = (comp.competitors||[]).length;
+        document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+        var leader = null;
+        allRows = (comp.competitors||[]).map(function (c) {
+          var a = c.athlete || {};
+          var pos = ((c.status||{}).position||{}).displayName || '';
+          var posInt = parseInt(String(pos).replace(/^T/,''),10); if (isNaN(posInt)) posInt = 999;
+          var status = ((c.status||{}).type||{}).description || '';
+          var cut = /CUT|MDF|WD|DQ|MC/.test(String(pos)) || /Withdrawn|Cut|Disqualified/i.test(status);
+          var total = num(c.score);
+          var today = c.linescores && c.linescores.length ? num((c.linescores[c.linescores.length-1] || {}).value) : null;
+          // round scores
+          var rds = c.linescores || [];
+          function rdGross(i) { return rds[i] && rds[i].value != null ? rds[i].value : null; }
+          function rdPar(i) { var v = rdGross(i); if (v == null) return null; return v - par; }
+          if (leader == null && !cut && total != null) leader = total;
+          return {
+            name: String(a.displayName||''),
+            pos: pos,
+            posInt: posInt,
+            cut: cut,
+            total: total,
+            today: today,
+            thru: (c.status && c.status.thru) || (c.status && c.status.type && c.status.type.shortDetail) || '',
+            r1: rdGross(0), r1Par: rdPar(0),
+            r2: rdGross(1), r2Par: rdPar(1),
+            r3: rdGross(2), r3Par: rdPar(2),
+            r4: rdGross(3), r4Par: rdPar(3)
+          };
+        }).sort(function (a, b) { return a.posInt - b.posInt; });
+        document.getElementById('metaLeader').textContent = fmt(leader);
+        render();
+      });
+  }
+
+  document.getElementById('search').addEventListener('input', render);
+  document.querySelectorAll('.filter-btns button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.filter-btns button').forEach(function (x) { x.classList.remove('active'); });
+      b.classList.add('active');
+      currentFilter = b.getAttribute('data-filter');
+      render();
+    });
+  });
+
+  load();
+  setInterval(load, 90000);
+})();
+</script>
+</body>
+</html>
