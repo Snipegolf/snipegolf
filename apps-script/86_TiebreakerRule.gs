@@ -123,6 +123,7 @@
         var name = pk2 ? String(pk2['bracket_' + L] || '') : '';
         // worst-case fallback score: leader's current score + penalty (treat missing pick like worst MC)
         var fallbackScore = ((sc.winnerScore == null) ? 0 : sc.winnerScore) + penalty;
+        if (fallbackScore < penalty) fallbackScore = penalty;
         if (!name) {
           // no pick selected — apply penalty so empty picks don't get a free 0
           detail.push({ bracket: L.toUpperCase(), name: '', score: fallbackScore, status: 'no_pick', position_int: 999 });
