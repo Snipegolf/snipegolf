@@ -95,8 +95,8 @@
     var slug = d.league.league_slug;
     var compSlug = d.comp.comp_slug;
     document.title = d.comp.name + ' — Field · SnipeGolf';
-    loadBrackets(slug, compSlug).then(function () { loadField(d.comp.espn_id); });
-    setInterval(function () { loadField(d.comp.espn_id); }, REFRESH_MS);
+    loadBrackets(slug, compSlug).then(function () { loadField(slug); });
+    setInterval(function () { loadField(slug); }, REFRESH_MS);
   });
 
   function loadBrackets(slug, compSlug) {
@@ -112,12 +112,12 @@
       .catch(function () {});
   }
 
-  function loadField(espnId) {
-    if (!espnId) {
-      document.getElementById('sg-status').innerHTML = '<span class="sg-dot" style="background:var(--bad)"></span>No ESPN id';
+  function loadField(slug) {
+    if (!slug) {
+      document.getElementById('sg-status').innerHTML = '<span class="sg-dot" style="background:var(--bad)"></span>No league';
       return;
     }
-    fetch(WORKER + '/api/leaderboard?espn=' + encodeURIComponent(espnId) + '&field=1')
+    fetch(WORKER + '/api/field?league=' + encodeURIComponent(slug))
       .then(function (r) { return r.json(); })
       .then(function (d) {
         document.getElementById('sg-status').innerHTML = '<span class="sg-dot"></span>Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
