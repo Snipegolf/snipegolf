@@ -10,7 +10,7 @@
     {
       "pid": "5mzv62t5bv",
       "display_name": "Baden Maher",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     },
     {
       "pid": "1000d30c",
@@ -48,5 +48,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-06-05T15:54:44.807Z"
+  "published_at": "2026-06-05T15:59:47.226Z"
 }
