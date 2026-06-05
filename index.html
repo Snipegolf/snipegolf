@@ -1,296 +1,175 @@
 <!DOCTYPE html>
-<!--
-  SnipeGolf — Global landing page (v2)
-  Premium golf-tournament feel · 10 daily-rotating colourways · mobile-first
--->
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="SnipeGolf — run your golf club's sweepstake like a tour event. Live leaderboards, mobile entry, automatic WD swap, GDPR-compliant.">
-  <title>SnipeGolf — Run your club's sweep like a pro</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="assets/css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>SnipeGolf — Pick. Sweep. Win.</title>
+<meta name="description" content="SnipeGolf — golf sweepstakes for clubs. Pick one player from each bracket. Live leaderboards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/style.css">
+<style>
+  .hero-root { text-align:center; padding: clamp(var(--s-5), 8vw, var(--s-8)) var(--s-3); }
+  .hero-root h1 { font-size: clamp(2.6rem, 7vw, 5rem); margin: 12px 0; line-height: 1; }
+  .hero-root .lead { font-size: 1.15rem; max-width: 56ch; margin: var(--s-3) auto var(--s-5); color: var(--muted); }
+  .league-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--s-4); margin-top: var(--s-5); }
+  .league-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md);
+    padding: var(--s-4); text-decoration:none; color: var(--text);
+    transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    display: flex; flex-direction: column; gap: var(--s-2);
+  }
+  .league-card:hover { transform: translateY(-3px); border-color: var(--accent); background: var(--surface-2); }
+  .league-card__title { font-family: var(--font-display); font-size: 1.25rem; margin: 0; }
+  .league-card__comp { color: var(--accent); font-weight: 600; font-size: .95rem; }
+  .league-card__meta { color: var(--muted); font-size: .8rem; }
+  .league-card__badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .5px; }
+  .league-card__badge.live { background: rgba(52,211,153,0.18); color: #34d399; }
+  .league-card__badge.upcoming { background: rgba(212,162,71,0.18); color: var(--accent); }
+  .league-card__badge.frozen { background: rgba(248,113,113,0.18); color: #f87171; }
+  .pitch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin-top: var(--s-6); }
+  @media (max-width: 700px) { .pitch-grid { grid-template-columns: 1fr; } }
+  .pitch { padding: var(--s-4); background: var(--surface); border-radius: var(--r-md); border: 1px solid var(--border); }
+  .pitch h3 { margin-top: 0; font-size: 1.1rem; }
+  .theme-strip { display:flex; gap:6px; justify-content:center; margin-top: var(--s-4); flex-wrap:wrap }
+  .theme-chip { width:18px; height:18px; border-radius:50%; border:1px solid rgba(255,255,255,0.1); cursor: pointer; transition: transform .1s; }
+  .theme-chip:hover { transform: scale(1.2); }
+  .theme-chip.active { box-shadow: 0 0 0 2px var(--text); }
+</style>
 </head>
-<body data-page="landing">
+<body data-page="snipegolf-home">
 
-  <a class="brand" href="#main" style="position:absolute;left:-9999px">Skip to content</a>
+<header class="site-header" role="banner">
+  <div class="site-header__inner">
+    <a class="brand" href="/" aria-label="SnipeGolf home">
+      <span class="brand__mark" aria-hidden="true">S</span>
+      <span class="serif">SNIPEGOLF</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#leagues">Leagues</a>
+      <a href="#how">How it works</a>
+      <a href="mailto:snipegolfclothing@gmail.com">Contact</a>
+    </nav>
+  </div>
+</header>
 
-  <header class="site-header" role="banner">
-    <div class="site-header__inner">
-      <a class="brand" href="index.html" aria-label="SnipeGolf home">
-        <span class="brand__mark" aria-hidden="true">S</span>
-        <span class="serif">SNIPEGOLF</span>
-      </a>
-      <nav class="site-nav" aria-label="Primary">
-        <a href="#features">Features</a>
-          <a href="main-leaderboard.html">Leaderboard</a>
-        <a href="#how">How it works</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="main">
-
-    <!-- ─── Hero ───────────────────────────────────────────────────── -->
-    <section class="hero">
-      <div class="container hero__inner">
-        <span class="eyebrow">Golf sweepstakes platform</span>
-        <h1>Run your club's sweep<br>like a pro.</h1>
-        <p class="lead">Live leaderboards, mobile entry, automatic withdrawal swaps, and admin tools that take a Saturday-morning headache and turn it into a tour-grade experience for your members.</p>
-        <div class="hero__ctas">
-          <a class="btn btn--ghost btn--lg" href="#contact">Set up your club</a>
-        </div>
-      </div>
-
-      <!-- Subtle course silhouette -->
-      <svg class="golf-silhouette" viewBox="0 0 1600 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-        <path d="M0,200 C200,140 400,180 600,160 C800,140 950,180 1100,150 C1280,116 1440,170 1600,140 L1600,240 L0,240 Z" fill="currentColor" opacity="0.7"/>
-        <path d="M0,220 C260,180 480,210 700,200 C920,190 1100,220 1300,200 C1450,186 1550,210 1600,200 L1600,240 L0,240 Z" fill="currentColor" opacity="0.5"/>
-        <!-- flagstick -->
-        <g transform="translate(1100,90)" fill="currentColor" opacity="0.85">
-          <rect x="0" y="0" width="2" height="100"/>
-          <path d="M2,0 L40,10 L2,20 Z"/>
-        </g>
-      </svg>
-    </section>
-
-    <!-- ─── Live competitions ─── -->
-    <section class="section" id="live-comps">
-      <div class="container">
-        <div style="text-align:center;margin-bottom:24px">
-          <span class="eyebrow">Live now</span>
-          <h2 style="margin:8px 0 4px;font-family:Fraunces,serif">Active competitions</h2>
-          <p class="text-muted" style="margin:0">Check your golfers · enter picks · see the leaderboard</p>
-        </div>
-        <div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
-          <div class="card live-league-card" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-            <div>
-              <span class="eyebrow">Live now</span>
-              <h3 style="margin:8px 0 4px;font-family:Fraunces,serif;font-size:20px">Youghal GC</h3>
-              <p class="text-muted" style="margin:0;font-size:14px"></p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
-              <a class="btn btn--primary btn--sm" href="leagues/youghal-gc-truist-championship-2026/leaderboard.html">Leaderboard</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/youghal-gc-truist-championship-2026/picks.html">Enter picks</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/youghal-gc-truist-championship-2026/index.html">Club home</a>
-            </div>
-          </div>
-          <div class="card live-league-card" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-            <div>
-              <span class="eyebrow">Live now</span>
-              <h3 style="margin:8px 0 4px;font-family:Fraunces,serif;font-size:20px">Mahon GC</h3>
-              <p class="text-muted" style="margin:0;font-size:14px"></p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
-              <a class="btn btn--primary btn--sm" href="leagues/mahon-gc-truist-championship-2026/leaderboard.html">Leaderboard</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/mahon-gc-truist-championship-2026/picks.html">Enter picks</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/mahon-gc-truist-championship-2026/index.html">Club home</a>
-            </div>
-          </div>
-          <div class="card live-league-card" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-            <div>
-              <span class="eyebrow">Live now</span>
-              <h3 style="margin:8px 0 4px;font-family:Fraunces,serif;font-size:20px">Carrigaline GC</h3>
-              <p class="text-muted" style="margin:0;font-size:14px"></p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
-              <a class="btn btn--primary btn--sm" href="leagues/carrigaline-gc-truist-championship-2026/leaderboard.html">Leaderboard</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/carrigaline-gc-truist-championship-2026/picks.html">Enter picks</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/carrigaline-gc-truist-championship-2026/index.html">Club home</a>
-            </div>
-          </div>
-          <div class="card live-league-card" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-            <div>
-              <span class="eyebrow">Live now</span>
-              <h3 style="margin:8px 0 4px;font-family:Fraunces,serif;font-size:20px">The Anchor Bar</h3>
-              <p class="text-muted" style="margin:0;font-size:14px"></p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
-              <a class="btn btn--primary btn--sm" href="leagues/the-anchor-bar-truist-championship-2026/leaderboard.html">Leaderboard</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/the-anchor-bar-truist-championship-2026/picks.html">Enter picks</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/the-anchor-bar-truist-championship-2026/index.html">Club home</a>
-            </div>
-          </div>
-          <div class="card live-league-card" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-            <div>
-              <span class="eyebrow">Live now</span>
-              <h3 style="margin:8px 0 4px;font-family:Fraunces,serif;font-size:20px">Kinsale GC</h3>
-              <p class="text-muted" style="margin:0;font-size:14px"></p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
-              <a class="btn btn--primary btn--sm" href="leagues/kinsale-gc-truist-championship-2026/leaderboard.html">Leaderboard</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/kinsale-gc-truist-championship-2026/picks.html">Enter picks</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/kinsale-gc-truist-championship-2026/index.html">Club home</a>
-            </div>
-          </div>
-          <div class="card live-league-card" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-            <div>
-              <span class="eyebrow">Live now</span>
-              <h3 style="margin:8px 0 4px;font-family:Fraunces,serif;font-size:20px">Fota Island</h3>
-              <p class="text-muted" style="margin:0;font-size:14px"></p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
-              <a class="btn btn--primary btn--sm" href="leagues/fota-island-truist-championship-2026/leaderboard.html">Leaderboard</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/fota-island-truist-championship-2026/picks.html">Enter picks</a>
-              <a class="btn btn--ghost btn--sm" href="leagues/fota-island-truist-championship-2026/index.html">Club home</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ─── Features ─────────────────────────────────────────────── -->
-    <section class="section" id="features">
-      <div class="container">
-        <div class="text-center mb-6">
-          <span class="eyebrow">Everything your sweep needs</span>
-          <h2 style="margin-top:8px">Designed for the way clubs actually run sweeps.</h2>
-          <p class="lead" style="margin:12px auto 0;max-width:60ch">From the bar staff scanning a QR code to the captain checking the standings on the back nine, every surface earns its keep.</p>
-        </div>
-
-        <div class="grid grid-3">
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
-            </div>
-            <h3>Live leaderboards</h3>
-            <p>Powered by ESPN data. Refreshes every 60 seconds during play with rank movement, tiebreakers and round-by-round picks.</p>
-          </article>
-
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
-            </div>
-            <h3>Mobile entry</h3>
-            <p>One link. Two golfers per bracket, tiebreaker, done. Searchable lists, no iOS pinch-zoom, 48-pixel tap targets.</p>
-          </article>
-
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M17 20v1M20 17v4"/></svg>
-            </div>
-            <h3>Printable QR posters</h3>
-            <p>Single-sheet A4 poster for the clubhouse notice board. Scan, enter, done. Branded with your club crest and tournament logo.</p>
-          </article>
-
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3.4-7"/><path d="M21 4v5h-5"/></svg>
-            </div>
-            <h3>Auto WD swap</h3>
-            <p>If a player withdraws before Thursday, SnipeGolf automatically swaps to the next available golfer in the same bracket. No spreadsheets at midnight.</p>
-          </article>
-
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v4M16 4v4"/></svg>
-            </div>
-            <h3>Admin dashboard</h3>
-            <p>Token-gated. Players, picks, payments, WD log, message blasts, lock entries — one screen, mobile-friendly.</p>
-          </article>
-
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
-            </div>
-            <h3>GDPR-compliant</h3>
-            <p>Built for the EU. Explicit consent, right-to-erasure, 30-day post-event retention. Hosted on Google's infrastructure under your club's control.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── How it works ─────────────────────────────────────────── -->
-    <section class="section" id="how">
-      <div class="container">
-        <div class="text-center mb-6">
-          <span class="eyebrow">From zero to live in minutes</span>
-          <h2 style="margin-top:8px">Three steps. No code.</h2>
-        </div>
-
-        <div class="grid grid-3">
-          <div class="step">
-            <span class="step__num">1</span>
-            <h3>We provision your league</h3>
-            <p>Send us your club name, tournament and prize. We spin up a private league page, an admin link and a member entry link.</p>
-          </div>
-          <div class="step">
-            <span class="step__num">2</span>
-            <h3>Members enter on their phone</h3>
-            <p>Share the QR code or WhatsApp link. Players pick 2 golfers from each of 4 brackets and submit a tiebreaker.</p>
-          </div>
-          <div class="step">
-            <span class="step__num">3</span>
-            <h3>Watch it play out live</h3>
-            <p>The leaderboard updates every minute. Withdrawals are swapped automatically. The captain has the trophy waiting on Sunday.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── Contact / CTA band ───────────────────────────────────── -->
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="card card--feature" style="text-align:center">
-          <span class="eyebrow">Set up your club</span>
-          <h2 style="margin:12px 0">Ready for your next major?</h2>
-          <p class="lead" style="max-width:60ch;margin:0 auto var(--s-5)">We'll have your league live in under an hour. No setup fee for the first event.</p>
-          <a class="btn btn--lg" href="mailto:snipegolfclothing@gmail.com?subject=SnipeGolf%20—%20club%20enquiry">Email us →</a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="site-footer" role="contentinfo">
+<main>
+  <section class="hero-root">
     <div class="container">
-      <div class="site-footer__grid">
-        <div>
-          <a class="brand" href="index.html" aria-label="SnipeGolf home">
-            <span class="brand__mark" aria-hidden="true">S</span>
-            <span class="serif">SNIPEGOLF</span>
-          </a>
-          <p style="margin-top:12px;max-width:36ch">A platform for clubs to run smarter, fairer, more elegant golf sweepstakes.</p>
-        </div>
-        <div>
-          <h4>Product</h4>
-          <ul>
-            <li><a href="#features">Features</a></li>
-              <li><a href="main-leaderboard.html">Leaderboard</a></li>
-            <li><a href="#how">How it works</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="leagues/_template/terms.html">Terms &amp; Conditions</a></li>
-            <li><a href="leagues/_template/privacy.html">Privacy Policy</a></li>
-            <li><span>18+ Responsible Gambling</span></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Contact</h4>
-          <ul>
-            <li><a href="mailto:snipegolfclothing@gmail.com"><a href="mailto:snipegolfclothing@gmail.com"><a href="mailto:snipegolfclothing@gmail.com">snipegolfclothing@gmail.com</a></a></a></li>
-            <li><a href="https://www.dataprotection.ie" target="_blank" rel="noopener">Data Protection Commission</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="site-footer__bottom">
-        <span>© <span id="year"></span> SnipeGolf · Republic of Ireland</span>
-        <span>Built for clubs · Powered by ESPN data · Hosted on GitHub Pages</span>
+      <span class="eyebrow">Golf sweepstakes for clubs</span>
+      <h1 class="serif">Pick. Sweep. Win.</h1>
+      <p class="lead">One golfer from each of four brackets. Live ESPN scoring. Big-mover leaderboards. Members hooked all weekend.</p>
+      <div class="theme-strip" id="themeStrip" aria-label="Theme preview"></div>
+    </div>
+  </section>
+
+  <section class="section" id="leagues">
+    <div class="container">
+      <h2 class="serif" style="text-align:center;margin-bottom:var(--s-4)">Live leagues</h2>
+      <div id="leagueGrid" class="league-grid">
+        <div class="sg-empty" style="grid-column:1/-1">Loading leagues…</div>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-  <script src="assets/js/themes.js"></script>
-  <script src="leagues/_template/js/app.js"></script>
+  <section class="section" id="how">
+    <div class="container">
+      <h2 class="serif" style="text-align:center;margin-bottom:var(--s-4)">How it works</h2>
+      <div class="pitch-grid">
+        <div class="pitch"><h3>1. Enter</h3><p style="color:var(--muted)">Scan the club QR. Pick one player from each of four brackets. Set your tiebreaker (winner's score vs par).</p></div>
+        <div class="pitch"><h3>2. Watch</h3><p style="color:var(--muted)">Live leaderboard updates every 90 seconds via ESPN. ▲/▼ shows who's moving every hour.</p></div>
+        <div class="pitch"><h3>3. Win</h3><p style="color:var(--muted)">Lowest combined total wins. Closest under-the-winner tiebreaker decides ties. Prizes from the pro shop.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="card card--feature" style="text-align:center">
+        <h2 class="serif">Run a sweep at your club</h2>
+        <p class="lead" style="max-width:50ch;margin:var(--s-3) auto">Free to set up. Set your own prizes. Members enter on their phones — no app to install.</p>
+        <a class="btn btn--primary btn--lg" href="mailto:snipegolfclothing@gmail.com?subject=SnipeGolf%20for%20our%20club">Get in touch</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="site-footer__bottom" style="border:none;padding-top:0">
+      <span>SnipeGolf · Built for golf clubs</span>
+      <span>18+ · Responsible gambling · <a href="mailto:snipegolfclothing@gmail.com">Contact</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared/themes.js"></script>
+<script>
+(function () {
+  // Embedded league index — small enough to ship inline, no API call needed
+  var LEAGUES = [
+    {
+      slug: 'memorial-2026-test',
+      club: 'SnipeGolf Test League',
+      comp: 'The Memorial Tournament 2026',
+      logo: '',
+      status: 'live',
+      dates: 'June 5–8, 2026'
+    },
+    {
+      slug: 'us-open-2026-cobh-gc',
+      club: 'Cobh Golf Club',
+      comp: 'U.S. Open 2026',
+      logo: '',
+      status: 'upcoming',
+      dates: 'June 18–21, 2026'
+    }
+  ];
+
+  // Theme strip (clickable preview / picker)
+  if (window.SnipeThemes) {
+    var current = window.SnipeThemes.init();
+    var strip = document.getElementById('themeStrip');
+    var list = window.SnipeThemes.list || [];
+    var html = '';
+    for (var i = 0; i < list.length; i++) {
+      var t = list[i];
+      var bg = (t.tokens && t.tokens['--accent']) || '#ccc';
+      html += '<button class="theme-chip' + (t.id === current.id ? ' active' : '') +
+              '" style="background:' + bg + '" data-id="' + t.id + '" title="' + t.name + '"></button>';
+    }
+    strip.innerHTML = html;
+    strip.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('[data-id]');
+      if (!btn) return;
+      var id = btn.getAttribute('data-id');
+      window.SnipeThemes.apply(id);
+      window.SnipeThemes.save(id);
+      var chips = strip.querySelectorAll('.theme-chip');
+      for (var j = 0; j < chips.length; j++) chips[j].classList.toggle('active', chips[j].getAttribute('data-id') === id);
+    });
+  }
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  var grid = document.getElementById('leagueGrid');
+  if (!LEAGUES.length) {
+    grid.innerHTML = '<div class="sg-empty" style="grid-column:1/-1">No active leagues yet.</div>';
+    return;
+  }
+  var html2 = '';
+  for (var k = 0; k < LEAGUES.length; k++) {
+    var L = LEAGUES[k];
+    html2 += '<a class="league-card" href="' + esc(L.slug) + '/">' +
+      '<span class="league-card__badge ' + esc(L.status) + '">' + esc(L.status.toUpperCase()) + '</span>' +
+      '<h3 class="league-card__title">' + esc(L.club) + '</h3>' +
+      '<div class="league-card__comp">' + esc(L.comp) + '</div>' +
+      '<div class="league-card__meta">' + esc(L.dates) + '</div>' +
+    '</a>';
+  }
+  grid.innerHTML = html2;
+})();
+</script>
 </body>
 </html>

@@ -100,10 +100,15 @@
       var tabsHolder = document.getElementById('sg-tabs');
       if (tabsHolder) tabsHolder.innerHTML = rendered.tabsHtml;
 
-      // apply theme via comp.theme or league.theme later
       document.documentElement.setAttribute('data-league', slug);
-      if (typeof window.applyTheme === 'function' && (d.comp && d.comp.theme)) {
-        window.applyTheme(d.comp.theme);
+      // Apply theme: comp.theme > league.theme > stored > day-of-year rotation
+      if (window.SnipeThemes) {
+        var compTheme = (d.comp && d.comp.theme) || (d.league && d.league.theme) || '';
+        if (compTheme && typeof window.SnipeThemes.getById === 'function' && window.SnipeThemes.getById(compTheme)) {
+          window.SnipeThemes.apply(compTheme);
+        } else {
+          window.SnipeThemes.init();
+        }
       }
       return d;
     });

@@ -86,6 +86,12 @@
   var bracketMap = {};
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  function normName(s) {
+    if (!s) return '';
+    return String(s).toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
   function fmt(n) { if (n == null || n === '') return '—'; var v = parseInt(n, 10); if (isNaN(v)) return esc(n); if (v === 0) return 'E'; return (v>0?'+':'') + v; }
   function scoreClass(n) { if (n == null) return ''; var v = parseInt(n,10); if (isNaN(v)) return ''; if (v < 0) return 'under'; if (v > 0) return 'over'; return ''; }
   function isCut(p) { return p.status && /CUT|MDF|WD|DQ|MC/i.test(p.status); }
@@ -104,9 +110,22 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.ok || !d.brackets) return;
-        for (var i = 0; i < d.brackets.length; i++) {
-          var b = d.brackets[i];
-          bracketMap[(b.player_name || '').toLowerCase().trim()] = b.bracket;
+        // brackets API returns either array (legacy) or {A:[...], B:[...]}
+        var allBks = [];
+        if (Array.isArray(d.brackets)) {
+          allBks = d.brackets;
+        } else if (typeof d.brackets === 'object') {
+          var keys = ['A','B','C','D'];
+          for (var ki = 0; ki < keys.length; ki++) {
+            var arr = d.brackets[keys[ki]] || [];
+            for (var ai = 0; ai < arr.length; ai++) {
+              allBks.push({ player_name: arr[ai].name || arr[ai].player_name, bracket: keys[ki] });
+            }
+          }
+        }
+        for (var i = 0; i < allBks.length; i++) {
+          var b = allBks[i];
+          bracketMap[normName(b.player_name || '')] = b.bracket;
         }
       })
       .catch(function () {});
@@ -149,7 +168,7 @@
     for (var i = 0; i < allPlayers.length; i++) {
       var p = allPlayers[i];
       var nm = (p.name || '').toLowerCase();
-      var bk = bracketMap[nm] || '';
+      var bk = bracketMap[normName(p.name || '')] || '';
       if (q && nm.indexOf(q) === -1) continue;
       if (bf && bk !== bf) continue;
       var cut = isCut(p);
