@@ -7,15 +7,6 @@
   "logo_url": "https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:r000.png/tournaments/logos/2026/r026.png",
   "status": "open",
   "participants": [],
-  "picks": [
-    {
-      "pid": "1000d30c",
-      "bracket_a": "Scottie Scheffler",
-      "bracket_b": "Viktor Hovland",
-      "bracket_c": "Russell Henley",
-      "bracket_d": "Davis Thompson",
-      "tiebreaker": -12
-    }
-  ],
-  "published_at": "2026-06-06T20:24:47.456Z"
+  "picks": [],
+  "published_at": "2026-06-06T20:29:43.578Z"
 }
