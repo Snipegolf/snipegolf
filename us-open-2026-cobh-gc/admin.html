@@ -53,6 +53,7 @@
 
       <div class="toolbar">
         <input id="search" placeholder="Search name or email…">
+        <button class="btn btn--primary btn--sm" onclick="openNewEntry()">+ Add entry</button>
         <button class="btn btn--ghost btn--sm" onclick="loadList()">↻ Refresh</button>
       </div>
 
@@ -84,7 +85,7 @@
         <select id="m_paid_status"><option value="unpaid">unpaid</option><option value="paid">paid</option></select>
       </label>
       <label>Paid method
-        <select id="m_paid_method"><option value="">—</option><option value="cash">cash</option><option value="revolut">revolut</option><option value="shop">shop</option></select>
+        <select id="m_paid_method"><option value="revolut">revolut</option><option value="cash">cash</option><option value="shop">shop</option><option value="iou">IOU</option></select>
       </label>
     </div>
     <div class="field-row">
@@ -241,6 +242,72 @@
       if (!d.ok) { toast(d.error || 'delete failed', true); return; }
       toast('Deleted'); closeModal(); loadList();
     });
+  };
+
+  var isNewEntry = false;
+
+  window.openNewEntry = function () {
+    isNewEntry = true;
+    currentEntry = null;
+    document.getElementById('modalTitle').textContent = 'Add new entry';
+    document.getElementById('m_display_name').value = '';
+    document.getElementById('m_email').value = '';
+    document.getElementById('m_paid_status').value = 'unpaid';
+    document.getElementById('m_paid_method').value = 'revolut';
+    document.getElementById('m_bracket_a').value = '';
+    document.getElementById('m_bracket_b').value = '';
+    document.getElementById('m_bracket_c').value = '';
+    document.getElementById('m_bracket_d').value = '';
+    document.getElementById('m_tiebreaker').value = '';
+    document.getElementById('m_notes').value = '';
+    document.getElementById('m_reason').value = '';
+    document.getElementById('reasonLabel').style.display = 'none';
+    document.getElementById('modalBg').classList.add('show');
+  };
+
+  // Wrap openModal to clear new-entry flag
+  var _origOpenModal = window.openModal;
+  window.openModal = function (pid) {
+    isNewEntry = false;
+    _origOpenModal(pid);
+  };
+
+  // Wrap saveEntry: if new, POST to admin_entry instead of admin_update
+  var _origSaveEntry = window.saveEntry;
+  window.saveEntry = function () {
+    if (!isNewEntry) { _origSaveEntry(); return; }
+    var name = document.getElementById('m_display_name').value.trim();
+    var email = document.getElementById('m_email').value.trim();
+    if (!name || !email) { toast('Name and email required', true); return; }
+    var payload = {
+      route: 'admin_entry',
+      key: key,
+      league_slug: leagueSlug,
+      display_name: name,
+      email: email,
+      paid_method: document.getElementById('m_paid_method').value,
+      paid_status: document.getElementById('m_paid_status').value,
+      notes: document.getElementById('m_notes').value.trim()
+    };
+    fetch(api('/admin_entry'), {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d.duplicate) {
+        if (confirm('Duplicate found: ' + d.existing.display_name + ' (' + d.existing.email + '). Update existing instead?')) {
+          payload.force_create = true;
+          fetch(api('/admin_entry'), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+            .then(function (r) { return r.json(); }).then(function (d2) {
+              if (!d2.ok) { toast(d2.error || 'failed', true); return; }
+              toast('Updated existing'); closeModal(); loadList();
+            });
+        }
+        return;
+      }
+      if (!d.ok) { toast(d.error || 'add failed', true); return; }
+      toast(d.email_queued ? 'Added (email queued)' : 'Added & email sent');
+      closeModal(); loadList();
+    }).catch(function (e) { toast('Network: ' + e, true); });
   };
 
   window.resendEmail = function () {
