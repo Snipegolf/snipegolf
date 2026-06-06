@@ -311,6 +311,10 @@
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d.error === 'name_clash') {
+        alert(d.message || 'Name already used in this league.');
+        return;
+      }
       if (d.duplicate) {
         if (confirm('Duplicate found: ' + d.existing.display_name + ' (' + d.existing.email + '). Update existing instead?')) {
           payload.force_create = true;
