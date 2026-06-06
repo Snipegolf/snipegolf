@@ -6,38 +6,7 @@
   "revolut_link": "https://revolut.me/badenimdn",
   "logo_url": "https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:r000.png/tournaments/logos/2026/r026.png",
   "status": "open",
-  "participants": [
-    {
-      "pid": "5mzv62t5bv",
-      "display_name": "Baden Maher",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "1000d30c",
-      "display_name": "Lucy Maher",
-      "paid_status": "unpaid"
-    },
-    {
-      "pid": "fake0001",
-      "display_name": "Test Player One",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "fake0002",
-      "display_name": "Test Player Two",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "fake0003",
-      "display_name": "Test Player Three",
-      "paid_status": "unpaid"
-    },
-    {
-      "pid": "fake0004",
-      "display_name": "Test Player Four",
-      "paid_status": "paid"
-    }
-  ],
+  "participants": [],
   "picks": [
     {
       "pid": "1000d30c",
@@ -48,5 +17,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-06-06T20:19:42.965Z"
+  "published_at": "2026-06-06T20:24:47.456Z"
 }
