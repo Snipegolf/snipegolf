@@ -246,6 +246,22 @@
 
   var isNewEntry = false;
 
+  function toggleNewEntryUI(isNew) {
+    // Hide Delete + Resend buttons for new entries (they only make sense for existing)
+    var actions = document.querySelector('.modal-actions');
+    if (!actions) return;
+    var btns = actions.querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) {
+      var t = btns[i].textContent || '';
+      if (t.indexOf('Delete') >= 0 || t.indexOf('Resend') >= 0) {
+        btns[i].style.display = isNew ? 'none' : '';
+      }
+      if (t.indexOf('Save') >= 0) {
+        btns[i].textContent = isNew ? 'Save & email' : 'Save';
+      }
+    }
+  }
+
   window.openNewEntry = function () {
     isNewEntry = true;
     currentEntry = null;
@@ -262,6 +278,7 @@
     document.getElementById('m_notes').value = '';
     document.getElementById('m_reason').value = '';
     document.getElementById('reasonLabel').style.display = 'none';
+    toggleNewEntryUI(true);
     document.getElementById('modalBg').classList.add('show');
   };
 
@@ -269,6 +286,7 @@
   var _origOpenModal = window.openModal;
   window.openModal = function (pid) {
     isNewEntry = false;
+    toggleNewEntryUI(false);
     _origOpenModal(pid);
   };
 
