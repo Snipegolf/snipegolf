@@ -50,7 +50,8 @@
       </div>
 
       <p style="font-size:.78rem;color:var(--muted);text-align:center;margin-top:var(--s-3)">
-        Tap a row to see all 4 picks · Auto-refresh every 90s · Missed cut / WD / DQ = score + 5 ·
+        Tap a row to see all picks · Auto-refresh every 90s · Missed cut / WD / DQ = score + 5 ·
+        <span style="text-decoration:line-through">strikethrough</span> = cut/WD/DQ ·
         ▲/▼ = position move since last hour
       </p>
     </div>
@@ -82,6 +83,12 @@
   function fmt(n) { if (n == null) return '—'; if (n === 0) return 'E'; return (n>0?'+':'') + n; }
   function scoreClass(n) { if (n == null) return ''; if (n < 0) return 'under'; if (n > 0) return 'over'; return ''; }
 
+  function isPickCut(p) {
+    if (p.cut === true) return true;
+    if (p.status && /CUT|MDF|WD|DQ|MC/i.test(String(p.status))) return true;
+    return false;
+  }
+
   function expandRow(tr, picks) {
     var ex = tr.nextElementSibling;
     if (ex && ex.classList.contains('lb-detail-row')) { ex.remove(); tr.classList.remove('expanded'); return; }
@@ -92,11 +99,13 @@
     var grid = '<div class="lb-detail"><div class="lb-detail-grid picks-detail">';
     for (var i = 0; i < picks.length; i++) {
       var p = picks[i];
-      var cutCls = (p.status && /CUT|MDF|WD|DQ|MC/i.test(p.status)) ? 'cut' : '';
+      var cut = isPickCut(p);
+      var cutCls = cut ? 'cut' : '';
+      var cutStyle = cut ? 'text-decoration:line-through;opacity:0.7' : '';
       var sCls = scoreClass(p.score);
       grid += '<div class="pick-card ' + cutCls + '">' +
         '<span class="bk">Bracket ' + esc(p.bracket) + '</span>' +
-        '<span class="pn">' + esc(p.name || '—') + '</span>' +
+        '<span class="pn" style="' + cutStyle + '">' + esc(p.name || '—') + '</span>' +
         '<span class="ps ' + sCls + '">' + (p.score == null ? '—' : fmt(p.score)) + (p.status ? ' · ' + esc(p.status) : '') + '</span>' +
       '</div>';
     }
@@ -146,7 +155,7 @@
         worstPick = sorted[sorted.length-1].name + ' ' + fmt(sorted[sorted.length-1].score);
       }
 
-      var allCut = picksDetail.length > 0 && picksDetail.every(function (p) { return p.status && /CUT|MDF|WD|DQ|MC/i.test(p.status); });
+      var allCut = picksDetail.length > 0 && picksDetail.every(function (p) { return isPickCut(p); });
       var isCutRow = allCut;
 
       html += '<tr class="expandable ' + rowCls + (isCutRow ? ' is-cut' : '') + '" data-picks=\'' + esc(JSON.stringify(picksDetail)) + '\'>' +

@@ -61,7 +61,7 @@
         <div class="flex justify-between items-center mb-4 gap-3 flex-wrap">
           <div>
             <h1 style="margin:0">Leaderboard</h1>
-            <p class="text-muted" style="font-size:.9rem;margin-top:4px">Tap any row to see all eight picks.</p>
+            <p class="text-muted" style="font-size:.9rem;margin-top:4px">Tap any row to see all picks. <span style="text-decoration:line-through">Strikethrough</span> = missed cut / WD / DQ.</p>
           </div>
           <button class="btn btn--ghost btn--sm" id="share-btn"
                   onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText(window.location.href).then(function(){var b=document.getElementById('share-btn');b.textContent='Link copied';setTimeout(function(){b.textContent='Copy public link';},1500);});">
@@ -107,8 +107,8 @@
 
         <div class="msg msg-info mt-5" style="font-size:.82rem">
           <strong style="color:var(--text)">Tiebreakers:</strong>
-          1. Sum of all 8 picks' scores (lower wins) ·
-          2. Most top-place finishes among picks ·
+          1. Sum of all picks' scores (lower wins) ·
+          2. Best finish positions across picks (head-to-head) ·
           3. Closest tiebreaker prediction (under wins).
         </div>
 

@@ -88,12 +88,20 @@
       </label>
     </div>
     <div class="field-row">
-      <label>Bracket A<input id="m_bracket_a"></label>
-      <label>Bracket B<input id="m_bracket_b"></label>
+      <label>Bracket A<input id="m_bracket_a" placeholder="Pick 1"></label>
+      <label>Bracket A2<input id="m_bracket_a2" placeholder="Pick 2 (if 2-pick comp)"></label>
     </div>
     <div class="field-row">
-      <label>Bracket C<input id="m_bracket_c"></label>
-      <label>Bracket D<input id="m_bracket_d"></label>
+      <label>Bracket B<input id="m_bracket_b" placeholder="Pick 1"></label>
+      <label>Bracket B2<input id="m_bracket_b2" placeholder="Pick 2 (if 2-pick comp)"></label>
+    </div>
+    <div class="field-row">
+      <label>Bracket C<input id="m_bracket_c" placeholder="Pick 1"></label>
+      <label>Bracket C2<input id="m_bracket_c2" placeholder="Pick 2 (if 2-pick comp)"></label>
+    </div>
+    <div class="field-row">
+      <label>Bracket D<input id="m_bracket_d" placeholder="Pick 1"></label>
+      <label>Bracket D2<input id="m_bracket_d2" placeholder="Pick 2 (if 2-pick comp)"></label>
     </div>
     <label>Tiebreaker (e.g. -12)<input id="m_tiebreaker"></label>
     <label>Notes<input id="m_notes"></label>
@@ -163,9 +171,13 @@
       var e = entries[i];
       var picks = '';
       if (e.bracket_a) picks += '<span class="pick-chip">A:' + esc(e.bracket_a) + '</span>';
+      if (e.bracket_a2) picks += '<span class="pick-chip">A2:' + esc(e.bracket_a2) + '</span>';
       if (e.bracket_b) picks += '<span class="pick-chip">B:' + esc(e.bracket_b) + '</span>';
+      if (e.bracket_b2) picks += '<span class="pick-chip">B2:' + esc(e.bracket_b2) + '</span>';
       if (e.bracket_c) picks += '<span class="pick-chip">C:' + esc(e.bracket_c) + '</span>';
+      if (e.bracket_c2) picks += '<span class="pick-chip">C2:' + esc(e.bracket_c2) + '</span>';
       if (e.bracket_d) picks += '<span class="pick-chip">D:' + esc(e.bracket_d) + '</span>';
+      if (e.bracket_d2) picks += '<span class="pick-chip">D2:' + esc(e.bracket_d2) + '</span>';
       if (e.tiebreaker) picks += '<span class="pick-chip" style="background:rgba(255,255,255,0.1);color:var(--ink)">TB:' + esc(e.tiebreaker) + '</span>';
       if (!picks) picks = '<span style="color:var(--muted);font-size:.72rem">no picks</span>';
       html += '<tr>' +
@@ -194,9 +206,13 @@
     document.getElementById('m_paid_status').value = currentEntry.paid_status || 'unpaid';
     document.getElementById('m_paid_method').value = currentEntry.paid_method || '';
     document.getElementById('m_bracket_a').value = currentEntry.bracket_a || '';
+    document.getElementById('m_bracket_a2').value = currentEntry.bracket_a2 || '';
     document.getElementById('m_bracket_b').value = currentEntry.bracket_b || '';
+    document.getElementById('m_bracket_b2').value = currentEntry.bracket_b2 || '';
     document.getElementById('m_bracket_c').value = currentEntry.bracket_c || '';
+    document.getElementById('m_bracket_c2').value = currentEntry.bracket_c2 || '';
     document.getElementById('m_bracket_d').value = currentEntry.bracket_d || '';
+    document.getElementById('m_bracket_d2').value = currentEntry.bracket_d2 || '';
     document.getElementById('m_tiebreaker').value = currentEntry.tiebreaker || '';
     document.getElementById('m_notes').value = currentEntry.notes || '';
     document.getElementById('m_reason').value = '';
@@ -213,9 +229,13 @@
       paid_status: document.getElementById('m_paid_status').value,
       paid_method: document.getElementById('m_paid_method').value,
       bracket_a: document.getElementById('m_bracket_a').value.trim(),
+      bracket_a2: document.getElementById('m_bracket_a2').value.trim(),
       bracket_b: document.getElementById('m_bracket_b').value.trim(),
+      bracket_b2: document.getElementById('m_bracket_b2').value.trim(),
       bracket_c: document.getElementById('m_bracket_c').value.trim(),
+      bracket_c2: document.getElementById('m_bracket_c2').value.trim(),
       bracket_d: document.getElementById('m_bracket_d').value.trim(),
+      bracket_d2: document.getElementById('m_bracket_d2').value.trim(),
       tiebreaker: document.getElementById('m_tiebreaker').value.trim(),
       notes: document.getElementById('m_notes').value.trim()
     };

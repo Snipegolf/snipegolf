@@ -157,6 +157,22 @@
     setInterval(tick, 1000);
   }
 
+  function isPickCut(p) {
+    if (!p) return false;
+    if (typeof p === 'string') return false; // legacy string format
+    if (p.cut === true) return true;
+    if (p.status && /CUT|MDF|WD|DQ|MC/i.test(String(p.status))) return true;
+    return false;
+  }
+
+  function fmtPickDisplay(p) {
+    if (!p) return '—';
+    if (typeof p === 'string') return p || '—'; // legacy plain-string format
+    var nm = p.name || '—';
+    var sc = (p.score != null) ? (' ' + fmtScore(p.score)) : '';
+    return nm + sc;
+  }
+
   function expandRow(tr, picks) {
     var existing = tr.nextElementSibling;
     if (existing && existing.classList.contains('lb-detail-row')) {
@@ -169,8 +185,17 @@
     var cell = document.createElement('td');
     cell.colSpan = tr.children.length;
     var grid = '<div class="lb-detail-grid">';
-    for (var i = 0; i < 8; i++) {
-      grid += '<div><span>Pick ' + (i + 1) + '</span><strong>' + esc(picks[i] || '—') + '</strong></div>';
+    for (var i = 0; i < picks.length; i++) {
+      var p = picks[i];
+      var cut = isPickCut(p);
+      var label = typeof p === 'string' ? ('Pick ' + (i + 1)) : (p.bracket ? ('Bracket ' + esc(p.bracket)) : ('Pick ' + (i + 1)));
+      var display = fmtPickDisplay(p);
+      var style = cut ? 'text-decoration:line-through;opacity:0.7' : '';
+      grid += '<div><span>' + label + '</span><strong style="' + style + '">' + esc(display) + '</strong></div>';
+    }
+    // Fill empty slots up to 8 for visual consistency
+    for (var j = picks.length; j < 8; j++) {
+      grid += '<div><span>Pick ' + (j + 1) + '</span><strong style="color:var(--muted)">—</strong></div>';
     }
     grid += '</div>';
     cell.innerHTML = '<div class="lb-detail">' + grid + '</div>';
