@@ -73,6 +73,9 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.5
 
   <div id="payBanner" class="banner warn hidden">
     Payment still pending. <a id="payLink" href="#" style="color:var(--gold);text-decoration:underline">Pay by Revolut →</a>
+    <div id="revolutSignupRow" style="margin-top:8px;font-size:12px;opacity:.75;display:none">
+      Not on Revolut? <a id="revolutSignupLink" href="#" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">Sign up here</a>
+    </div>
   </div>
 
   <div class="card">
@@ -232,6 +235,10 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.5
     if (me && me.paid_status && me.paid_status !== 'paid' && me.revolut_link) {
       $('payBanner').classList.remove('hidden');
       $('payLink').href = me.revolut_link;
+      if (me.revolut_signup_url) {
+        $('revolutSignupLink').href = me.revolut_signup_url;
+        $('revolutSignupRow').style.display = 'block';
+      }
     }
 
     // Countdown to picks open
