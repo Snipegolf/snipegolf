@@ -52,10 +52,14 @@ function sendEntryEmail_(pid) {
     else payLine = 'Entry paid. Thanks.';
   } else if (method === 'revolut') {
     var rlink = league.revolut_link ? String(league.revolut_link) : '';
+    var signupUrl = cfg_('revolut_signup_url') || '';
     if (rlink) {
       payLine = 'Please pay ' + fee + ' via Revolut:\n' + rlink;
     } else {
       payLine = 'Please pay ' + fee + ' via Revolut (link to follow from ' + adminName + ').';
+    }
+    if (signupUrl) {
+      payLine = payLine + '\n\nNot on Revolut? Sign up here:\n' + signupUrl;
     }
   } else if (method === 'iou') {
     payLine = 'Please pay ' + fee + ' cash at the shop or to ' + adminName + '.';
