@@ -15,14 +15,9 @@
     {
       "pid": "52d5fff7",
       "display_name": "Lucy Maher",
-      "paid_status": "unpaid"
-    },
-    {
-      "pid": "012c8ca1",
-      "display_name": "Barry Hughes",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-07T10:39:44.474Z"
+  "published_at": "2026-06-07T10:44:46.441Z"
 }
