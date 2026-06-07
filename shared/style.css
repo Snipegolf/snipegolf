@@ -171,7 +171,11 @@ p  { color: var(--text); }
 .league-logos {
   display: inline-flex; align-items: center; gap: var(--s-3);
 }
-.league-logos img { height: 36px; max-width: 110px; object-fit: contain; }
+.league-logos img { height: 64px; max-width: 160px; object-fit: contain; }
+.league-logos__main { height: 64px !important; max-width: 160px !important; }
+@media (max-width: 640px) {
+  .league-logos img, .league-logos__main { height: 48px !important; max-width: 120px !important; }
+}
 .league-logos__divider {
   display: inline-block;
   width: 1px; height: 24px;

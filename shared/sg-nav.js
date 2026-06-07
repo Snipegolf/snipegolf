@@ -39,7 +39,6 @@
       { id: 'home',        label: 'Home',        href: 'index.html' },
       { id: 'leaderboard', label: 'Leaderboard', href: 'leaderboard.html' },
       { id: 'field',       label: 'Field',       href: 'field.html' },
-      { id: 'picks',       label: 'Enter picks', href: 'picks.html' },
       { id: 'qr',          label: 'QR poster',   href: 'qr.html' }
     ];
 
@@ -58,9 +57,8 @@
       '<div class="league-header">' +
         '<div class="league-header__row">' +
           '<div class="league-logos">' +
-            (clubLogo ? '<img src="' + esc(clubLogo) + '" alt="' + esc(leagueName) + '" onerror="this.style.display=\'none\'">' : '') +
-            (clubLogo && tournamentLogo ? '<span class="league-logos__divider" aria-hidden="true"></span>' : '') +
-            (tournamentLogo ? '<img src="' + esc(tournamentLogo) + '" alt="' + esc(compName) + '" onerror="this.style.display=\'none\'">' : '') +
+            // Show ONE logo: prefer tournament logo (Masters, US Open, PGA), else club logo
+            ((tournamentLogo || clubLogo) ? '<img class="league-logos__main" src="' + esc(tournamentLogo || clubLogo) + '" alt="' + esc(compName || leagueName) + '" onerror="this.style.display=\'none\'">' : '') +
           '</div>' +
           '<div class="league-title">' +
             '<span>' + esc(compName) + '</span>' +
