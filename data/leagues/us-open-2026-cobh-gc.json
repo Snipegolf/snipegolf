@@ -16,8 +16,13 @@
       "pid": "52d5fff7",
       "display_name": "Lucy Maher",
       "paid_status": "paid"
+    },
+    {
+      "pid": "b3cf5f77",
+      "display_name": "Sean Gallagher",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-11T08:24:46.432Z"
+  "published_at": "2026-06-11T08:29:46.058Z"
 }
