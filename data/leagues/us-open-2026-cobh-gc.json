@@ -21,8 +21,13 @@
       "pid": "b3cf5f77",
       "display_name": "Sean Gallagher",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1abecc39",
+      "display_name": "Stephen Ryan",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-12T11:49:48.128Z"
+  "published_at": "2026-06-12T11:54:46.228Z"
 }
