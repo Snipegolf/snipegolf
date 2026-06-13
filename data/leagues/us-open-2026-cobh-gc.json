@@ -66,8 +66,13 @@
       "pid": 48843041,
       "display_name": "Max Kahn",
       "paid_status": "paid"
+    },
+    {
+      "pid": "5a7d3764",
+      "display_name": "Conor Coyne",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T07:04:50.053Z"
+  "published_at": "2026-06-13T07:09:45.856Z"
 }
