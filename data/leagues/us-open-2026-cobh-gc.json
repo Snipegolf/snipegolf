@@ -111,8 +111,13 @@
       "pid": "ba4e2c93",
       "display_name": "Henry Tobin",
       "paid_status": "paid"
+    },
+    {
+      "pid": "3f2a026a",
+      "display_name": "Ian Whelton",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T08:24:43.472Z"
+  "published_at": "2026-06-13T08:29:45.890Z"
 }
