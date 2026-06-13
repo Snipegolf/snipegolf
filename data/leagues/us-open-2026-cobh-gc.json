@@ -116,8 +116,18 @@
       "pid": "3f2a026a",
       "display_name": "Ian Whelton",
       "paid_status": "paid"
+    },
+    {
+      "pid": "adfc1c1e",
+      "display_name": "Colman O' Driscoll",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "b358a07c",
+      "display_name": "Patrick Griffiths",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T08:29:45.890Z"
+  "published_at": "2026-06-13T08:34:43.789Z"
 }
