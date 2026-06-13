@@ -101,8 +101,18 @@
       "pid": "53cb85ce",
       "display_name": "Adam Horgan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "247d2c97",
+      "display_name": "Keith Hickman",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "ba4e2c93",
+      "display_name": "Henry Tobin",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T08:14:48.238Z"
+  "published_at": "2026-06-13T08:19:51.272Z"
 }
