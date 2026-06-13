@@ -61,8 +61,13 @@
       "pid": "13a0f8df",
       "display_name": "David O' Donovan",
       "paid_status": "paid"
+    },
+    {
+      "pid": 48843041,
+      "display_name": "Max Kahn",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T06:54:43.119Z"
+  "published_at": "2026-06-13T06:59:45.381Z"
 }
