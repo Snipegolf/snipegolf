@@ -136,8 +136,13 @@
       "pid": "16271d36",
       "display_name": "Darrian O' Donoghue",
       "paid_status": "paid"
+    },
+    {
+      "pid": "a9adb5ff",
+      "display_name": "Philip O' Connor",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T09:19:44.298Z"
+  "published_at": "2026-06-13T09:24:43.729Z"
 }
