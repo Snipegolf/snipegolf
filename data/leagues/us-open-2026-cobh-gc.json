@@ -141,8 +141,18 @@
       "pid": "a9adb5ff",
       "display_name": "Philip O' Connor",
       "paid_status": "paid"
+    },
+    {
+      "pid": "de0231e8",
+      "display_name": "Patrick Hamilton",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "5998440c",
+      "display_name": "Dallan Clancy",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T09:29:44.304Z"
+  "published_at": "2026-06-13T09:34:46.902Z"
 }
