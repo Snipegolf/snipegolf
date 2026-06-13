@@ -181,8 +181,13 @@
       "pid": "a74f88a9",
       "display_name": "Patrick Walsh",
       "paid_status": "paid"
+    },
+    {
+      "pid": "d1835afa",
+      "display_name": "Ann Lenihan",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T15:29:45.105Z"
+  "published_at": "2026-06-13T15:34:44.661Z"
 }
