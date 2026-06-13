@@ -131,8 +131,13 @@
       "pid": "96ffd639",
       "display_name": "Peter Carroll",
       "paid_status": "paid"
+    },
+    {
+      "pid": "16271d36",
+      "display_name": "Darrian O' Donoghue",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T09:09:43.530Z"
+  "published_at": "2026-06-13T09:14:46.958Z"
 }
