@@ -96,8 +96,13 @@
       "pid": "d0a4bffa",
       "display_name": "John O' Keffee",
       "paid_status": "paid"
+    },
+    {
+      "pid": "53cb85ce",
+      "display_name": "Adam Horgan",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T08:09:45.416Z"
+  "published_at": "2026-06-13T08:14:48.238Z"
 }
