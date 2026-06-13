@@ -71,8 +71,13 @@
       "pid": "5a7d3764",
       "display_name": "Conor Coyne",
       "paid_status": "paid"
+    },
+    {
+      "pid": "b7cecfb8",
+      "display_name": "Kieran Gill",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T07:14:52.418Z"
+  "published_at": "2026-06-13T07:19:44.171Z"
 }
