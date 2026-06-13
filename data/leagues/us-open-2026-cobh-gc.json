@@ -51,8 +51,13 @@
       "pid": "04c87137",
       "display_name": "Brendan Crowley",
       "paid_status": "paid"
+    },
+    {
+      "pid": "9c60e6b2",
+      "display_name": "Robert Fitzpatrick",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T06:29:44.275Z"
+  "published_at": "2026-06-13T06:34:51.150Z"
 }
