@@ -26,8 +26,33 @@
       "pid": "1abecc39",
       "display_name": "Stephen Ryan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "f566adee",
+      "display_name": "Evelyn Ryan",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "e551a205",
+      "display_name": "Jerry O' Connor",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "5f53d9f0",
+      "display_name": "John Barry",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "4ffc49f1",
+      "display_name": "Bertie Crowley",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "04c87137",
+      "display_name": "Brendan Crowley",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T05:54:43.103Z"
+  "published_at": "2026-06-13T05:59:45.583Z"
 }
