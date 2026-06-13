@@ -76,8 +76,13 @@
       "pid": "b7cecfb8",
       "display_name": "Kieran Gill",
       "paid_status": "paid"
+    },
+    {
+      "pid": "4d7b98b9",
+      "display_name": "Grahame Goggin",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T07:30:39.112Z"
+  "published_at": "2026-06-13T07:34:44.462Z"
 }
