@@ -166,8 +166,13 @@
       "pid": "fa8b2860",
       "display_name": "Colm McGinley",
       "paid_status": "paid"
+    },
+    {
+      "pid": "e22a43b6",
+      "display_name": "Eoin O' Donovan",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T09:59:44.037Z"
+  "published_at": "2026-06-13T10:04:43.489Z"
 }
