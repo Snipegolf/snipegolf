@@ -86,8 +86,13 @@
       "pid": "859ebd82",
       "display_name": "Alan Morrison",
       "paid_status": "paid"
+    },
+    {
+      "pid": "77d1cf3e",
+      "display_name": "Niall Tyrrell",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-13T07:44:45.233Z"
+  "published_at": "2026-06-13T07:49:45.311Z"
 }
