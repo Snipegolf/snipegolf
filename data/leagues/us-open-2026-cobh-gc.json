@@ -191,8 +191,13 @@
       "pid": "53b609d0",
       "display_name": "Anthony Murray",
       "paid_status": "paid"
+    },
+    {
+      "pid": "815fbe2c",
+      "display_name": "Frank Morrissey",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T07:34:47.232Z"
+  "published_at": "2026-06-14T07:39:43.422Z"
 }
