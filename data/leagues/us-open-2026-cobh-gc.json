@@ -221,8 +221,13 @@
       "pid": "c6877dff",
       "display_name": "Eoin Ryan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1d14af62",
+      "display_name": "Carol Forrest",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T12:04:45.214Z"
+  "published_at": "2026-06-14T12:09:44.640Z"
 }
