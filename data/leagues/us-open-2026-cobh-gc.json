@@ -186,8 +186,13 @@
       "pid": "d1835afa",
       "display_name": "Ann Lenihan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "53b609d0",
+      "display_name": "Anthony Murray",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T06:44:44.964Z"
+  "published_at": "2026-06-14T06:49:44.176Z"
 }
