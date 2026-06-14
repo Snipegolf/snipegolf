@@ -201,8 +201,13 @@
       "pid": "50242ad1",
       "display_name": "Nick O Riordan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "3d939368",
+      "display_name": "Kieran Flannery",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T09:09:46.673Z"
+  "published_at": "2026-06-14T09:14:44.729Z"
 }
