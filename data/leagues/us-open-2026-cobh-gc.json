@@ -226,8 +226,13 @@
       "pid": "1d14af62",
       "display_name": "Carol Forrest",
       "paid_status": "paid"
+    },
+    {
+      "pid": "b5b0b552",
+      "display_name": "John Dunphy",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T14:34:49.108Z"
+  "published_at": "2026-06-14T14:39:49.883Z"
 }
