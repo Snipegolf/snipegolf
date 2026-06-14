@@ -216,8 +216,13 @@
       "pid": "538d8dab",
       "display_name": "Charlie Rasmussen",
       "paid_status": "paid"
+    },
+    {
+      "pid": "c6877dff",
+      "display_name": "Eoin Ryan",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T11:44:45.668Z"
+  "published_at": "2026-06-14T11:49:45.138Z"
 }
