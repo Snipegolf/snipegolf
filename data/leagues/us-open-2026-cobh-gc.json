@@ -206,8 +206,13 @@
       "pid": "3d939368",
       "display_name": "Kieran Flannery",
       "paid_status": "paid"
+    },
+    {
+      "pid": "f20af151",
+      "display_name": "Antony Lynch",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T09:14:44.729Z"
+  "published_at": "2026-06-14T09:19:44.364Z"
 }
