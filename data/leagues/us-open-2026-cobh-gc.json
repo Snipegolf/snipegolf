@@ -196,8 +196,13 @@
       "pid": "815fbe2c",
       "display_name": "Frank Morrissey",
       "paid_status": "paid"
+    },
+    {
+      "pid": "50242ad1",
+      "display_name": "Nick O Riordan",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T09:04:44.551Z"
+  "published_at": "2026-06-14T09:09:46.673Z"
 }
