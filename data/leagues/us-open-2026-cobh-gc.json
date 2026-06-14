@@ -211,8 +211,13 @@
       "pid": "f20af151",
       "display_name": "Antony Lynch",
       "paid_status": "paid"
+    },
+    {
+      "pid": "538d8dab",
+      "display_name": "Charlie Rasmussen",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-14T10:24:47.705Z"
+  "published_at": "2026-06-14T10:29:47.341Z"
 }
