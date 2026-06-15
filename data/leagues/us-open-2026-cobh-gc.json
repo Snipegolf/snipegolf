@@ -393,7 +393,23 @@
       "bracket_c": "Angel Hidalgo",
       "bracket_d": "Ryuichi Oiwa",
       "tiebreaker": -8
+    },
+    {
+      "pid": "50242ad1",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "David Puig",
+      "bracket_d": "Hamilton Coleman",
+      "tiebreaker": -5
+    },
+    {
+      "pid": 48843041,
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "David Puig",
+      "bracket_d": "Kevin Roy",
+      "tiebreaker": -6
     }
   ],
-  "published_at": "2026-06-15T20:04:43.281Z"
+  "published_at": "2026-06-15T20:09:44.531Z"
 }
