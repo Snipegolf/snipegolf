@@ -433,7 +433,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -14
+    },
+    {
+      "pid": "f7968caf",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Jordan Spieth",
+      "bracket_c": "Neal Shipley",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-15T20:39:44.890Z"
+  "published_at": "2026-06-15T20:44:46.615Z"
 }
