@@ -279,7 +279,15 @@
       "bracket_c": "Jackson Suber",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -8
+    },
+    {
+      "pid": "1abecc39",
+      "bracket_a": "Wyndham Clark",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "Kevin Roy",
+      "tiebreaker": -10
     }
   ],
-  "published_at": "2026-06-15T18:24:45.410Z"
+  "published_at": "2026-06-15T18:29:45.937Z"
 }
