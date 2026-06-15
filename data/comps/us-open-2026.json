@@ -100,9 +100,7 @@
         "name": "Tyrrell Hatton",
         "rank": 18,
         "espn_id": ""
-      }
-    ],
-    "B": [
+      },
       {
         "name": "Sungjae Im",
         "rank": 19,
@@ -197,7 +195,9 @@
         "name": "J.J. Spaun",
         "rank": 37,
         "espn_id": ""
-      },
+      }
+    ],
+    "B": [
       {
         "name": "Jordan Spieth",
         "rank": 38,
@@ -262,9 +262,7 @@
         "name": "Dustin Johnson",
         "rank": 50,
         "espn_id": ""
-      }
-    ],
-    "C": [
+      },
       {
         "name": "Lucas Herbert",
         "rank": 51,
@@ -384,7 +382,9 @@
         "name": "Emiliano Grillo",
         "rank": 74,
         "espn_id": ""
-      },
+      }
+    ],
+    "C": [
       {
         "name": "Max Greyserman",
         "rank": 75,
@@ -504,9 +504,7 @@
         "name": "Ben James",
         "rank": 98,
         "espn_id": ""
-      }
-    ],
-    "D": [
+      },
       {
         "name": "Sudarshan Yellamaraju",
         "rank": 99,
@@ -571,7 +569,9 @@
         "name": "Max McGreevy",
         "rank": 111,
         "espn_id": ""
-      },
+      }
+    ],
+    "D": [
       {
         "name": "J.B. Holmes",
         "rank": 112,
@@ -759,5 +759,5 @@
       }
     ]
   },
-  "published_at": "2026-06-15T09:29:42.682Z"
+  "published_at": "2026-06-15T09:34:42.118Z"
 }
