@@ -441,7 +441,15 @@
       "bracket_c": "Neal Shipley",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -3
+    },
+    {
+      "pid": "a9adb5ff",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": -14
     }
   ],
-  "published_at": "2026-06-15T21:14:45.851Z"
+  "published_at": "2026-06-15T21:19:47.113Z"
 }
