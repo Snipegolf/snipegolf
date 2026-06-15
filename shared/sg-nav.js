@@ -13,8 +13,23 @@
     var qs = new URLSearchParams(location.search);
     if (qs.get('league')) return qs.get('league');
     var parts = location.pathname.replace(/\/$/, '').split('/');
+    var RESERVED = { 'snipegolf': 1, 'picks': 1, 'leaderboard': 1, 'field': 1, 'qr': 1, 'index': 1, 'admin': 1, 'holding': 1, 'shared': 1, 'assets': 1 };
+    // Prefer the longest slug-with-hyphen (leagues look like 'us-open-2026-cobh-gc')
     for (var i = parts.length - 1; i >= 0; i--) {
-      if (/^[a-z0-9][a-z0-9-]+$/.test(parts[i]) && !/\.html?$/.test(parts[i]) && parts[i] !== 'snipegolf') return parts[i];
+      var p = parts[i];
+      if (!p) continue;
+      if (RESERVED[p]) continue;
+      if (/\.html?$/.test(p)) continue;
+      if (!/^[a-z0-9][a-z0-9-]+$/.test(p)) continue;
+      if (p.indexOf('-') === -1) continue;
+      return p;
+    }
+    // Fallback: any non-reserved slug
+    for (var j = parts.length - 1; j >= 0; j--) {
+      var q = parts[j];
+      if (!q || RESERVED[q]) continue;
+      if (/\.html?$/.test(q)) continue;
+      if (/^[a-z0-9][a-z0-9-]+$/.test(q)) return q;
     }
     return '';
   }
