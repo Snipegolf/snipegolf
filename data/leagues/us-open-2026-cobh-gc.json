@@ -361,7 +361,31 @@
       "bracket_c": "Andrew Putnam",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": 15
+    },
+    {
+      "pid": "3d939368",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Johnny Keefer",
+      "bracket_d": "Jackson Koivun",
+      "tiebreaker": -16
+    },
+    {
+      "pid": "96ffd639",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Ryan Fox",
+      "bracket_c": "Jimmy Stanger",
+      "bracket_d": "Chase Kyes",
+      "tiebreaker": 11
+    },
+    {
+      "pid": "53b609d0",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Jordan Spieth",
+      "bracket_c": "David Puig",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": 5
     }
   ],
-  "published_at": "2026-06-15T19:39:44.902Z"
+  "published_at": "2026-06-15T19:44:52.366Z"
 }
