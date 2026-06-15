@@ -417,7 +417,23 @@
       "bracket_c": "Max Greyserman",
       "bracket_d": "Matthew Jordan",
       "tiebreaker": 10
+    },
+    {
+      "pid": "b5b0b552",
+      "bracket_a": "Viktor Hovland",
+      "bracket_b": "Sahith Theegala",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "Filippo Celli",
+      "tiebreaker": -14
+    },
+    {
+      "pid": "04c87137",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Jordan Spieth",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -14
     }
   ],
-  "published_at": "2026-06-15T20:34:52.378Z"
+  "published_at": "2026-06-15T20:39:44.890Z"
 }
