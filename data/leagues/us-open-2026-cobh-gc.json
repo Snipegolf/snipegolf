@@ -241,8 +241,13 @@
       "pid": "874524d8",
       "display_name": "Shauna Gill",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1a436812",
+      "display_name": "Philip Kennedy",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-15T11:54:54.654Z"
+  "published_at": "2026-06-15T11:59:48.332Z"
 }
