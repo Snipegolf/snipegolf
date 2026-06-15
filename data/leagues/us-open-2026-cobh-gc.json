@@ -449,7 +449,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "T.K. Kim",
       "tiebreaker": -14
+    },
+    {
+      "pid": "e341c091",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Sahith Theegala",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "Nathan Kimsey",
+      "tiebreaker": -2
     }
   ],
-  "published_at": "2026-06-15T21:39:45.256Z"
+  "published_at": "2026-06-15T21:44:45.562Z"
 }
