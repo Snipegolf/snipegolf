@@ -261,6 +261,16 @@
       "pid": "0f5f2770",
       "display_name": "Bertie Meehan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "69cda52b",
+      "display_name": "Rob Murphy",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "f44d6dba",
+      "display_name": "Adam Donnachie",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -319,7 +329,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "Taihei Sato",
       "tiebreaker": -16
+    },
+    {
+      "pid": "13a0f8df",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "Rocco Repetto Taylor",
+      "tiebreaker": 8
     }
   ],
-  "published_at": "2026-06-15T19:19:48.023Z"
+  "published_at": "2026-06-15T19:24:47.859Z"
 }
