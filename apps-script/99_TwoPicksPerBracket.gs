@@ -50,9 +50,17 @@
   // Helper: score a single named pick against the score map
   // Returns { score, status, position_int, cut }
   // ─────────────────────────────────────────────────────────────────────
-  function scorePick_(name, scPlayers, winnerScore, penalty, rosterSet) {
+  function scorePick_(name, scPlayers, winnerScore, penalty, rosterSet, started) {
     var fallback = ((winnerScore == null) ? 0 : winnerScore) + penalty;
     if (fallback < penalty) fallback = penalty;
+
+    // Pre-tournament: tournament not yet started -> no penalties, picks just show as pending.
+    if (started === false) {
+      if (!name) {
+        return { score: 0, status: 'pending', position_int: 999, cut: false };
+      }
+      return { name: name, score: 0, status: 'pending', position_int: 999, cut: false };
+    }
 
     if (!name) {
       return { score: fallback, status: 'no_pick', position_int: 999, cut: false };
@@ -134,7 +142,7 @@
 
         // ── Primary pick (bracket_X) ──────────────────────────────────
         var name1 = pk2 ? String(pk2['bracket_' + L] || '') : '';
-        var r1 = scorePick_(name1, sc.players, sc.winnerScore, penalty, rosterSet);
+        var r1 = scorePick_(name1, sc.players, sc.winnerScore, penalty, rosterSet, sc.started);
         if (name1) hasAnyPick = true;
         total += r1.score;
         positionsSorted.push(r1.position_int);
@@ -151,7 +159,7 @@
         // ── Second pick (bracket_X2) — only when ppb === 2 ───────────
         if (ppb === 2) {
           var name2 = pk2 ? String(pk2['bracket_' + L + '2'] || '') : '';
-          var r2 = scorePick_(name2, sc.players, sc.winnerScore, penalty, rosterSet);
+          var r2 = scorePick_(name2, sc.players, sc.winnerScore, penalty, rosterSet, sc.started);
           if (name2) hasAnyPick = true;
           total += r2.score;
           positionsSorted.push(r2.position_int);

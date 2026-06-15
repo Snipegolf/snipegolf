@@ -8,7 +8,7 @@
  * V8 strict, var only, IIFE-safe.
  */
 (function () {
-  var ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard?event=';
+  var ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=';
 
   function parseScore_(s) {
     if (s === 0 || s === '0' || s === 'E' || s === 'e') return 0;

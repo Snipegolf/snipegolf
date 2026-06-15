@@ -61,10 +61,10 @@
   }
 
   function fetchScoresV3_(espnId) {
-    if (!espnId) return { players: {}, winnerScore: null, ts: '' };
+    if (!espnId) return { players: {}, winnerScore: null, ts: '', started: false };
     try {
       var resp = UrlFetchApp.fetch(ESPN_BASE_V3 + encodeURIComponent(espnId), { muteHttpExceptions: true, followRedirects: true });
-      if (resp.getResponseCode() !== 200) return { players: {}, winnerScore: null, ts: '' };
+      if (resp.getResponseCode() !== 200) return { players: {}, winnerScore: null, ts: '', started: false };
       var d = JSON.parse(resp.getContentText());
       var events = d.events || [];
       var ev = null;
@@ -74,10 +74,18 @@
       }
       if (!ev && events.length === 1) ev = events[0];
       if (!ev) ev = events[0];
-      if (!ev) return { players: {}, winnerScore: null, ts: '' };
+      if (!ev) return { players: {}, winnerScore: null, ts: '', started: false };
       var comp = (ev.competitions || [])[0];
-      if (!comp) return { players: {}, winnerScore: null, ts: '' };
+      if (!comp) return { players: {}, winnerScore: null, ts: '', started: false };
       var competitors = comp.competitors || [];
+      // Detect tournament started: status.type.state must be 'in' or 'post' (ESPN convention).
+      // 'pre' = scheduled and not yet underway -> no penalties yet.
+      var stateRaw = '';
+      try { stateRaw = String(((comp.status || {}).type || {}).state || ''); } catch (eState) { stateRaw = ''; }
+      if (!stateRaw) {
+        try { stateRaw = String(((ev.status || {}).type || {}).state || ''); } catch (eState2) { stateRaw = ''; }
+      }
+      var started = (stateRaw === 'in' || stateRaw === 'post') && competitors.length > 0;
       var out = {};
       var best = null;
       for (var i2 = 0; i2 < competitors.length; i2++) {
@@ -113,9 +121,9 @@
         };
         if (!isCut && (best == null || n < best)) best = n;
       }
-      return { players: out, winnerScore: best, ts: new Date().toISOString() };
+      return { players: out, winnerScore: best, ts: new Date().toISOString(), started: started };
     } catch (err) {
-      return { players: {}, winnerScore: null, ts: '', error: String(err) };
+      return { players: {}, winnerScore: null, ts: '', started: false, error: String(err) };
     }
   }
 
