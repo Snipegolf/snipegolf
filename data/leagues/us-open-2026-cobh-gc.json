@@ -385,7 +385,15 @@
       "bracket_c": "David Puig",
       "bracket_d": "T.K. Kim",
       "tiebreaker": 5
+    },
+    {
+      "pid": "b3cf5f77",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "Angel Hidalgo",
+      "bracket_d": "Ryuichi Oiwa",
+      "tiebreaker": -8
     }
   ],
-  "published_at": "2026-06-15T19:44:52.366Z"
+  "published_at": "2026-06-15T19:49:50.298Z"
 }
