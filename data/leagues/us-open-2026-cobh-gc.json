@@ -251,8 +251,13 @@
       "pid": "92d9ad2e",
       "display_name": "Seamus Barry",
       "paid_status": "paid"
+    },
+    {
+      "pid": "d1d79c58",
+      "display_name": "Brian Gleeson",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-06-15T15:54:49.767Z"
+  "published_at": "2026-06-15T15:59:44.871Z"
 }
