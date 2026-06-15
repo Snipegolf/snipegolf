@@ -345,7 +345,23 @@
       "bracket_c": "Kristoffer Reitan",
       "bracket_d": "Kevin Roy",
       "tiebreaker": -7
+    },
+    {
+      "pid": "3f2a026a",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "Arni Sveinsson",
+      "tiebreaker": -4
+    },
+    {
+      "pid": "77d1cf3e",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Andrew Putnam",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": 15
     }
   ],
-  "published_at": "2026-06-15T19:29:45.230Z"
+  "published_at": "2026-06-15T19:34:46.632Z"
 }
