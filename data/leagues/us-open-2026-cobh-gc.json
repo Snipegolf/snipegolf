@@ -295,7 +295,23 @@
       "bracket_c": "Max Greyserman",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -12
+    },
+    {
+      "pid": "8dce63ab",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": -9
+    },
+    {
+      "pid": "1a436812",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Michael Kim",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": -11
     }
   ],
-  "published_at": "2026-06-15T18:44:45.647Z"
+  "published_at": "2026-06-15T18:49:44.452Z"
 }
