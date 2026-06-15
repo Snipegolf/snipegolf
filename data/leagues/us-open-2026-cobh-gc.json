@@ -256,6 +256,11 @@
       "pid": "d1d79c58",
       "display_name": "Brian Gleeson",
       "paid_status": "paid"
+    },
+    {
+      "pid": "0f5f2770",
+      "display_name": "Bertie Meehan",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -268,5 +273,5 @@
       "tiebreaker": -22
     }
   ],
-  "published_at": "2026-06-15T17:44:50.336Z"
+  "published_at": "2026-06-15T17:49:48.051Z"
 }
