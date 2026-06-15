@@ -337,7 +337,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "Rocco Repetto Taylor",
       "tiebreaker": 8
+    },
+    {
+      "pid": "247d2c97",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Sahith Theegala",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "Kevin Roy",
+      "tiebreaker": -7
     }
   ],
-  "published_at": "2026-06-15T19:24:47.859Z"
+  "published_at": "2026-06-15T19:29:45.230Z"
 }
