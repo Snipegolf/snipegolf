@@ -287,7 +287,15 @@
       "bracket_c": "Max Greyserman",
       "bracket_d": "Kevin Roy",
       "tiebreaker": -10
+    },
+    {
+      "pid": "a74f88a9",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -12
     }
   ],
-  "published_at": "2026-06-15T18:39:48.088Z"
+  "published_at": "2026-06-15T18:44:45.647Z"
 }
