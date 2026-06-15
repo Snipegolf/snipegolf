@@ -409,7 +409,15 @@
       "bracket_c": "David Puig",
       "bracket_d": "Kevin Roy",
       "tiebreaker": -6
+    },
+    {
+      "pid": "b7cecfb8",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "Matthew Jordan",
+      "tiebreaker": 10
     }
   ],
-  "published_at": "2026-06-15T20:19:45.345Z"
+  "published_at": "2026-06-15T20:24:45.615Z"
 }
