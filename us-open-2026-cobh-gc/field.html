@@ -105,6 +105,8 @@
     setInterval(function () { loadField(slug); }, REFRESH_MS);
   });
 
+  var bracketRoster = []; // [{name, bracket}] from Brackets tab
+
   function loadBrackets(slug, compSlug) {
     return fetch(WORKER + '/api/brackets?comp=' + encodeURIComponent(compSlug))
       .then(function (r) { return r.json(); })
@@ -125,7 +127,9 @@
         }
         for (var i = 0; i < allBks.length; i++) {
           var b = allBks[i];
-          bracketMap[normName(b.player_name || '')] = b.bracket;
+          var nm = b.player_name || '';
+          bracketMap[normName(nm)] = b.bracket;
+          bracketRoster.push({ name: nm, bracket: b.bracket });
         }
       })
       .catch(function () {});
@@ -140,19 +144,27 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         document.getElementById('sg-status').innerHTML = '<span class="sg-dot"></span>Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-        if (!d.ok || !d.field) {
-          document.getElementById('field-body').innerHTML = '<tr><td colspan="10" class="sg-empty">' + esc(d.error || 'No field data') + '</td></tr>';
-          return;
+        var live = d.ok && Array.isArray(d.field) ? d.field : [];
+        if (live.length > 0) {
+          allPlayers = live;
+          document.getElementById('stat-players').textContent = allPlayers.length;
+          var active = allPlayers.filter(function (p) { return !isCut(p); });
+          if (active.length) {
+            var leader = active[0];
+            document.getElementById('stat-leader').textContent = (leader.name || '').split(' ').slice(-1)[0];
+          }
+          document.getElementById('stat-cut').textContent = d.cut_score != null ? fmt(d.cut_score) : '—';
+          document.getElementById('stat-round').textContent = d.round || '—';
+        } else {
+          // Pre-tournament fallback: render the bracket roster as the field
+          allPlayers = bracketRoster.map(function (b) {
+            return { name: b.name, pos: '', total: null, today: null, thru: '', r1: '', r2: '', r3: '', r4: '', status: '' };
+          });
+          document.getElementById('stat-players').textContent = allPlayers.length;
+          document.getElementById('stat-leader').textContent = '—';
+          document.getElementById('stat-cut').textContent = '—';
+          document.getElementById('stat-round').textContent = '6/18 - 6/21';
         }
-        allPlayers = d.field || [];
-        document.getElementById('stat-players').textContent = allPlayers.length;
-        var active = allPlayers.filter(function (p) { return !isCut(p); });
-        if (active.length) {
-          var leader = active[0];
-          document.getElementById('stat-leader').textContent = (leader.name || '').split(' ').slice(-1)[0];
-        }
-        document.getElementById('stat-cut').textContent = d.cut_score != null ? fmt(d.cut_score) : '—';
-        document.getElementById('stat-round').textContent = d.round || '—';
         applyFilter();
       })
       .catch(function () {
