@@ -258,6 +258,15 @@
       "paid_status": "paid"
     }
   ],
-  "picks": [],
-  "published_at": "2026-06-15T16:09:45.082Z"
+  "picks": [
+    {
+      "pid": "e0c63d9b",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Jordan Spieth",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": 280
+    }
+  ],
+  "published_at": "2026-06-15T16:14:45.576Z"
 }
