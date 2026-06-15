@@ -25,6 +25,15 @@
 (function () {
 
   // ─────────────────────────────────────────────────────────────────────
+  // Helper: wrap return values for Apps Script doGet/doPost
+  // ─────────────────────────────────────────────────────────────────────
+  function jsonOut_(o) {
+    return ContentService
+      .createTextOutput(JSON.stringify(o))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // ─────────────────────────────────────────────────────────────────────
   // Helper: read picks_per_bracket for a given comp_slug (default 2)
   // ─────────────────────────────────────────────────────────────────────
   function picksPerBracket_(compSlug) {
@@ -248,19 +257,19 @@
   function submitPickV2_(body) {
     var pid = body.pid;
     var token = body.t;
-    if (!pid || !token) return { ok: false, error: 'missing_token' };
+    if (!pid || !token) return jsonOut_({ ok: false, error: 'missing_token' });
 
     var part = findRow_(TAB.PARTICIPANTS, 'pid', pid);
-    if (!part) return { ok: false, error: 'pid_not_found' };
-    if (String(part.edit_token) !== String(token)) return { ok: false, error: 'bad_token' };
+    if (!part) return jsonOut_({ ok: false, error: 'pid_not_found' });
+    if (String(part.edit_token) !== String(token)) return jsonOut_({ ok: false, error: 'bad_token' });
 
     var comp = findRow_(TAB.COMPS, 'comp_slug', part.comp_slug);
-    if (!comp) return { ok: false, error: 'comp_not_found' };
-    if (String(comp.status) === 'frozen') return { ok: false, error: 'comp_frozen' };
+    if (!comp) return jsonOut_({ ok: false, error: 'comp_not_found' });
+    if (String(comp.status) === 'frozen') return jsonOut_({ ok: false, error: 'comp_frozen' });
 
     if (comp.picks_lock_datetime) {
       var lock = new Date(comp.picks_lock_datetime);
-      if (!isNaN(lock.getTime()) && new Date() > lock) return { ok: false, error: 'picks_locked' };
+      if (!isNaN(lock.getTime()) && new Date() > lock) return jsonOut_({ ok: false, error: 'picks_locked' });
     }
 
     var ppb = picksPerBracket_(part.comp_slug);
@@ -273,8 +282,8 @@
         var v1 = String(body['bracket_' + L] || '').trim().toLowerCase();
         var v2 = String(body['bracket_' + L + '2'] || '').trim().toLowerCase();
         if (v1 && v2 && v1 === v2) {
-          return { ok: false, error: 'duplicate_pick_in_bracket', bracket: L.toUpperCase(),
-                   message: 'Your two picks in Bracket ' + L.toUpperCase() + ' must be different golfers.' };
+          return jsonOut_({ ok: false, error: 'duplicate_pick_in_bracket', bracket: L.toUpperCase(),
+                   message: 'Your two picks in Bracket ' + L.toUpperCase() + ' must be different golfers.' });
         }
       }
     }
@@ -307,7 +316,7 @@
       appendRow_(TAB.PICKS, payload);
     }
 
-    return { ok: true, pid: pid };
+    return jsonOut_({ ok: true, pid: pid });
   }
 
   // ─────────────────────────────────────────────────────────────────────
