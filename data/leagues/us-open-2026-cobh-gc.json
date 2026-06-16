@@ -69,7 +69,7 @@
     },
     {
       "pid": "5a7d3764",
-      "display_name": "Conor Coyne",
+      "display_name": "Aisling Cooke",
       "paid_status": "paid"
     },
     {
@@ -509,7 +509,15 @@
       "bracket_c": "Sudarshan Yellamaraju",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -7
+    },
+    {
+      "pid": "5a7d3764",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "James Nicholas",
+      "tiebreaker": -2
     }
   ],
-  "published_at": "2026-06-16T09:04:48.047Z"
+  "published_at": "2026-06-16T09:09:52.984Z"
 }
