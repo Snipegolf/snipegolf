@@ -306,6 +306,11 @@
       "pid": "dc36b777",
       "display_name": "Noel Maguire",
       "paid_status": "paid"
+    },
+    {
+      "pid": "92ebdc5d",
+      "display_name": "Marie Flynn",
+      "paid_status": "unpaid"
     }
   ],
   "picks": [
@@ -401,9 +406,9 @@
       "pid": "3d939368",
       "bracket_a": "Rory McIlroy",
       "bracket_b": "Patrick Reed",
-      "bracket_c": "Johnny Keefer",
-      "bracket_d": "Jackson Koivun",
-      "tiebreaker": -16
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": -3
     },
     {
       "pid": "96ffd639",
@@ -606,5 +611,5 @@
       "tiebreaker": 11
     }
   ],
-  "published_at": "2026-06-16T15:29:44.887Z"
+  "published_at": "2026-06-16T15:34:44.828Z"
 }
