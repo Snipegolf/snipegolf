@@ -564,7 +564,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "James Nicholas",
       "tiebreaker": -3
+    },
+    {
+      "pid": "708a6a28",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Si Woo Kim",
+      "bracket_c": "Adrien Saddier",
+      "bracket_d": "Greyson Leach",
+      "tiebreaker": -9
     }
   ],
-  "published_at": "2026-06-16T11:19:50.787Z"
+  "published_at": "2026-06-16T11:24:45.192Z"
 }
