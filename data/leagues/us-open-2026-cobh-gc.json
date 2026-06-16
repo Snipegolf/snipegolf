@@ -588,7 +588,15 @@
       "bracket_c": "Jackson Suber",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": 11
+    },
+    {
+      "pid": "baa56e51",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Jordan Spieth",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "Ryuichi Oiwa",
+      "tiebreaker": -2
     }
   ],
-  "published_at": "2026-06-16T12:54:49.648Z"
+  "published_at": "2026-06-16T12:59:51.834Z"
 }
