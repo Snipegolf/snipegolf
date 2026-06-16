@@ -493,7 +493,23 @@
       "bracket_c": "Michael Brennan",
       "bracket_d": "Brandon Holtz",
       "tiebreaker": 3
+    },
+    {
+      "pid": "1d14af62",
+      "bracket_a": "Ludvig Aberg",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "Michael Brennan",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": 13
+    },
+    {
+      "pid": "c361cc1c",
+      "bracket_a": "Brooks Koepka",
+      "bracket_b": "Kurt Kitayama",
+      "bracket_c": "Sudarshan Yellamaraju",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -7
     }
   ],
-  "published_at": "2026-06-16T08:44:50.770Z"
+  "published_at": "2026-06-16T08:49:47.948Z"
 }
