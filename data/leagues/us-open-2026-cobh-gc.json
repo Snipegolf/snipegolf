@@ -291,6 +291,11 @@
       "pid": "c361cc1c",
       "display_name": "Finn Twomey",
       "paid_status": "paid"
+    },
+    {
+      "pid": "708a6a28",
+      "display_name": "Ross McAuliffe",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -533,7 +538,15 @@
       "bracket_c": "Matti Schmid",
       "bracket_d": "Jake Sollon",
       "tiebreaker": -14
+    },
+    {
+      "pid": "5f53d9f0",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "Sudarshan Yellamaraju",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-16T10:09:45.654Z"
+  "published_at": "2026-06-16T10:14:45.782Z"
 }
