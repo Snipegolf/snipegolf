@@ -659,7 +659,15 @@
       "bracket_c": "Niklas Norgaard",
       "bracket_d": "Brandon Holtz",
       "tiebreaker": -2
+    },
+    {
+      "pid": "7cd721fd",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Jordan Spieth",
+      "bracket_c": "David Puig",
+      "bracket_d": "Jake Peacock",
+      "tiebreaker": -9
     }
   ],
-  "published_at": "2026-06-16T21:59:42.875Z"
+  "published_at": "2026-06-16T22:04:48.051Z"
 }
