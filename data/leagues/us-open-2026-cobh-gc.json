@@ -517,7 +517,23 @@
       "bracket_c": "Kristoffer Reitan",
       "bracket_d": "James Nicholas",
       "tiebreaker": -2
+    },
+    {
+      "pid": "9061cd43",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -4
+    },
+    {
+      "pid": "52d5fff7",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Adam Scott",
+      "bracket_c": "Matti Schmid",
+      "bracket_d": "Jake Sollon",
+      "tiebreaker": -14
     }
   ],
-  "published_at": "2026-06-16T09:09:52.984Z"
+  "published_at": "2026-06-16T09:14:45.516Z"
 }
