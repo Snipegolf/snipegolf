@@ -667,7 +667,15 @@
       "bracket_c": "David Puig",
       "bracket_d": "Jake Peacock",
       "tiebreaker": -9
+    },
+    {
+      "pid": "4b534ec7",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": 1
     }
   ],
-  "published_at": "2026-06-16T22:04:48.051Z"
+  "published_at": "2026-06-16T22:09:56.873Z"
 }
