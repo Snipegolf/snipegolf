@@ -276,6 +276,11 @@
       "pid": "4b534ec7",
       "display_name": "James O' Donoghue",
       "paid_status": "paid"
+    },
+    {
+      "pid": "9061cd43",
+      "display_name": "Elaine O' Flynn",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -480,5 +485,5 @@
       "tiebreaker": 3
     }
   ],
-  "published_at": "2026-06-16T08:34:43.615Z"
+  "published_at": "2026-06-16T08:39:51.866Z"
 }
