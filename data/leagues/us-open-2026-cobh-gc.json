@@ -465,7 +465,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -11
+    },
+    {
+      "pid": "4ffc49f1",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Si Woo Kim",
+      "bracket_c": "Michael Brennan",
+      "bracket_d": "Brandon Holtz",
+      "tiebreaker": 3
     }
   ],
-  "published_at": "2026-06-16T08:24:44.624Z"
+  "published_at": "2026-06-16T08:29:43.413Z"
 }
