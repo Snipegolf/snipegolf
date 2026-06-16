@@ -580,7 +580,15 @@
       "bracket_c": "David Puig",
       "bracket_d": "Jackson Koivun",
       "tiebreaker": -4
+    },
+    {
+      "pid": "dc36b777",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Adam Scott",
+      "bracket_c": "Jackson Suber",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": 11
     }
   ],
-  "published_at": "2026-06-16T11:34:47.197Z"
+  "published_at": "2026-06-16T11:39:49.746Z"
 }
