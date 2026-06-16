@@ -635,7 +635,15 @@
       "bracket_c": "Kristoffer Reitan",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -14
+    },
+    {
+      "pid": "815fbe2c",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Alex Smalley",
+      "bracket_c": "Matti Schmid",
+      "bracket_d": "Matthew Jordan",
+      "tiebreaker": -15
     }
   ],
-  "published_at": "2026-06-16T18:44:45.552Z"
+  "published_at": "2026-06-16T18:49:44.369Z"
 }
