@@ -301,6 +301,11 @@
       "pid": "6d022200",
       "display_name": "Gary Halpin",
       "paid_status": "paid"
+    },
+    {
+      "pid": "dc36b777",
+      "display_name": "Noel Maguire",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -551,7 +556,15 @@
       "bracket_c": "Sudarshan Yellamaraju",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -3
+    },
+    {
+      "pid": "6d022200",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Jordan Spieth",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "James Nicholas",
+      "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-16T11:15:24.037Z"
+  "published_at": "2026-06-16T11:19:50.787Z"
 }
