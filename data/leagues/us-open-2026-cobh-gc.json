@@ -296,6 +296,11 @@
       "pid": "708a6a28",
       "display_name": "Ross McAuliffe",
       "paid_status": "paid"
+    },
+    {
+      "pid": "6d022200",
+      "display_name": "Gary Halpin",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -548,5 +553,5 @@
       "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-16T11:09:46.065Z"
+  "published_at": "2026-06-16T11:15:24.037Z"
 }
