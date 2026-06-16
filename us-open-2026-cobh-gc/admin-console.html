@@ -74,7 +74,7 @@
               <th>Name</th>
               <th class="hide-sm">Email</th>
               <th>Paid</th>
-              <th class="hide-sm">Picks (A/B/C/D · TB)</th>
+              <th class="hide-sm">Picks (8 + TB)</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -110,12 +110,20 @@
       </label>
     </div>
     <div class="field-row">
-      <label>Bracket A<select id="m_bracket_a"><option value="">— pick player —</option></select></label>
-      <label>Bracket B<select id="m_bracket_b"><option value="">— pick player —</option></select></label>
+      <label>Bracket A · Pick 1<select id="m_bracket_a"><option value="">— pick player —</option></select></label>
+      <label>Bracket A · Pick 2<select id="m_bracket_a2"><option value="">— pick player —</option></select></label>
     </div>
     <div class="field-row">
-      <label>Bracket C<select id="m_bracket_c"><option value="">— pick player —</option></select></label>
-      <label>Bracket D<select id="m_bracket_d"><option value="">— pick player —</option></select></label>
+      <label>Bracket B · Pick 1<select id="m_bracket_b"><option value="">— pick player —</option></select></label>
+      <label>Bracket B · Pick 2<select id="m_bracket_b2"><option value="">— pick player —</option></select></label>
+    </div>
+    <div class="field-row">
+      <label>Bracket C · Pick 1<select id="m_bracket_c"><option value="">— pick player —</option></select></label>
+      <label>Bracket C · Pick 2<select id="m_bracket_c2"><option value="">— pick player —</option></select></label>
+    </div>
+    <div class="field-row">
+      <label>Bracket D · Pick 1<select id="m_bracket_d"><option value="">— pick player —</option></select></label>
+      <label>Bracket D · Pick 2<select id="m_bracket_d2"><option value="">— pick player —</option></select></label>
     </div>
     <label>Tiebreaker (e.g. -12)<input id="m_tiebreaker"></label>
     <label>Notes<input id="m_notes"></label>
@@ -247,9 +255,13 @@
       var e = entries[i];
       var picks = '';
       if (e.bracket_a) picks += '<span class="pick-chip">A:' + esc(e.bracket_a) + '</span>';
+      if (e.bracket_a2) picks += '<span class="pick-chip">A2:' + esc(e.bracket_a2) + '</span>';
       if (e.bracket_b) picks += '<span class="pick-chip">B:' + esc(e.bracket_b) + '</span>';
+      if (e.bracket_b2) picks += '<span class="pick-chip">B2:' + esc(e.bracket_b2) + '</span>';
       if (e.bracket_c) picks += '<span class="pick-chip">C:' + esc(e.bracket_c) + '</span>';
+      if (e.bracket_c2) picks += '<span class="pick-chip">C2:' + esc(e.bracket_c2) + '</span>';
       if (e.bracket_d) picks += '<span class="pick-chip">D:' + esc(e.bracket_d) + '</span>';
+      if (e.bracket_d2) picks += '<span class="pick-chip">D2:' + esc(e.bracket_d2) + '</span>';
       if (e.tiebreaker) picks += '<span class="pick-chip" style="background:rgba(255,255,255,0.1);color:var(--ink)">TB:' + esc(e.tiebreaker) + '</span>';
       if (!picks) picks = '<span style="color:var(--muted);font-size:.72rem">no picks</span>';
       html += '<tr>' +
@@ -278,9 +290,13 @@
     document.getElementById('m_paid_status').value = currentEntry.paid_status || 'unpaid';
     document.getElementById('m_paid_method').value = currentEntry.paid_method || '';
     fillBracketSelect('m_bracket_a', 'A', currentEntry.bracket_a || '');
+    fillBracketSelect('m_bracket_a2', 'A', currentEntry.bracket_a2 || '');
     fillBracketSelect('m_bracket_b', 'B', currentEntry.bracket_b || '');
+    fillBracketSelect('m_bracket_b2', 'B', currentEntry.bracket_b2 || '');
     fillBracketSelect('m_bracket_c', 'C', currentEntry.bracket_c || '');
+    fillBracketSelect('m_bracket_c2', 'C', currentEntry.bracket_c2 || '');
     fillBracketSelect('m_bracket_d', 'D', currentEntry.bracket_d || '');
+    fillBracketSelect('m_bracket_d2', 'D', currentEntry.bracket_d2 || '');
     document.getElementById('m_tiebreaker').value = currentEntry.tiebreaker || '';
     document.getElementById('m_notes').value = currentEntry.notes || '';
     document.getElementById('m_reason').value = '';
@@ -297,9 +313,13 @@
       paid_status: document.getElementById('m_paid_status').value,
       paid_method: document.getElementById('m_paid_method').value,
       bracket_a: document.getElementById('m_bracket_a').value,
+      bracket_a2: document.getElementById('m_bracket_a2').value,
       bracket_b: document.getElementById('m_bracket_b').value,
+      bracket_b2: document.getElementById('m_bracket_b2').value,
       bracket_c: document.getElementById('m_bracket_c').value,
+      bracket_c2: document.getElementById('m_bracket_c2').value,
       bracket_d: document.getElementById('m_bracket_d').value,
+      bracket_d2: document.getElementById('m_bracket_d2').value,
       tiebreaker: document.getElementById('m_tiebreaker').value.trim(),
       notes: document.getElementById('m_notes').value.trim()
     };
