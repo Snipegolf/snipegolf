@@ -311,6 +311,11 @@
       "pid": "92ebdc5d",
       "display_name": "Marie Flynn",
       "paid_status": "unpaid"
+    },
+    {
+      "pid": "7cd721fd",
+      "display_name": "Sean Tobin",
+      "paid_status": "unpaid"
     }
   ],
   "picks": [
@@ -619,5 +624,5 @@
       "tiebreaker": 14
     }
   ],
-  "published_at": "2026-06-16T16:34:50.016Z"
+  "published_at": "2026-06-16T16:39:47.448Z"
 }
