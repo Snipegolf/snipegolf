@@ -627,7 +627,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": 14
+    },
+    {
+      "pid": "538d8dab",
+      "bracket_a": "Xander Schauffele",
+      "bracket_b": "Si Woo Kim",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -14
     }
   ],
-  "published_at": "2026-06-16T17:39:45.681Z"
+  "published_at": "2026-06-16T17:44:44.255Z"
 }
