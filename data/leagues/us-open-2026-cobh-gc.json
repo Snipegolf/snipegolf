@@ -281,6 +281,16 @@
       "pid": "9061cd43",
       "display_name": "Elaine O' Flynn",
       "paid_status": "paid"
+    },
+    {
+      "pid": "e3975e47",
+      "display_name": "Paddy Donnachie",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "c361cc1c",
+      "display_name": "Finn Twomey",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -485,5 +495,5 @@
       "tiebreaker": 3
     }
   ],
-  "published_at": "2026-06-16T08:39:51.866Z"
+  "published_at": "2026-06-16T08:44:50.770Z"
 }
