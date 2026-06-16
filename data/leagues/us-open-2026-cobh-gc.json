@@ -643,7 +643,15 @@
       "bracket_c": "Matti Schmid",
       "bracket_d": "Matthew Jordan",
       "tiebreaker": -15
+    },
+    {
+      "pid": "0f5f2770",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Cole Hammer",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": 16
     }
   ],
-  "published_at": "2026-06-16T20:44:44.176Z"
+  "published_at": "2026-06-16T20:49:51.559Z"
 }
