@@ -572,7 +572,15 @@
       "bracket_c": "Adrien Saddier",
       "bracket_d": "Greyson Leach",
       "tiebreaker": -9
+    },
+    {
+      "pid": "e22a43b6",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "David Puig",
+      "bracket_d": "Jackson Koivun",
+      "tiebreaker": -4
     }
   ],
-  "published_at": "2026-06-16T11:29:45.883Z"
+  "published_at": "2026-06-16T11:34:47.197Z"
 }
