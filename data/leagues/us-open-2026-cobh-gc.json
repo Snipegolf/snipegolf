@@ -316,6 +316,11 @@
       "pid": "7cd721fd",
       "display_name": "Sean Tobin",
       "paid_status": "unpaid"
+    },
+    {
+      "pid": "8ce96b4a",
+      "display_name": "Louis Kahn",
+      "paid_status": "unpaid"
     }
   ],
   "picks": [
@@ -624,5 +629,5 @@
       "tiebreaker": 14
     }
   ],
-  "published_at": "2026-06-16T17:14:45.884Z"
+  "published_at": "2026-06-16T17:19:46.916Z"
 }
