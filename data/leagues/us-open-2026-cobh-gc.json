@@ -651,7 +651,15 @@
       "bracket_c": "Cole Hammer",
       "bracket_d": "T.K. Kim",
       "tiebreaker": 16
+    },
+    {
+      "pid": "f566adee",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Niklas Norgaard",
+      "bracket_d": "Brandon Holtz",
+      "tiebreaker": -2
     }
   ],
-  "published_at": "2026-06-16T21:14:48.832Z"
+  "published_at": "2026-06-16T21:19:44.898Z"
 }
