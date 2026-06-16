@@ -596,7 +596,15 @@
       "bracket_c": "Max Greyserman",
       "bracket_d": "Ryuichi Oiwa",
       "tiebreaker": -2
+    },
+    {
+      "pid": "fa8b2860",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Sahith Theegala",
+      "bracket_c": "Jackson Suber",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": 11
     }
   ],
-  "published_at": "2026-06-16T13:14:51.346Z"
+  "published_at": "2026-06-16T13:19:46.635Z"
 }
