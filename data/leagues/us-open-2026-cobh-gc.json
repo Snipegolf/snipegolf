@@ -271,6 +271,11 @@
       "pid": "f44d6dba",
       "display_name": "Adam Donnachie",
       "paid_status": "paid"
+    },
+    {
+      "pid": "4b534ec7",
+      "display_name": "James O' Donoghue",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -475,5 +480,5 @@
       "tiebreaker": 3
     }
   ],
-  "published_at": "2026-06-16T08:29:43.413Z"
+  "published_at": "2026-06-16T08:34:43.615Z"
 }
