@@ -746,7 +746,15 @@
       "bracket_c": "Max Greyserman",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -2
+    },
+    {
+      "pid": "de0231e8",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Nicolai Hojgaard",
+      "bracket_c": "David Puig",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-17T12:59:44.826Z"
+  "published_at": "2026-06-17T13:04:43.796Z"
 }
