@@ -853,7 +853,15 @@
       "bracket_c": "Kristoffer Reitan",
       "bracket_d": "James Nicholas",
       "tiebreaker": 1
+    },
+    {
+      "pid": "f44d6dba",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Kurt Kitayama",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "Miles Russell",
+      "tiebreaker": -2
     }
   ],
-  "published_at": "2026-06-17T19:14:48.104Z"
+  "published_at": "2026-06-17T19:19:47.202Z"
 }
