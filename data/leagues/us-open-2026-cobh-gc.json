@@ -720,12 +720,12 @@
     },
     {
       "pid": "9a9fb860",
-      "bracket_a": "",
-      "bracket_b": "",
-      "bracket_c": "",
-      "bracket_d": "",
-      "tiebreaker": ""
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Jordan Spieth",
+      "bracket_c": "Matti Schmid",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -7
     }
   ],
-  "published_at": "2026-06-17T10:04:45.956Z"
+  "published_at": "2026-06-17T10:09:43.764Z"
 }
