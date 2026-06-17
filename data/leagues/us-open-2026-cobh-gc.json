@@ -321,6 +321,11 @@
       "pid": "8ce96b4a",
       "display_name": "Louis Kahn",
       "paid_status": "unpaid"
+    },
+    {
+      "pid": "vusfio61it",
+      "display_name": "Sanjay Nayak",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -677,5 +682,5 @@
       "tiebreaker": 1
     }
   ],
-  "published_at": "2026-06-17T05:19:43.768Z"
+  "published_at": "2026-06-17T05:24:44.216Z"
 }
