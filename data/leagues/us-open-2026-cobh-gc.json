@@ -356,6 +356,11 @@
       "pid": "5c346de4",
       "display_name": "Thomas Plunkett",
       "paid_status": "paid"
+    },
+    {
+      "pid": "9363e7b4",
+      "display_name": "Bryan Walsh",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -790,7 +795,23 @@
       "bracket_c": "Kristoffer Reitan",
       "bracket_d": "Arni Sveinsson",
       "tiebreaker": -10
+    },
+    {
+      "pid": "91e9889a",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Sudarshan Yellamaraju",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": -6
+    },
+    {
+      "pid": "9c60e6b2",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Sudarshan Yellamaraju",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": 0
     }
   ],
-  "published_at": "2026-06-17T16:24:46.554Z"
+  "published_at": "2026-06-17T16:29:46.576Z"
 }
