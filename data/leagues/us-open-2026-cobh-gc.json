@@ -696,7 +696,15 @@
       "bracket_c": "Max Greyserman",
       "bracket_d": "Kevin Roy",
       "tiebreaker": -1
+    },
+    {
+      "pid": "vusfio61it",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "Kevin Roy",
+      "tiebreaker": 1
     }
   ],
-  "published_at": "2026-06-17T08:39:43.296Z"
+  "published_at": "2026-06-17T08:44:44.661Z"
 }
