@@ -824,7 +824,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "Logan Reilly",
       "tiebreaker": 13
+    },
+    {
+      "pid": "5c346de4",
+      "bracket_a": "Jon Rahm",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "David Puig",
+      "bracket_d": "T.K. Kim",
+      "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-17T16:54:50.728Z"
+  "published_at": "2026-06-17T16:59:44.394Z"
 }
