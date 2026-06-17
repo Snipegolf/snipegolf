@@ -336,6 +336,11 @@
       "pid": "9823a94b",
       "display_name": "John O Halloran",
       "paid_status": "unpaid"
+    },
+    {
+      "pid": "91e9889a",
+      "display_name": "Val Keenan",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -764,5 +769,5 @@
       "tiebreaker": -5
     }
   ],
-  "published_at": "2026-06-17T15:29:46.560Z"
+  "published_at": "2026-06-17T15:34:50.782Z"
 }
