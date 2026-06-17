@@ -52,6 +52,7 @@
     var picksLink = opts.picksUrlOverride || (slug + '/picks.html');
     var nav = [
       { id: 'home',        label: 'Home',        href: 'index.html' },
+      { id: 'brackets',    label: 'Brackets',    href: 'brackets.html' },
       { id: 'leaderboard', label: 'Leaderboard', href: 'leaderboard.html' },
       { id: 'field',       label: 'Field',       href: 'field.html' },
       { id: 'qr',          label: 'QR poster',   href: 'qr.html' }
