@@ -481,7 +481,7 @@
       "bracket_b": "Brian Harman",
       "bracket_c": "Max Greyserman",
       "bracket_d": "Matthew Jordan",
-      "tiebreaker": 10
+      "tiebreaker": 5
     },
     {
       "pid": "b5b0b552",
@@ -756,5 +756,5 @@
       "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-17T14:19:46.202Z"
+  "published_at": "2026-06-17T14:24:48.474Z"
 }
