@@ -709,7 +709,15 @@
       "bracket_c": "Kristoffer Reitan",
       "bracket_d": "Kevin Roy",
       "tiebreaker": 1
+    },
+    {
+      "pid": "859ebd82",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Si Woo Kim",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "Ugo Coussaud",
+      "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-17T09:54:43.294Z"
+  "published_at": "2026-06-17T09:59:45.572Z"
 }
