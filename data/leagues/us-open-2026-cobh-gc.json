@@ -777,7 +777,15 @@
       "bracket_c": "Laurie Canter",
       "bracket_d": "T.K. Kim",
       "tiebreaker": -5
+    },
+    {
+      "pid": "f20af151",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "Arni Sveinsson",
+      "tiebreaker": -10
     }
   ],
-  "published_at": "2026-06-17T15:54:46.228Z"
+  "published_at": "2026-06-17T15:59:51.011Z"
 }
