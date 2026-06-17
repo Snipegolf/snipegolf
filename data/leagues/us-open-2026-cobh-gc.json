@@ -330,7 +330,7 @@
     {
       "pid": "9a9fb860",
       "display_name": "Tom Cronin",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -717,7 +717,15 @@
       "bracket_c": "Max Greyserman",
       "bracket_d": "Ugo Coussaud",
       "tiebreaker": -3
+    },
+    {
+      "pid": "9a9fb860",
+      "bracket_a": "",
+      "bracket_b": "",
+      "bracket_c": "",
+      "bracket_d": "",
+      "tiebreaker": ""
     }
   ],
-  "published_at": "2026-06-17T09:59:45.572Z"
+  "published_at": "2026-06-17T10:04:45.956Z"
 }
