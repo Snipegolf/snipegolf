@@ -326,6 +326,11 @@
       "pid": "vusfio61it",
       "display_name": "Sanjay Nayak",
       "paid_status": "paid"
+    },
+    {
+      "pid": "9a9fb860",
+      "display_name": "Tom Cronin",
+      "paid_status": "unpaid"
     }
   ],
   "picks": [
@@ -706,5 +711,5 @@
       "tiebreaker": 1
     }
   ],
-  "published_at": "2026-06-17T09:49:47.088Z"
+  "published_at": "2026-06-17T09:54:43.294Z"
 }
