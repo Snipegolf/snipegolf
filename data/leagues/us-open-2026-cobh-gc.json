@@ -716,7 +716,7 @@
       "bracket_b": "Jordan Spieth",
       "bracket_c": "David Puig",
       "bracket_d": "Jake Peacock",
-      "tiebreaker": -4
+      "tiebreaker": -2
     },
     {
       "pid": "4b534ec7",
@@ -855,5 +855,5 @@
       "tiebreaker": 1
     }
   ],
-  "published_at": "2026-06-17T17:39:45.280Z"
+  "published_at": "2026-06-17T17:44:44.998Z"
 }
