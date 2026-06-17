@@ -345,7 +345,7 @@
     {
       "pid": "2bededdd",
       "display_name": "Rosaire Higgins",
-      "paid_status": "paid"
+      "paid_status": "unpaid"
     },
     {
       "pid": "107eae3c",
@@ -779,5 +779,5 @@
       "tiebreaker": -5
     }
   ],
-  "published_at": "2026-06-17T15:44:47.417Z"
+  "published_at": "2026-06-17T15:49:46.004Z"
 }
