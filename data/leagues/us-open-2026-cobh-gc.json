@@ -365,12 +365,12 @@
     {
       "pid": 17170872,
       "display_name": "Mitar Nikolic",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     },
     {
       "pid": "0ad5676c",
       "display_name": "Shane Ryan",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -895,5 +895,5 @@
       "tiebreaker": -7
     }
   ],
-  "published_at": "2026-06-17T21:19:43.781Z"
+  "published_at": "2026-06-17T21:24:48.880Z"
 }
