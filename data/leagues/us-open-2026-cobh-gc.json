@@ -376,6 +376,11 @@
       "pid": "2105cde0",
       "display_name": "Evan Baumann",
       "paid_status": "paid"
+    },
+    {
+      "pid": "7c37a2fb",
+      "display_name": "Brendan Daly",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -908,5 +913,5 @@
       "tiebreaker": -3
     }
   ],
-  "published_at": "2026-06-18T07:44:44.551Z"
+  "published_at": "2026-06-18T07:49:45.226Z"
 }
