@@ -335,7 +335,7 @@
     {
       "pid": "9823a94b",
       "display_name": "John O Halloran",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     },
     {
       "pid": "91e9889a",
@@ -895,5 +895,5 @@
       "tiebreaker": -7
     }
   ],
-  "published_at": "2026-06-18T07:09:50.252Z"
+  "published_at": "2026-06-18T07:14:44.038Z"
 }
