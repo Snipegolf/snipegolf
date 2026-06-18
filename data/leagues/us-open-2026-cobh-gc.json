@@ -898,7 +898,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "Kevin Roy",
       "tiebreaker": -7
+    },
+    {
+      "pid": "2105cde0",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Sahith Theegala",
+      "bracket_c": "Angel Hidalgo",
+      "bracket_d": "",
+      "tiebreaker": ""
     }
   ],
-  "published_at": "2026-06-18T07:19:45.768Z"
+  "published_at": "2026-06-18T07:24:46.199Z"
 }
