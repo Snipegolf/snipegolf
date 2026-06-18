@@ -927,7 +927,15 @@
       "bracket_c": "Max Greyserman",
       "bracket_d": "Matthew Jordan",
       "tiebreaker": -3
+    },
+    {
+      "pid": "e551a205",
+      "bracket_a": "Viktor Hovland",
+      "bracket_b": "Billy Horschel",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -6
     }
   ],
-  "published_at": "2026-06-18T09:29:43.023Z"
+  "published_at": "2026-06-18T09:34:46.254Z"
 }
