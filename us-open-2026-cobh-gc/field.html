@@ -176,6 +176,19 @@
     var q = (document.getElementById('field-search').value || '').toLowerCase().trim();
     var bf = document.getElementById('field-bracket').value;
     var cf = document.getElementById('field-cut').value;
+    // Sort lowest score first: use total if available, else today.
+    // Cut/WD/DQ go to bottom. Scheduled (today==0, thru==0) go to bottom too.
+    allPlayers.sort(function (a, b) {
+      var aCut = isCut(a), bCut = isCut(b);
+      if (aCut !== bCut) return aCut ? 1 : -1;
+      var aSched = !a.thru || a.thru === 0 || a.thru === '0';
+      var bSched = !b.thru || b.thru === 0 || b.thru === '0';
+      if (aSched !== bSched) return aSched ? 1 : -1;
+      var av = a.total != null ? a.total : (a.today != null ? a.today : 999);
+      var bv = b.total != null ? b.total : (b.today != null ? b.today : 999);
+      if (av !== bv) return av - bv;
+      return (a.name || '').localeCompare(b.name || '');
+    });
     var rows = '';
     for (var i = 0; i < allPlayers.length; i++) {
       var p = allPlayers[i];
