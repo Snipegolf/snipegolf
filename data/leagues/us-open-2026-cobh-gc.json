@@ -943,7 +943,31 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -6
+    },
+    {
+      "pid": "b358a07c",
+      "bracket_a": "Sam Burns",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "Zac Blair",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -5
+    },
+    {
+      "pid": "adfc1c1e",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Si Woo Kim",
+      "bracket_c": "Max Greyserman",
+      "bracket_d": "Matthew Jordan",
+      "tiebreaker": -6
+    },
+    {
+      "pid": "92d9ad2e",
+      "bracket_a": "Collin Morikawa",
+      "bracket_b": "Adam Scott",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "J.B. Holmes",
+      "tiebreaker": -2
     }
   ],
-  "published_at": "2026-06-18T09:44:44.827Z"
+  "published_at": "2026-06-18T09:49:45.184Z"
 }
