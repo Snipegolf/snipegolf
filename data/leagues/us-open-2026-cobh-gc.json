@@ -320,7 +320,7 @@
     {
       "pid": "8ce96b4a",
       "display_name": "Louis Kahn",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     },
     {
       "pid": "vusfio61it",
@@ -985,5 +985,5 @@
       "tiebreaker": 2
     }
   ],
-  "published_at": "2026-06-18T10:59:49.976Z"
+  "published_at": "2026-06-18T11:04:43.897Z"
 }
