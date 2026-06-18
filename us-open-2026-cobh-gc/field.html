@@ -47,16 +47,16 @@
         </select>
       </div>
 
-      <div class="lb-wrap card">
-        <table class="lb field-table">
+      <div class="lb-wrap card" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table class="lb field-table" style="min-width:560px">
           <thead>
             <tr>
               <th class="col-rank">#</th>
               <th>Player</th>
               <th class="hide-sm">Bracket</th>
               <th>Total</th>
-              <th class="hide-xs">Thru</th>
-              <th class="hide-xs">Today</th>
+              <th>Thru</th>
+              <th>Today</th>
               <th class="hide-sm">R1</th>
               <th class="hide-sm">R2</th>
               <th class="hide-sm">R3</th>
@@ -193,8 +193,8 @@
         '<td><strong>' + esc(p.name) + '</strong>' + (p.status && cut ? ' <span class="status-pill">' + esc(p.status) + '</span>' : '') + '</td>' +
         '<td class="hide-sm">' + (bk ? '<span class="bracket-pill bk-' + esc(bk) + '">' + esc(bk) + '</span>' : '—') + '</td>' +
         '<td class="' + medal + ' ' + scoreClass(p.total != null ? p.total : p.today) + '"><strong>' + fmt(p.total != null ? p.total : p.today) + '</strong></td>' +
-        '<td class="hide-xs">' + esc(p.thru || '—') + '</td>' +
-        '<td class="hide-xs ' + scoreClass(p.today) + '">' + fmt(p.today) + '</td>' +
+        '<td>' + esc(p.thru || '—') + '</td>' +
+        '<td class="' + scoreClass(p.today) + '">' + fmt(p.today) + '</td>' +
         '<td class="hide-sm">' + esc(p.r1 || '—') + '</td>' +
         '<td class="hide-sm">' + esc(p.r2 || '—') + '</td>' +
         '<td class="hide-sm">' + esc(p.r3 || '—') + '</td>' +
