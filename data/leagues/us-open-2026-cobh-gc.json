@@ -967,7 +967,15 @@
       "bracket_c": "Padraig Harrington",
       "bracket_d": "J.B. Holmes",
       "tiebreaker": -2
+    },
+    {
+      "pid": "d1835afa",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Si Woo Kim",
+      "bracket_c": "Michael Brennan",
+      "bracket_d": "Matthew Jordan",
+      "tiebreaker": -2
     }
   ],
-  "published_at": "2026-06-18T09:54:56.741Z"
+  "published_at": "2026-06-18T09:59:46.130Z"
 }
