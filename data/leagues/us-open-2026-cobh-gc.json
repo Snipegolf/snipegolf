@@ -371,6 +371,11 @@
       "pid": "0ad5676c",
       "display_name": "Shane Ryan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "2105cde0",
+      "display_name": "Evan Baumann",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -895,5 +900,5 @@
       "tiebreaker": -7
     }
   ],
-  "published_at": "2026-06-18T07:14:44.038Z"
+  "published_at": "2026-06-18T07:19:45.768Z"
 }
