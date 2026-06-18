@@ -148,11 +148,6 @@
         if (live.length > 0) {
           allPlayers = live;
           document.getElementById('stat-players').textContent = allPlayers.length;
-          var active = allPlayers.filter(function (p) { return !isCut(p); });
-          if (active.length) {
-            var leader = active[0];
-            document.getElementById('stat-leader').textContent = (leader.name || '').split(' ').slice(-1)[0];
-          }
           document.getElementById('stat-cut').textContent = d.cut_score != null ? fmt(d.cut_score) : '—';
           document.getElementById('stat-round').textContent = d.round || '—';
         } else {
@@ -189,6 +184,19 @@
       if (av !== bv) return av - bv;
       return (a.name || '').localeCompare(b.name || '');
     });
+    // Leader stat = top of sorted active list (after sort above)
+    var active = allPlayers.filter(function (pp) {
+      if (isCut(pp)) return false;
+      var sched = !pp.thru || pp.thru === 0 || pp.thru === '0';
+      return !sched;
+    });
+    if (active.length) {
+      var ldr = active[0];
+      var ldrLast = (ldr.name || '').split(' ').slice(-1)[0];
+      document.getElementById('stat-leader').textContent = ldrLast || '—';
+    } else {
+      document.getElementById('stat-leader').textContent = '—';
+    }
     var rows = '';
     for (var i = 0; i < allPlayers.length; i++) {
       var p = allPlayers[i];
