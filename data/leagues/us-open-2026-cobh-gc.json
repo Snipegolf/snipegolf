@@ -975,7 +975,15 @@
       "bracket_c": "Michael Brennan",
       "bracket_d": "Matthew Jordan",
       "tiebreaker": -2
+    },
+    {
+      "pid": "4d7b98b9",
+      "bracket_a": "Xander Schauffele",
+      "bracket_b": "Gary Woodland",
+      "bracket_c": "Padraig Harrington",
+      "bracket_d": "Jake Peacock",
+      "tiebreaker": 2
     }
   ],
-  "published_at": "2026-06-18T10:09:49.132Z"
+  "published_at": "2026-06-18T10:14:43.935Z"
 }
