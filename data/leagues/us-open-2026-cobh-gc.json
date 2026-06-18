@@ -315,7 +315,7 @@
     {
       "pid": "7cd721fd",
       "display_name": "Sean Tobin",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     },
     {
       "pid": "8ce96b4a",
@@ -345,7 +345,7 @@
     {
       "pid": "2bededdd",
       "display_name": "Rosaire Higgins",
-      "paid_status": "unpaid"
+      "paid_status": "paid"
     },
     {
       "pid": "107eae3c",
@@ -985,5 +985,5 @@
       "tiebreaker": 2
     }
   ],
-  "published_at": "2026-06-18T11:54:44.708Z"
+  "published_at": "2026-06-18T11:59:46.995Z"
 }
