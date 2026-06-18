@@ -192,7 +192,7 @@
         '<td class="col-rank ' + medal + '">' + esc(p.pos || (i+1)) + '</td>' +
         '<td><strong>' + esc(p.name) + '</strong>' + (p.status && cut ? ' <span class="status-pill">' + esc(p.status) + '</span>' : '') + '</td>' +
         '<td class="hide-sm">' + (bk ? '<span class="bracket-pill bk-' + esc(bk) + '">' + esc(bk) + '</span>' : '—') + '</td>' +
-        '<td class="' + medal + ' ' + scoreClass(p.total) + '"><strong>' + fmt(p.total) + '</strong></td>' +
+        '<td class="' + medal + ' ' + scoreClass(p.total != null ? p.total : p.today) + '"><strong>' + fmt(p.total != null ? p.total : p.today) + '</strong></td>' +
         '<td class="hide-xs">' + esc(p.thru || '—') + '</td>' +
         '<td class="hide-xs ' + scoreClass(p.today) + '">' + fmt(p.today) + '</td>' +
         '<td class="hide-sm">' + esc(p.r1 || '—') + '</td>' +

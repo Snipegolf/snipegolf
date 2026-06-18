@@ -105,6 +105,22 @@
 
         var rawScore = c.score;
         var n = parseScoreV3_(rawScore);
+        // LIVE FIX: if c.score.displayValue is 'E' but a linescore for current/last round has a real value,
+        // use that instead. ESPN only updates c.score after the round ends.
+        try {
+          var lsArr = c.linescores || [];
+          var liveSum = null;
+          for (var li = 0; li < lsArr.length; li++) {
+            var dv = lsArr[li] && lsArr[li].displayValue;
+            if (dv == null || dv === '' || dv === '-') continue;
+            var lsVal = parseDisplayScore_(dv);
+            if (liveSum == null) liveSum = 0;
+            liveSum += lsVal;
+          }
+          if (liveSum != null && (n === 0)) {
+            n = liveSum;
+          }
+        } catch (eLs) { /* non-fatal */ }
 
         var posInt = parsePosV3_(posDisp);
         var statusLabel = posDisp || dispVal || typeDesc || '';
