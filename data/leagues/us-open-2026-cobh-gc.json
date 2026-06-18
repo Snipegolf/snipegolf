@@ -911,7 +911,15 @@
       "bracket_c": "Angel Hidalgo",
       "bracket_d": "Jackson Koivun",
       "tiebreaker": -3
+    },
+    {
+      "pid": "9823a94b",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Ryan Gerard",
+      "bracket_c": "Kristoffer Reitan",
+      "bracket_d": "Matthew Jordan",
+      "tiebreaker": -6
     }
   ],
-  "published_at": "2026-06-18T08:14:47.976Z"
+  "published_at": "2026-06-18T08:19:46.924Z"
 }
