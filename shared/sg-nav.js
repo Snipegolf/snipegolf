@@ -13,7 +13,7 @@
     var qs = new URLSearchParams(location.search);
     if (qs.get('league')) return qs.get('league');
     var parts = location.pathname.replace(/\/$/, '').split('/');
-    var RESERVED = { 'snipegolf': 1, 'picks': 1, 'leaderboard': 1, 'field': 1, 'qr': 1, 'index': 1, 'admin': 1, 'holding': 1, 'shared': 1, 'assets': 1 };
+    var RESERVED = { 'snipegolf': 1, 'picks': 1, 'leaderboard': 1, 'field': 1, 'qr': 1, 'index': 1, 'admin': 1, 'holding': 1, 'shared': 1, 'assets': 1, 'rules': 1, 'brackets': 1 };
     // Prefer the longest slug-with-hyphen (leagues look like 'us-open-2026-cobh-gc')
     for (var i = parts.length - 1; i >= 0; i--) {
       var p = parts[i];
@@ -55,6 +55,7 @@
       { id: 'brackets',    label: 'Brackets',    href: 'brackets.html' },
       { id: 'leaderboard', label: 'Leaderboard', href: 'leaderboard.html' },
       { id: 'field',       label: 'Field',       href: 'field.html' },
+      { id: 'rules',       label: 'Rules',       href: 'rules.html' },
       { id: 'qr',          label: 'QR poster',   href: 'qr.html' }
     ];
 

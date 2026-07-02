@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Brackets · US Open 2026 · SnipeGolf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<style>
+  .poster-head {
+    text-align: center;
+    margin: 1.5rem 0 1rem;
+  }
+  .poster-head h1 {
+    font-family: Fraunces, serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+  .poster-head p {
+    margin: 0.4rem 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+  .poster-actions {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    margin: 0.8rem 0 1.5rem;
+    flex-wrap: wrap;
+  }
+  .bracket-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  @media (min-width: 1200px) {
+    .bracket-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .bracket-grid { grid-template-columns: 1fr; }
+  }
+  .bracket-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 0.9rem 1rem;
+    break-inside: avoid;
+  }
+  .bracket-card h2 {
+    font-family: Fraunces, serif;
+    font-size: 1.4rem;
+    margin: 0 0 0.1rem;
+    letter-spacing: -0.01em;
+  }
+  .bracket-card .sub {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--brand);
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+  .bracket-card ol {
+    list-style: none;
+    counter-reset: pl;
+    padding: 0;
+    margin: 0;
+    columns: 1;
+  }
+  .bracket-card li {
+    counter-increment: pl;
+    padding: 0.35rem 0.2rem 0.35rem 1.9rem;
+    border-bottom: 1px dashed rgba(255,255,255,0.06);
+    position: relative;
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+  .bracket-card li::before {
+    content: counter(pl);
+    position: absolute;
+    left: 0.2rem;
+    top: 0.35rem;
+    width: 1.4rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .bracket-card li:last-child { border-bottom: none; }
+  .cta-banner {
+    margin: 1.5rem 0 0;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04));
+    border: 1px solid rgba(220,38,38,0.3);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .cta-banner p { margin: 0 0 0.6rem; font-size: 1rem; }
+  .cta-banner .btn { display: inline-block; }
+  .rules-mini {
+    margin-top: 1rem;
+    padding: 0.9rem 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .rules-mini strong { color: var(--ink); }
+  @media print {
+    #sg-header, #sg-tabs, .poster-actions, .cta-banner { display: none !important; }
+    body { background: white !important; color: black !important; }
+    .bracket-card { background: white !important; border: 1px solid #ccc !important; break-inside: avoid; page-break-inside: avoid; }
+    .bracket-card li { border-bottom: 1px dashed #ddd !important; color: black !important; }
+    .bracket-card .sub { color: #c00 !important; }
+    .bracket-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.6rem !important; }
+    .bracket-card h2 { color: black !important; }
+    .rules-mini { background: white !important; color: black !important; border: 1px solid #ccc !important; }
+    @page { size: A4; margin: 1cm; }
+  }
+</style>
+</head>
+<body data-page="brackets">
+
+<div id="sg-header"></div>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div id="sg-tabs"></div>
+
+      <div class="poster-head">
+        <h1>US Open 2026 — Brackets</h1>
+        <p>Cobh GC · Pick 2 players from each bracket · Picks lock Thu 18 Jun, 08:00 BST</p>
+      </div>
+
+      <div class="poster-actions">
+        <button class="btn btn--ghost" onclick="window.print()">Print poster</button>
+      </div>
+
+      <div id="brackets-mount" class="bracket-grid">
+        <div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:2rem">Loading brackets…</div>
+      </div>
+
+      <div class="rules-mini">
+        <strong>How it works.</strong> Pick 2 players from each bracket (8 total). Lower score wins. Cut/WD/DQ penalty = current leader score + 5. Tiebreaker = winning score guess. Entry €10 — pay via Revolut, cash, or in the shop.
+      </div>
+
+      <div class="cta-banner">
+        <p><strong>Not entered yet?</strong> Drop into Cobh GC shop or message the WhatsApp.</p>
+        <a class="btn btn--primary" href="index.html">Back to home</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../shared/sg-nav.js"></script>
+<script>
+(function () {
+  var WORKER = 'https://twilight-recipe-e213.badenmaher.workers.dev';
+  var LEAGUE = 'the-open-2026-cobh-gc';
+  var COMP = 'the-open-2026';
+
+  if (window.SGNav && SGNav.init) {
+    SGNav.init({ active: 'brackets', league: LEAGUE, picksUrlOverride: 'picks.html' });
+  }
+
+  // Preserve pid/t in entry button so people clicking through from their email keep their token
+  try {
+    var qs = new URLSearchParams(location.search);
+    if (qs.get('pid') && qs.get('t')) {
+      var btn = document.getElementById('entry-btn');
+      if (btn) btn.href = 'picks.html?pid=' + encodeURIComponent(qs.get('pid')) + '&t=' + encodeURIComponent(qs.get('t'));
+    }
+  } catch (e) {}
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return c === '&' ? '&amp;' : c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : '&#39;';
+    });
+  }
+
+  var SUBTITLES = {
+    A: 'Elite · World Class',
+    B: 'Contenders',
+    C: 'Dark Horses',
+    D: 'Outsiders'
+  };
+
+  function render(brackets) {
+    var mount = document.getElementById('brackets-mount');
+    var keys = ['A', 'B', 'C', 'D'];
+    var html = '';
+    for (var k = 0; k < keys.length; k++) {
+      var key = keys[k];
+      var arr = brackets[key] || [];
+      var rows = '';
+      // sort alpha by surname for findability
+      arr.sort(function (a, b) {
+        var an = (a.name || '').split(' ').slice(-1)[0].toLowerCase();
+        var bn = (b.name || '').split(' ').slice(-1)[0].toLowerCase();
+        return an < bn ? -1 : an > bn ? 1 : 0;
+      });
+      for (var i = 0; i < arr.length; i++) {
+        rows += '<li>' + esc(arr[i].name) + '</li>';
+      }
+      if (!rows) rows = '<li style="color:var(--muted)">(empty)</li>';
+      html += '<div class="bracket-card">' +
+        '<div class="sub">Bracket ' + key + '</div>' +
+        '<h2>' + esc(SUBTITLES[key]) + '</h2>' +
+        '<ol>' + rows + '</ol>' +
+        '</div>';
+    }
+    mount.innerHTML = html;
+  }
+
+  fetch(WORKER + '/api/brackets?league=' + encodeURIComponent(LEAGUE) + '&comp=' + encodeURIComponent(COMP))
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d.ok || !d.brackets) {
+        document.getElementById('brackets-mount').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:2rem">Brackets not available</div>';
+        return;
+      }
+      var bks = d.brackets;
+      // Normalise array form -> grouped
+      if (Array.isArray(bks)) {
+        var grouped = { A: [], B: [], C: [], D: [] };
+        for (var i = 0; i < bks.length; i++) {
+          var b = bks[i].bracket;
+          if (grouped[b]) grouped[b].push({ name: bks[i].player_name || bks[i].name });
+        }
+        bks = grouped;
+      }
+      render(bks);
+    })
+    .catch(function () {
+      document.getElementById('brackets-mount').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:2rem">Could not load brackets</div>';
+    });
+})();
+</script>
+</body>
+</html>

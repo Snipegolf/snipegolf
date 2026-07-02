@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR poster · SnipeGolf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<style>
+  @media print {
+    .sg-noprint, #sg-header, #sg-tabs, .site-footer, .refresh-bar { display:none !important; }
+    body { background: #fff; color: #000; }
+    .poster { box-shadow:none; border:2px solid #000; background:#fff; color:#000 }
+    .poster h1, .poster h2 { color:#000 }
+    .poster .qr-box { background:#fff; border:1px solid #000 }
+  }
+  .poster {
+    max-width: 720px; margin: 0 auto;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 18px;
+    padding: 48px 36px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--surface), var(--surface-alt));
+  }
+  .poster h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin: 12px 0; }
+  .poster h2 { font-size: clamp(1.2rem, 3vw, 1.6rem); margin: 0 0 24px; color: var(--accent); }
+  .qr-box { background: #fff; padding: 16px; border-radius: 16px; display: inline-block; }
+  .qr-box img { display:block; width: 280px; height: 280px; }
+  .poster .url { font-size: .95rem; word-break: break-all; color: var(--muted); margin-top: 16px; }
+  .poster .cta-big { font-size: 1.3rem; font-weight: 700; margin-top: 24px; color: var(--ink); }
+  .poster .prizes-mini { margin-top: 28px; text-align: left; }
+  .poster .prizes-mini li { padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 8px; display:flex; justify-content:space-between; gap:16px; margin:6px 0; list-style:none }
+  .poster .prizes-mini strong { color: var(--accent) }
+</style>
+</head>
+<body data-page="qr">
+
+<div id="sg-header"></div>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div id="sg-tabs"></div>
+
+      <div class="sg-noprint" style="text-align:center;margin-bottom:var(--s-4)">
+        <button class="btn btn--primary" onclick="window.print()">Print poster</button>
+        <a class="btn btn--ghost" id="copy-link-btn" href="#">Copy entry link</a>
+      </div>
+
+      <div class="poster">
+        <div class="league-logos" style="justify-content:center;margin-bottom:12px">
+          <img id="qr-club-logo" alt="" style="max-height:80px" onerror="this.style.display='none'">
+          <span class="league-logos__divider"></span>
+          <img id="qr-tour-logo" alt="" style="max-height:80px" onerror="this.style.display='none'">
+        </div>
+        <h2 id="qr-club">…</h2>
+        <h1 class="serif" id="qr-comp">…</h1>
+        <p class="lead" id="qr-tag">Sweepstakes — pick a player from each bracket</p>
+
+        <div class="qr-box">
+          <img id="qr-img" alt="QR code" src="" loading="lazy">
+        </div>
+        <div class="cta-big">Scan to enter</div>
+        <div class="url" id="qr-url"></div>
+
+        <div id="qr-prizes-wrap" style="display:none">
+          <h3 style="margin:28px 0 8px;font-size:1.1rem">Prizes</h3>
+          <ul class="prizes-mini" id="qr-prizes"></ul>
+        </div>
+
+        <p style="font-size:.78rem;color:var(--muted);margin-top:32px">
+          Powered by SnipeGolf · 18+
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../shared/themes.js"></script>
+<script src="../shared/sg-nav.js"></script>
+<script>
+(function () {
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  SGNav.init({ active: 'qr' }).then(function (d) {
+    if (!d || !d.ok) return;
+    var league = d.league, comp = d.comp;
+    var slug = league.league_slug;
+    var base = location.origin + location.pathname.replace(/qr\.html$/, '');
+    var entryUrl = base + 'enter.html';
+    document.getElementById('qr-club').textContent = league.league_name || '';
+    document.getElementById('qr-comp').textContent = comp.name || '';
+    if (league.logo_url) document.getElementById('qr-club-logo').src = league.logo_url;
+    if (comp.logo_url) document.getElementById('qr-tour-logo').src = comp.logo_url;
+    var qrSrc = 'https://api.qrserver.com/v1/create-qr-code/?size=560x560&margin=10&data=' + encodeURIComponent(entryUrl);
+    document.getElementById('qr-img').src = qrSrc;
+    document.getElementById('qr-url').textContent = entryUrl;
+    document.title = 'QR · ' + comp.name;
+    document.getElementById('copy-link-btn').addEventListener('click', function (e) {
+      e.preventDefault();
+      navigator.clipboard.writeText(entryUrl).then(function () {
+        var btn = document.getElementById('copy-link-btn');
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = 'Copy entry link'; }, 2000);
+      });
+    });
+
+    var prizes = comp.prizes || league.prizes;
+    if (prizes) {
+      try {
+        var arr = typeof prizes === 'string' ? JSON.parse(prizes) : prizes;
+        if (arr && arr.length) {
+          var html = '';
+          for (var i = 0; i < arr.length; i++) {
+            html += '<li><strong>' + esc(arr[i].place || (i+1)+'') + '</strong><span>' + esc(arr[i].prize) + '</span></li>';
+          }
+          document.getElementById('qr-prizes').innerHTML = html;
+          document.getElementById('qr-prizes-wrap').style.display = 'block';
+        }
+      } catch (e) {}
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>SnipeGolf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+</head>
+<body data-page="index">
+
+<div id="sg-header"></div>
+
+<main>
+  <section class="section">
+    <div class="container">
+
+      <div class="card card--feature" style="text-align:center;background:var(--surface);">
+        <span class="eyebrow">Sweepstakes</span>
+        <h1 class="serif" id="hero-title" style="margin:12px 0">Loading…</h1>
+        <p class="lead" id="hero-sub" style="max-width:54ch;margin:0 auto var(--s-4)"></p>
+        <span id="status-badge" class="badge badge-live" style="margin-bottom:var(--s-4)">LIVE</span>
+        <p style="font-size:1.05rem;color:var(--accent);font-weight:600;margin-top:var(--s-4)" id="prize-tag">Lovely prizes — dependant on number of entries</p>
+
+        <div class="hero__ctas" style="justify-content:center;margin-top:var(--s-5);display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn btn--primary btn--lg" href="leaderboard.html">View leaderboard</a>
+          <a class="btn btn--ghost btn--lg" href="field.html">View field</a>
+        </div>
+      </div>
+
+      <div id="sg-tabs"></div>
+
+      <div id="my-picks-card"></div>
+
+      <div class="stat-block mb-6">
+        <div class="stat"><span class="v" id="stat-entries">—</span><span class="l">Entries</span></div>
+        <div class="stat"><span class="v" id="stat-leader">—</span><span class="l">Leader</span></div>
+        <div class="stat"><span class="v" id="stat-score">—</span><span class="l">Top score</span></div>
+        <div class="stat"><span class="v" id="stat-tour">—</span><span class="l">Tour leader</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card__header">
+          <h2 style="margin:0">Live top 10</h2>
+          <a class="btn btn--ghost btn--sm" href="leaderboard.html">Full board →</a>
+        </div>
+        <div class="refresh-bar">
+          <span><span class="sg-dot"></span>Auto-updating</span>
+          <span id="lb-updated">Loading…</span>
+        </div>
+        <div class="lb-wrap">
+          <table class="lb" aria-label="Top 10">
+            <thead><tr><th class="col-rank">#</th><th>Player</th><th>Score</th><th class="hide-xs">Move</th></tr></thead>
+            <tbody id="lb-body"><tr><td colspan="4" class="sg-empty">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="prizes-card"></div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__bottom" style="border:none;padding-top:0">
+      <span id="footer-club">Sweepstakes operated under house rules</span>
+      <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · 18+ Responsible gambling</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../shared/themes.js"></script>
+<script src="../shared/sg-nav.js"></script>
+<script>
+(function () {
+  var WORKER = 'https://twilight-recipe-e213.badenmaher.workers.dev';
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  function fmt(n) { if (n == null) return '—'; if (n === 0) return 'E'; return (n>0?'+':'') + n; }
+
+  function qs(k) { return new URLSearchParams(location.search).get(k); }
+  var pid = qs('pid'), token = qs('t');
+
+  SGNav.init({ active: 'home' }).then(function (d) {
+    if (!d || !d.ok) return;
+    var league = d.league, comp = d.comp;
+    document.title = comp.name + ' | SnipeGolf';
+    document.getElementById('hero-title').textContent = league.league_name + ' — ' + comp.name;
+    document.getElementById('hero-sub').textContent = (comp.year || '') + (comp.picks_close ? ' · Picks close ' + comp.picks_close : '');
+    document.getElementById('footer-club').textContent = league.league_name + ' · Sweepstakes operated under house rules';
+
+    fetch(WORKER + '/api/prizes?league=' + encodeURIComponent(league.league_slug))
+      .then(function (r) { return r.json(); })
+      .then(function (pd) {
+        if (!pd || !pd.ok || !pd.prizes || !pd.prizes.length) return;
+        var ph = '<section class="sg-section" style="margin-top:1.5rem"><h2 style="margin:0 0 .75rem;font-size:1.25rem">Prizes</h2><div class="prize-list">';
+        for (var i = 0; i < pd.prizes.length; i++) {
+          var p = pd.prizes[i];
+          ph += '<div class="prize-row"><span class="prize-label">' + esc(p.label) + '</span><span class="prize-amount">' + esc(p.amount) + '</span></div>';
+        }
+        ph += '</div></section>';
+        document.getElementById('prizes-card').innerHTML = ph;
+      }).catch(function () {});
+
+    loadLb(league.league_slug);
+    if (pid && token) loadMyPicks(league.league_slug, pid, token);
+  });
+
+  function loadLb(slug) {
+    fetch(WORKER + '/api/leaderboard?league=' + encodeURIComponent(slug))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        document.getElementById('lb-updated').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+        if (!d.ok) return;
+        var entries = (d.entries || []).slice(0, 10);
+        document.getElementById('stat-entries').textContent = (d.entries || []).length;
+        if (entries.length) {
+          document.getElementById('stat-leader').textContent = (entries[0].name || '').split(' ').slice(-1)[0];
+          document.getElementById('stat-score').textContent = fmt(entries[0].total);
+        }
+        document.getElementById('stat-tour').textContent = fmt(d.winner_score);
+        var html = '';
+        for (var i = 0; i < entries.length; i++) {
+          var e = entries[i];
+          var medal = e.pos === 1 ? 'medal-1' : e.pos === 2 ? 'medal-2' : e.pos === 3 ? 'medal-3' : '';
+          var move = e.move_delta;
+          var moveCls = move == null ? 'move-same' : move > 0 ? 'move-up' : move < 0 ? 'move-down' : 'move-same';
+          var moveTxt = move == null || move === 0 ? '—' : Math.abs(move);
+          html += '<tr><td class="col-rank ' + medal + '">' + e.pos + '</td><td><strong>' + esc(e.name) + '</strong></td><td class="' + medal + '">' + fmt(e.total) + '</td><td class="hide-xs ' + moveCls + '">' + esc(moveTxt) + '</td></tr>';
+        }
+        document.getElementById('lb-body').innerHTML = html || '<tr><td colspan="4" class="sg-empty">No entries yet.</td></tr>';
+      })
+      .catch(function () {});
+  }
+
+  function loadMyPicks(slug, pid, token) {
+    fetch(WORKER + '/api/mypick?league=' + encodeURIComponent(slug) + '&pid=' + encodeURIComponent(pid) + '&t=' + encodeURIComponent(token))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok || !d.picks) return;
+        var html = '<section class="card mb-6"><h2 style="margin:0 0 12px;font-size:1.1rem">Your picks</h2><div class="lb-detail-grid picks-detail">';
+        var bs = ['A','B','C','D'];
+        for (var i = 0; i < bs.length; i++) {
+          var name = d.picks['bracket_' + bs[i].toLowerCase()] || '—';
+          html += '<div class="pick-card"><span class="bk">Bracket ' + bs[i] + '</span><span class="pn">' + esc(name) + '</span></div>';
+        }
+        html += '</div><p style="margin-top:12px;font-size:.85rem;color:var(--muted)">Tiebreaker: <strong>' + esc(d.picks.tiebreaker || '—') + '</strong></p></section>';
+        document.getElementById('my-picks-card').innerHTML = html;
+      })
+      .catch(function () {});
+  }
+})();
+</script>
+</body>
+</html>

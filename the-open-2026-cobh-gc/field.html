@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Field · SnipeGolf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+</head>
+<body data-page="field">
+
+<div id="sg-header"></div>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div id="sg-tabs"></div>
+
+      <div class="refresh-bar">
+        <h2 class="serif" style="margin:0">Tournament field</h2>
+        <span id="sg-status" class="sg-status"><span class="sg-dot"></span>Loading…</span>
+      </div>
+
+      <div class="stat-block">
+        <div class="stat"><span class="v" id="stat-players">—</span><span class="l">Players</span></div>
+        <div class="stat"><span class="v" id="stat-leader">—</span><span class="l">Leader</span></div>
+        <div class="stat"><span class="v" id="stat-cut">—</span><span class="l">Cut line</span></div>
+        <div class="stat"><span class="v" id="stat-round">—</span><span class="l">Round</span></div>
+      </div>
+
+      <div class="field-filter">
+        <input type="search" id="field-search" placeholder="Search player…" aria-label="Search">
+        <select id="field-bracket" aria-label="Bracket filter">
+          <option value="">All brackets</option>
+          <option value="A">Bracket A</option>
+          <option value="B">Bracket B</option>
+          <option value="C">Bracket C</option>
+          <option value="D">Bracket D</option>
+        </select>
+        <select id="field-cut" aria-label="Cut filter">
+          <option value="all">All players</option>
+          <option value="active">Active only</option>
+          <option value="cut">Missed cut</option>
+        </select>
+      </div>
+
+      <div class="lb-wrap card" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table class="lb field-table" style="min-width:560px">
+          <thead>
+            <tr>
+              <th class="col-rank">#</th>
+              <th>Player</th>
+              <th class="hide-sm">Bracket</th>
+              <th>Total</th>
+              <th>Thru</th>
+              <th>Today</th>
+              <th class="hide-sm">R1</th>
+              <th class="hide-sm">R2</th>
+              <th class="hide-sm">R3</th>
+              <th class="hide-sm">R4</th>
+            </tr>
+          </thead>
+          <tbody id="field-body">
+            <tr><td colspan="10" class="sg-empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="font-size:.78rem;color:var(--muted);text-align:center;margin-top:var(--s-3)">
+        Source: ESPN · Auto-refresh every 2 minutes · CUT/WD/DQ rows shown with strikethrough
+      </p>
+    </div>
+  </section>
+</main>
+
+<script src="../shared/themes.js"></script>
+<script src="../shared/sg-nav.js"></script>
+<script>
+(function () {
+  var WORKER = 'https://twilight-recipe-e213.badenmaher.workers.dev';
+  var REFRESH_MS = 120 * 1000;
+  var allPlayers = [];
+  var bracketMap = {};
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  function normName(s) {
+    if (!s) return '';
+    return String(s).toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
+  function fmt(n) { if (n == null || n === '') return '—'; var v = parseInt(n, 10); if (isNaN(v)) return esc(n); if (v === 0) return 'E'; return (v>0?'+':'') + v; }
+  function scoreClass(n) { if (n == null) return ''; var v = parseInt(n,10); if (isNaN(v)) return ''; if (v < 0) return 'under'; if (v > 0) return 'over'; return ''; }
+  function isCut(p) { return p.status && /CUT|MDF|WD|DQ|MC/i.test(p.status); }
+
+  SGNav.init({ active: 'field' }).then(function (d) {
+    if (!d || !d.ok) return;
+    var slug = d.league.league_slug;
+    var compSlug = d.comp.comp_slug;
+    document.title = d.comp.name + ' — Field · SnipeGolf';
+    loadBrackets(slug, compSlug).then(function () { loadField(slug); });
+    setInterval(function () { loadField(slug); }, REFRESH_MS);
+  });
+
+  var bracketRoster = []; // [{name, bracket}] from Brackets tab
+
+  function loadBrackets(slug, compSlug) {
+    return fetch(WORKER + '/api/brackets?comp=' + encodeURIComponent(compSlug))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok || !d.brackets) return;
+        // brackets API returns either array (legacy) or {A:[...], B:[...]}
+        var allBks = [];
+        if (Array.isArray(d.brackets)) {
+          allBks = d.brackets;
+        } else if (typeof d.brackets === 'object') {
+          var keys = ['A','B','C','D'];
+          for (var ki = 0; ki < keys.length; ki++) {
+            var arr = d.brackets[keys[ki]] || [];
+            for (var ai = 0; ai < arr.length; ai++) {
+              allBks.push({ player_name: arr[ai].name || arr[ai].player_name, bracket: keys[ki] });
+            }
+          }
+        }
+        for (var i = 0; i < allBks.length; i++) {
+          var b = allBks[i];
+          var nm = b.player_name || '';
+          bracketMap[normName(nm)] = b.bracket;
+          bracketRoster.push({ name: nm, bracket: b.bracket });
+        }
+      })
+      .catch(function () {});
+  }
+
+  function loadField(slug) {
+    if (!slug) {
+      document.getElementById('sg-status').innerHTML = '<span class="sg-dot" style="background:var(--bad)"></span>No league';
+      return;
+    }
+    fetch(WORKER + '/api/field?league=' + encodeURIComponent(slug))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        document.getElementById('sg-status').innerHTML = '<span class="sg-dot"></span>Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+        var live = d.ok && Array.isArray(d.field) ? d.field : [];
+        if (live.length > 0) {
+          allPlayers = live;
+          document.getElementById('stat-players').textContent = allPlayers.length;
+          document.getElementById('stat-cut').textContent = d.cut_score != null ? fmt(d.cut_score) : '—';
+          document.getElementById('stat-round').textContent = d.round || '—';
+        } else {
+          // Pre-tournament fallback: render the bracket roster as the field
+          allPlayers = bracketRoster.map(function (b) {
+            return { name: b.name, pos: '', total: null, today: null, thru: '', r1: '', r2: '', r3: '', r4: '', status: '' };
+          });
+          document.getElementById('stat-players').textContent = allPlayers.length;
+          document.getElementById('stat-leader').textContent = '—';
+          document.getElementById('stat-cut').textContent = '—';
+          document.getElementById('stat-round').textContent = '6/18 - 6/21';
+        }
+        applyFilter();
+      })
+      .catch(function () {
+        document.getElementById('sg-status').innerHTML = '<span class="sg-dot" style="background:var(--bad)"></span>Network err';
+      });
+  }
+
+  function applyFilter() {
+    var q = (document.getElementById('field-search').value || '').toLowerCase().trim();
+    var bf = document.getElementById('field-bracket').value;
+    var cf = document.getElementById('field-cut').value;
+    // Sort lowest score first: use total if available, else today.
+    // Cut/WD/DQ go to bottom. Scheduled (today==0, thru==0) go to bottom too.
+    allPlayers.sort(function (a, b) {
+      var aCut = isCut(a), bCut = isCut(b);
+      if (aCut !== bCut) return aCut ? 1 : -1;
+      var aSched = !a.thru || a.thru === 0 || a.thru === '0';
+      var bSched = !b.thru || b.thru === 0 || b.thru === '0';
+      if (aSched !== bSched) return aSched ? 1 : -1;
+      var av = a.total != null ? a.total : (a.today != null ? a.today : 999);
+      var bv = b.total != null ? b.total : (b.today != null ? b.today : 999);
+      if (av !== bv) return av - bv;
+      return (a.name || '').localeCompare(b.name || '');
+    });
+    // Leader stat = top of sorted active list (after sort above)
+    var active = allPlayers.filter(function (pp) {
+      if (isCut(pp)) return false;
+      var sched = !pp.thru || pp.thru === 0 || pp.thru === '0';
+      return !sched;
+    });
+    if (active.length) {
+      var ldr = active[0];
+      var ldrLast = (ldr.name || '').split(' ').slice(-1)[0];
+      document.getElementById('stat-leader').textContent = ldrLast || '—';
+    } else {
+      document.getElementById('stat-leader').textContent = '—';
+    }
+    var rows = '';
+    for (var i = 0; i < allPlayers.length; i++) {
+      var p = allPlayers[i];
+      var nm = (p.name || '').toLowerCase();
+      var bk = bracketMap[normName(p.name || '')] || '';
+      if (q && nm.indexOf(q) === -1) continue;
+      if (bf && bk !== bf) continue;
+      var cut = isCut(p);
+      if (cf === 'active' && cut) continue;
+      if (cf === 'cut' && !cut) continue;
+      var medal = i === 0 ? 'medal-1' : i === 1 ? 'medal-2' : i === 2 ? 'medal-3' : '';
+      var rcls = cut ? 'is-cut' : '';
+      rows += '<tr class="' + rcls + '">' +
+        '<td class="col-rank ' + medal + '">' + esc(p.pos || (i+1)) + '</td>' +
+        '<td><strong>' + esc(p.name) + '</strong>' + (p.status && cut ? ' <span class="status-pill">' + esc(p.status) + '</span>' : '') + '</td>' +
+        '<td class="hide-sm">' + (bk ? '<span class="bracket-pill bk-' + esc(bk) + '">' + esc(bk) + '</span>' : '—') + '</td>' +
+        '<td class="' + medal + ' ' + scoreClass(p.total != null ? p.total : p.today) + '"><strong>' + fmt(p.total != null ? p.total : p.today) + '</strong></td>' +
+        '<td>' + esc(p.thru || '—') + '</td>' +
+        '<td class="' + scoreClass(p.today) + '">' + fmt(p.today) + '</td>' +
+        '<td class="hide-sm">' + esc(p.r1 || '—') + '</td>' +
+        '<td class="hide-sm">' + esc(p.r2 || '—') + '</td>' +
+        '<td class="hide-sm">' + esc(p.r3 || '—') + '</td>' +
+        '<td class="hide-sm">' + esc(p.r4 || '—') + '</td>' +
+        '</tr>';
+    }
+    document.getElementById('field-body').innerHTML = rows || '<tr><td colspan="10" class="sg-empty">No matches.</td></tr>';
+  }
+
+  document.getElementById('field-search').addEventListener('input', applyFilter);
+  document.getElementById('field-bracket').addEventListener('change', applyFilter);
+  document.getElementById('field-cut').addEventListener('change', applyFilter);
+})();
+</script>
+</body>
+</html>

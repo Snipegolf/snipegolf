@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin · SnipeGolf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<style>
+  .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:50; padding:16px }
+  .modal-bg.show { display:flex }
+  .modal { background:var(--surface); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:24px; max-width:640px; width:100%; max-height:90vh; overflow:auto }
+  .modal h2 { margin:0 0 16px; font-size:1.2rem }
+  .modal label { display:block; margin-bottom:12px; font-size:.85rem; color:var(--muted) }
+  .modal input, .modal select { display:block; width:100%; padding:10px 12px; margin-top:4px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:var(--ink); font-size:.95rem }
+  .modal .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px }
+  .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; flex-wrap:wrap }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--accent); color:#000; padding:10px 18px; border-radius:10px; box-shadow:0 4px 18px rgba(0,0,0,0.4); z-index:100; font-weight:600 }
+  .toolbar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:var(--s-3) 0 var(--s-2) }
+  .toolbar input { flex:1; min-width:200px; padding:10px 14px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:var(--ink); font-size:.95rem }
+  .pick-chip { display:inline-block; padding:2px 8px; margin:2px; background:rgba(212,162,71,0.16); color:var(--accent); border-radius:6px; font-size:.72rem; font-weight:600 }
+  .post-lock-banner { background:rgba(248,113,113,0.18); color:#f87171; padding:10px 16px; text-align:center; font-size:.85rem; font-weight:600; border-radius:10px; margin-bottom:12px }
+  .paid-pill { padding:3px 10px; border-radius:999px; font-size:.7rem; font-weight:700; letter-spacing:.5px; text-transform:uppercase }
+  .paid-pill.paid { background:rgba(52,211,153,0.18); color:#34d399 }
+  .paid-pill.unpaid { background:rgba(251,191,36,0.18); color:#fbbf24 }
+</style>
+</head>
+<body data-page="admin">
+
+<div id="sg-header"></div>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div id="sg-tabs"></div>
+
+      <div class="refresh-bar">
+        <h2 class="serif" style="margin:0">Admin console</h2>
+        <span id="sg-status" class="sg-status"><span class="sg-dot"></span>Loading…</span>
+      </div>
+
+      <div id="postLockBanner" class="post-lock-banner" style="display:none">⚠ TOURNAMENT STARTED — pick edits logged & owner emailed</div>
+      <div id="errBox"></div>
+
+      <div class="stat-block" id="stats">
+        <div class="stat"><span class="v" id="s-total">—</span><span class="l">Entries</span></div>
+        <div class="stat"><span class="v" id="s-paid">—</span><span class="l">Paid</span></div>
+        <div class="stat"><span class="v" id="s-unpaid">—</span><span class="l">Unpaid</span></div>
+        <div class="stat"><span class="v" id="s-deleted">—</span><span class="l">Deleted</span></div>
+      </div>
+
+      <div class="toolbar">
+        <input id="search" placeholder="Search name or email…">
+        <button class="btn btn--primary btn--sm" onclick="openNewEntry()">+ Add entry</button>
+        <button class="btn btn--ghost btn--sm" onclick="loadList()">↻ Refresh</button>
+      </div>
+
+      <div class="lb-wrap card">
+        <table class="lb">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th class="hide-sm">Email</th>
+              <th>Paid</th>
+              <th class="hide-sm">Picks (A/B/C/D · TB)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rows"><tr><td colspan="5" class="sg-empty">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h2 id="modalTitle">Edit entry</h2>
+    <label>Display name<input id="m_display_name"></label>
+    <label>Email<input id="m_email"></label>
+    <div class="field-row">
+      <label>Paid status
+        <select id="m_paid_status"><option value="unpaid">unpaid</option><option value="paid">paid</option></select>
+      </label>
+      <label>Paid method
+        <select id="m_paid_method"><option value="revolut">revolut</option><option value="cash">cash</option><option value="shop">shop</option><option value="iou">IOU</option></select>
+      </label>
+    </div>
+    <div class="field-row">
+      <label>Bracket A · Pick 1<select id="m_bracket_a"><option value="">— pick player —</option></select></label>
+      <label>Bracket A · Pick 2<select id="m_bracket_a2"><option value="">— pick player —</option></select></label>
+    </div>
+    <div class="field-row">
+      <label>Bracket B · Pick 1<select id="m_bracket_b"><option value="">— pick player —</option></select></label>
+      <label>Bracket B · Pick 2<select id="m_bracket_b2"><option value="">— pick player —</option></select></label>
+    </div>
+    <div class="field-row">
+      <label>Bracket C · Pick 1<select id="m_bracket_c"><option value="">— pick player —</option></select></label>
+      <label>Bracket C · Pick 2<select id="m_bracket_c2"><option value="">— pick player —</option></select></label>
+    </div>
+    <div class="field-row">
+      <label>Bracket D · Pick 1<select id="m_bracket_d"><option value="">— pick player —</option></select></label>
+      <label>Bracket D · Pick 2<select id="m_bracket_d2"><option value="">— pick player —</option></select></label>
+    </div>
+    <label>Tiebreaker (e.g. -12)<input id="m_tiebreaker"></label>
+    <label>Notes<input id="m_notes"></label>
+    <label id="reasonLabel" style="display:none">Reason for post-lock edit (required)<input id="m_reason" placeholder="e.g. picks lost in submission"></label>
+    <div class="modal-actions">
+      <button class="btn btn--ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn--ghost" style="border-color:#f87171;color:#f87171" onclick="deleteEntry()">Delete</button>
+      <button class="btn btn--ghost" onclick="resendEmail()">✉ Resend</button>
+      <button class="btn btn--primary" onclick="saveEntry()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="../shared/themes.js"></script>
+<script src="../shared/sg-nav.js"></script>
+<script>
+(function () {
+  var WORKER = 'https://twilight-recipe-e213.badenmaher.workers.dev';
+  var qs = new URLSearchParams(location.search);
+  var leagueSlug = qs.get('league') || '';
+  var key = qs.get('key') || '';
+  var currentEntry = null;
+  var allEntries = [];
+  var postLock = false;
+
+  function api(p) { return WORKER + '/api' + p; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  function toast(msg, isErr) {
+    var d = document.createElement('div'); d.className = 'toast'; d.textContent = msg;
+    if (isErr) { d.style.background = '#f87171'; d.style.color = '#fff'; }
+    document.body.appendChild(d); setTimeout(function(){d.remove();}, 2500);
+  }
+  function showErr(m) { document.getElementById('errBox').innerHTML = '<div class="post-lock-banner">' + esc(m) + '</div>'; }
+
+  if (leagueSlug) {
+    SGNav.init({ active: 'admin', league: leagueSlug, picksUrlOverride: 'picks.html' });
+  }
+
+  var bracketsCache = null;
+  function loadBrackets() {
+    return fetch(api('/brackets?league=' + encodeURIComponent(leagueSlug)))
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d.ok) bracketsCache = d.brackets || {}; })
+      .catch(function () {});
+  }
+  window.fillBracketSelect = function (id, letter, currentVal) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var list = (bracketsCache && bracketsCache[letter.toUpperCase()]) || [];
+    var html = '<option value="">— pick player —</option>';
+    var matched = false;
+    for (var i = 0; i < list.length; i++) {
+      var nm = list[i].name;
+      var sel = (nm === currentVal) ? ' selected' : '';
+      if (sel) matched = true;
+      html += '<option value="' + esc(nm) + '"' + sel + '>' + esc(nm) + '</option>';
+    }
+    if (currentVal && !matched) {
+      html += '<option value="' + esc(currentVal) + '" selected>' + esc(currentVal) + ' (legacy)</option>';
+    }
+    el.innerHTML = html;
+  };
+  function fillBracketSelect(id, letter, currentVal) { return window.fillBracketSelect(id, letter, currentVal); }
+
+  window.loadList = function () {
+    if (!key) { showErr('Missing ?key= in URL'); return; }
+    if (!leagueSlug) { showErr('Missing ?league= in URL'); return; }
+    document.getElementById('sg-status').innerHTML = '<span class="sg-dot"></span>Loading…';
+    fetch(api('/admin_list?league=' + encodeURIComponent(leagueSlug) + '&key=' + encodeURIComponent(key)))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { showErr(d.error || 'load_failed'); document.getElementById('sg-status').innerHTML = '<span class="sg-dot" style="background:var(--bad)"></span>Error'; return; }
+        document.title = (d.league && d.league.league_name ? d.league.league_name + ' — ' : '') + 'Admin';
+        postLock = !!d.post_lock;
+        document.getElementById('postLockBanner').style.display = postLock ? 'block' : 'none';
+        var s = d.stats || {};
+        document.getElementById('s-total').textContent = s.total || 0;
+        document.getElementById('s-paid').textContent = s.paid || 0;
+        document.getElementById('s-unpaid').textContent = s.unpaid || 0;
+        document.getElementById('s-deleted').textContent = s.deleted || 0;
+        document.getElementById('sg-status').innerHTML = '<span class="sg-dot"></span>Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+        allEntries = d.entries || [];
+        render(allEntries);
+      })
+      .catch(function (e) { showErr('Network: ' + e); });
+  };
+
+  function render(entries) {
+    var body = document.getElementById('rows');
+    if (!entries.length) { body.innerHTML = '<tr><td colspan="5" class="sg-empty">No entries.</td></tr>'; return; }
+    var html = '';
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      var picks = '';
+      if (e.bracket_a) picks += '<span class="pick-chip">A:' + esc(e.bracket_a) + '</span>';
+      if (e.bracket_a2) picks += '<span class="pick-chip">A2:' + esc(e.bracket_a2) + '</span>';
+      if (e.bracket_b) picks += '<span class="pick-chip">B:' + esc(e.bracket_b) + '</span>';
+      if (e.bracket_b2) picks += '<span class="pick-chip">B2:' + esc(e.bracket_b2) + '</span>';
+      if (e.bracket_c) picks += '<span class="pick-chip">C:' + esc(e.bracket_c) + '</span>';
+      if (e.bracket_c2) picks += '<span class="pick-chip">C2:' + esc(e.bracket_c2) + '</span>';
+      if (e.bracket_d) picks += '<span class="pick-chip">D:' + esc(e.bracket_d) + '</span>';
+      if (e.bracket_d2) picks += '<span class="pick-chip">D2:' + esc(e.bracket_d2) + '</span>';
+      if (e.tiebreaker) picks += '<span class="pick-chip" style="background:rgba(255,255,255,0.1);color:var(--ink)">TB:' + esc(e.tiebreaker) + '</span>';
+      if (!picks) picks = '<span style="color:var(--muted);font-size:.72rem">no picks</span>';
+      html += '<tr>' +
+        '<td><strong>' + esc(e.display_name) + '</strong></td>' +
+        '<td class="hide-sm">' + esc(e.email) + '</td>' +
+        '<td><span class="paid-pill ' + (e.paid_status === 'paid' ? 'paid' : 'unpaid') + '">' + esc(e.paid_status || 'unpaid') + (e.paid_method ? ' · ' + esc(e.paid_method) : '') + '</span></td>' +
+        '<td class="hide-sm">' + picks + '</td>' +
+        '<td><button class="btn btn--ghost btn--sm" onclick="openModal(\'' + esc(e.pid) + '\')">Edit</button></td>' +
+      '</tr>';
+    }
+    body.innerHTML = html;
+  }
+
+  document.getElementById('search').addEventListener('input', function (ev) {
+    var q = ev.target.value.toLowerCase();
+    render(allEntries.filter(function (e) { return ((e.display_name || '') + ' ' + (e.email || '')).toLowerCase().indexOf(q) >= 0; }));
+  });
+
+  window.openModal = function (pid) {
+    currentEntry = null;
+    for (var i = 0; i < allEntries.length; i++) if (allEntries[i].pid === pid) { currentEntry = allEntries[i]; break; }
+    if (!currentEntry) return;
+    document.getElementById('modalTitle').textContent = 'Edit: ' + currentEntry.display_name;
+    document.getElementById('m_display_name').value = currentEntry.display_name || '';
+    document.getElementById('m_email').value = currentEntry.email || '';
+    document.getElementById('m_paid_status').value = currentEntry.paid_status || 'unpaid';
+    document.getElementById('m_paid_method').value = currentEntry.paid_method || '';
+    fillBracketSelect('m_bracket_a', 'A', currentEntry.bracket_a || '');
+    fillBracketSelect('m_bracket_a2', 'A', currentEntry.bracket_a2 || '');
+    fillBracketSelect('m_bracket_b', 'B', currentEntry.bracket_b || '');
+    fillBracketSelect('m_bracket_b2', 'B', currentEntry.bracket_b2 || '');
+    fillBracketSelect('m_bracket_c', 'C', currentEntry.bracket_c || '');
+    fillBracketSelect('m_bracket_c2', 'C', currentEntry.bracket_c2 || '');
+    fillBracketSelect('m_bracket_d', 'D', currentEntry.bracket_d || '');
+    fillBracketSelect('m_bracket_d2', 'D', currentEntry.bracket_d2 || '');
+    document.getElementById('m_tiebreaker').value = currentEntry.tiebreaker || '';
+    document.getElementById('m_notes').value = currentEntry.notes || '';
+    document.getElementById('m_reason').value = '';
+    document.getElementById('reasonLabel').style.display = postLock ? 'block' : 'none';
+    document.getElementById('modalBg').classList.add('show');
+  };
+  window.closeModal = function () { document.getElementById('modalBg').classList.remove('show'); };
+
+  window.saveEntry = function () {
+    if (!currentEntry) return;
+    var fields = {
+      display_name: document.getElementById('m_display_name').value.trim(),
+      email: document.getElementById('m_email').value.trim(),
+      paid_status: document.getElementById('m_paid_status').value,
+      paid_method: document.getElementById('m_paid_method').value,
+      bracket_a: document.getElementById('m_bracket_a').value,
+      bracket_a2: document.getElementById('m_bracket_a2').value,
+      bracket_b: document.getElementById('m_bracket_b').value,
+      bracket_b2: document.getElementById('m_bracket_b2').value,
+      bracket_c: document.getElementById('m_bracket_c').value,
+      bracket_c2: document.getElementById('m_bracket_c2').value,
+      bracket_d: document.getElementById('m_bracket_d').value,
+      bracket_d2: document.getElementById('m_bracket_d2').value,
+      tiebreaker: document.getElementById('m_tiebreaker').value.trim(),
+      notes: document.getElementById('m_notes').value.trim()
+    };
+    var reason = document.getElementById('m_reason').value.trim();
+    if (postLock && !reason) { toast('Reason required post-lock', true); return; }
+    fetch(api('/admin_update'), {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ route:'admin_update', key:key, pid:currentEntry.pid, fields:fields, reason:reason })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d.ok) { toast(d.error || 'save failed', true); return; }
+      toast('Saved'); closeModal(); loadList();
+    }).catch(function (e) { toast('Network: ' + e, true); });
+  };
+
+  window.deleteEntry = function () {
+    if (!currentEntry) return;
+    var reason = prompt('Reason for deletion?');
+    if (reason == null) return;
+    fetch(api('/admin_delete'), {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ route:'admin_delete', key:key, pid:currentEntry.pid, reason:reason })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d.ok) { toast(d.error || 'delete failed', true); return; }
+      toast('Deleted'); closeModal(); loadList();
+    });
+  };
+
+  var isNewEntry = false;
+
+  function toggleNewEntryUI(isNew) {
+    // Hide Delete + Resend buttons for new entries (they only make sense for existing)
+    var actions = document.querySelector('.modal-actions');
+    if (!actions) return;
+    var btns = actions.querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) {
+      var t = btns[i].textContent || '';
+      if (t.indexOf('Delete') >= 0 || t.indexOf('Resend') >= 0) {
+        btns[i].style.display = isNew ? 'none' : '';
+      }
+      if (t.indexOf('Save') >= 0) {
+        btns[i].textContent = isNew ? 'Save & email' : 'Save';
+      }
+    }
+  }
+
+  window.openNewEntry = function () {
+    isNewEntry = true;
+    currentEntry = null;
+    document.getElementById('modalTitle').textContent = 'Add new entry';
+    document.getElementById('m_display_name').value = '';
+    document.getElementById('m_email').value = '';
+    document.getElementById('m_paid_status').value = 'unpaid';
+    document.getElementById('m_paid_method').value = 'revolut';
+    fillBracketSelect('m_bracket_a', 'A', '');
+    fillBracketSelect('m_bracket_a2', 'A', '');
+    fillBracketSelect('m_bracket_b', 'B', '');
+    fillBracketSelect('m_bracket_b2', 'B', '');
+    fillBracketSelect('m_bracket_c', 'C', '');
+    fillBracketSelect('m_bracket_c2', 'C', '');
+    fillBracketSelect('m_bracket_d', 'D', '');
+    fillBracketSelect('m_bracket_d2', 'D', '');
+    document.getElementById('m_tiebreaker').value = '';
+    document.getElementById('m_notes').value = '';
+    document.getElementById('m_reason').value = '';
+    document.getElementById('reasonLabel').style.display = 'none';
+    toggleNewEntryUI(true);
+    document.getElementById('modalBg').classList.add('show');
+  };
+
+  // Wrap openModal to clear new-entry flag
+  var _origOpenModal = window.openModal;
+  window.openModal = function (pid) {
+    isNewEntry = false;
+    toggleNewEntryUI(false);
+    _origOpenModal(pid);
+  };
+
+  // Wrap saveEntry: if new, POST to admin_entry instead of admin_update
+  var _origSaveEntry = window.saveEntry;
+  window.saveEntry = function () {
+    if (!isNewEntry) { _origSaveEntry(); return; }
+    var name = document.getElementById('m_display_name').value.trim();
+    var email = document.getElementById('m_email').value.trim();
+    if (!name || !email) { toast('Name and email required', true); return; }
+    var payload = {
+      route: 'admin_entry',
+      key: key,
+      league_slug: leagueSlug,
+      display_name: name,
+      email: email,
+      paid_method: document.getElementById('m_paid_method').value,
+      paid_status: document.getElementById('m_paid_status').value,
+      notes: document.getElementById('m_notes').value.trim()
+    };
+    fetch(api('/admin_entry'), {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d.error === 'name_clash') {
+        alert(d.message || 'Name already used in this league.');
+        return;
+      }
+      if (d.duplicate) {
+        if (confirm('Duplicate found: ' + d.existing.display_name + ' (' + d.existing.email + '). Update existing instead?')) {
+          payload.force_create = true;
+          fetch(api('/admin_entry'), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+            .then(function (r) { return r.json(); }).then(function (d2) {
+              if (!d2.ok) { toast(d2.error || 'failed', true); return; }
+              toast('Updated existing'); closeModal(); loadList();
+            });
+        }
+        return;
+      }
+      if (!d.ok) { toast(d.error || 'add failed', true); return; }
+      toast(d.email_queued ? 'Added (email queued)' : 'Added & email sent');
+      closeModal(); loadList();
+    }).catch(function (e) { toast('Network: ' + e, true); });
+  };
+
+  window.resendEmail = function () {
+    if (!currentEntry) return;
+    fetch(api('/admin_resend'), {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ route:'admin_resend', key:key, pid:currentEntry.pid })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d.ok) { toast(d.error || 'resend failed', true); return; }
+      toast('Email sent');
+    });
+  };
+
+  loadList();
+  loadBrackets();
+})();
+</script>
+</body>
+</html>

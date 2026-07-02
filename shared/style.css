@@ -502,11 +502,13 @@ input:focus, select:focus, textarea:focus {
 .lb-detail-grid div { display: flex; justify-content: space-between; gap: var(--s-3); }
 .lb-detail-grid span { color: var(--muted); font-size: 0.78rem; }
 
-/* Hide non-essential columns under 600px */
+/* Mobile: keep Best/Worst but tighten + allow horizontal scroll */
 @media (max-width: 600px) {
-  .lb .hide-sm { display: none; }
-  .lb thead th, .lb tbody td { padding: 10px 8px; font-size: 0.86rem; }
+  .lb-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .lb { min-width: 640px; }
+  .lb thead th, .lb tbody td { padding: 10px 8px; font-size: 0.82rem; white-space: nowrap; }
   .lb .col-rank { width: 36px; }
+  .lb td.best-pick, .lb td.worst-pick { max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
 }
 @media (max-width: 420px) {
   .lb .hide-xs { display: none; }
