@@ -6,7 +6,7 @@
   "start_date": "Thu Jun 18 2026 00:00:00 GMT+0100 (British Summer Time)",
   "picks_open_date": "Mon Jun 15 2026 00:00:00 GMT+0100 (British Summer Time)",
   "picks_lock_datetime": "2026-06-18T08:00:00+01:00",
-  "status": "picks_open",
+  "status": "frozen",
   "freeze_message": "Thanks everyone for playing ? see you at the next major. Entries open this week, picks Monday of tournament.",
   "logo_url": "https://res.cloudinary.com/pgatour-prod/d_tournaments:logos:r000.png/tournaments/logos/2026/r026.png",
   "brackets": {
@@ -759,5 +759,5 @@
       }
     ]
   },
-  "published_at": "2026-07-02T15:59:41.941Z"
+  "published_at": "2026-07-02T16:04:45.240Z"
 }
