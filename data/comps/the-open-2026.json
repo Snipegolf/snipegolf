@@ -1,0 +1,688 @@
+{
+  "comp_slug": "the-open-2026",
+  "name": "The Open 2026",
+  "espn_id": 401811957,
+  "year": 2026,
+  "start_date": "Thu Jul 16 2026 00:00:00 GMT+0100 (British Summer Time)",
+  "picks_open_date": "Thu Jul 02 2026 00:00:00 GMT+0100 (British Summer Time)",
+  "picks_lock_datetime": "2026-07-15T22:00:00+01:00",
+  "status": "picks_open",
+  "freeze_message": "Entries open now. Brackets lock Wed 15 July 22:00 BST.",
+  "logo_url": "https://a.espncdn.com/i/teamlogos/leagues/500/pga.png",
+  "brackets": {
+    "A": [
+      {
+        "name": "Scottie Scheffler",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Rory McIlroy",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jon Rahm",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Matt Fitzpatrick",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Tommy Fleetwood",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Sam Burns",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Wyndham Clark",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Collin Morikawa",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Xander Schauffele",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Cameron Young",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Ludvig Aberg",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Russell Henley",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Patrick Cantlay",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Si Woo Kim",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "JJ Spaun",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Viktor Hovland",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Justin Thomas",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Ben Griffin",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Chris Gotterup",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Maverick McNealy",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Robert MacIntyre",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Harris English",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Justin Rose",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Alex Fitzpatrick",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Bryson DeChambeau",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Akshay Bhatia",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Shane Lowry",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Kurt Kitayama",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Tyrrell Hatton",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Aaron Rai",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Keegan Bradley",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "JT Poston",
+        "rank": "",
+        "espn_id": ""
+      }
+    ],
+    "B": [
+      {
+        "name": "Joaquin Niemann",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Ryan Gerard",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jake Knapp",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Bud Cauley",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Kristoffer Reitan",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Hideki Matsuyama",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Alex Noren",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Adam Scott",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Nicolai Hojgaard",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Patrick Reed",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jacob Bridgeman",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Eugenio Chacarra",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Min Woo Lee",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Alex Smalley",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Rickie Fowler",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Nick Taylor",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Brian Harman",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Angel Ayora",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Corey Conners",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jordan Spieth",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Gary Woodland",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Michael Kim",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Ryan Fox",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Harry Hall",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jason Day",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Daniel Hillier",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Daniel Berger",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Brooks Koepka",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Matt McCarty",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Andrew Novak",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Scott Vincent",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Sungjae Im",
+        "rank": "",
+        "espn_id": ""
+      }
+    ],
+    "C": [
+      {
+        "name": "Rasmus Neergaard-Petersen",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Cameron Smith",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jordan Smith",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Sepp Straka",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Kota Kaneko",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Lucas Herbert",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Casey Jarvis",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "John Parry",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Rasmus Hojgaard",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jackson Suber",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Tom McKibbin",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Billy Horschel",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Stewart Cink",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Haotong Li",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Marco Penge",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Keita Nakajima",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Louis Oosthuizen",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Antoine Rozner",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jesper Svensson",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jose Luis Ballester",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Martin Couvra",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Dan Brown",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Francesco Laporta",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Kazuma Kobori",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Laurie Canter",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Matthew Jordan",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Elvis Smylie",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Alistair Docherty",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Adrien Saddier",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Caleb Surratt",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Francesco Molinari",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Peter Uihlein",
+        "rank": "",
+        "espn_id": ""
+      }
+    ],
+    "D": [
+      {
+        "name": "Ren Yonezawa",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Frederic Lacroix",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Travis Smyth",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Shaun Norris",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Joakim Lagergren",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Austen Truslow",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "James Nicholas",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Ryutaro Nagano",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Kazuki Higa",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "MJ Daffue",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Sam Bairstow",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Padraig Harrington",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Henrik Stenson",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jeongwoo Ham",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Alejandro De Castro Piera",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "David Howard",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Fifa Laopakdee",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jack Buchanan",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Lev Grinberg",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Mason Howell",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Mateo Pulcini",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Nevill Ruiter",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Stuart Grehan",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Tim Wiedemeyer",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "David Duval",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Baard Bjoernevik Skogen",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Cameron John",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Darren Clarke",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jack McDonald",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Jiho Yang",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Marcus Plunkett",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Matthew Baldwin",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Matthew Southgate",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Michael Hollick",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Naoyuki Kataoka",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Tiger Christensen",
+        "rank": "",
+        "espn_id": ""
+      },
+      {
+        "name": "Tom Sloman",
+        "rank": "",
+        "espn_id": ""
+      }
+    ]
+  },
+  "published_at": "2026-07-02T12:39:45.309Z"
+}
