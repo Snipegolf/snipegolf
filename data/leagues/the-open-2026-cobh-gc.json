@@ -26,7 +26,15 @@
       "bracket_c": "Billy Horschel",
       "bracket_d": "Ryutaro Nagano",
       "tiebreaker": -12
+    },
+    {
+      "pid": "5708fb7d",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Alex Noren",
+      "bracket_c": "Laurie Canter",
+      "bracket_d": "Sam Bairstow",
+      "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-03T10:09:50.376Z"
+  "published_at": "2026-07-03T10:14:54.191Z"
 }
