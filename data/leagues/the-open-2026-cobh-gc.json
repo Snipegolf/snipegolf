@@ -71,8 +71,13 @@
       "pid": "f664555d",
       "display_name": "Normalizer Test 3",
       "paid_status": "unpaid"
+    },
+    {
+      "pid": "ba871c14",
+      "display_name": "Lucy Maher",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-07-03T08:29:49.561Z"
+  "published_at": "2026-07-03T08:34:51.691Z"
 }
