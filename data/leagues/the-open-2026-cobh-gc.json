@@ -16,8 +16,18 @@
       "pid": "5ff3898f",
       "display_name": "Test Baden",
       "paid_status": "paid"
+    },
+    {
+      "pid": "0b45b0fc",
+      "display_name": "CF Test Baden",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "a09fbd70",
+      "display_name": "CF Test 4",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-07-03T07:09:52.771Z"
+  "published_at": "2026-07-03T07:14:51.522Z"
 }
