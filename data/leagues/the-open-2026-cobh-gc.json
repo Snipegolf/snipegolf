@@ -6,7 +6,18 @@
   "revolut_link": "https://revolut.me/badenimdn",
   "logo_url": "https://www.theopen.com/-/media/images/logo-the-open-symbol.png?w=640&hash=69A664BB4B30E4DCF2A2660C55782753",
   "status": "open",
-  "participants": [],
+  "participants": [
+    {
+      "pid": "5708fb7d",
+      "display_name": "Baden Maher",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "5ff3898f",
+      "display_name": "Test Baden",
+      "paid_status": "paid"
+    }
+  ],
   "picks": [],
-  "published_at": "2026-07-03T07:04:54.234Z"
+  "published_at": "2026-07-03T07:09:52.771Z"
 }
