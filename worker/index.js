@@ -45,19 +45,31 @@ async function passthroughGet(url, ttl) {
   if (ttl > 0) {
     const req = new Request(target, { cf: { cacheTtl: ttl, cacheEverything: true } });
     let res = await cache.match(req);
-    if (!res) {
-      res = await fetch(req, { redirect: 'follow' });
-      if (res.ok) {
-        const cloned = new Response(res.body, res);
-        cloned.headers.set('Cache-Control', 'public, max-age=' + ttl);
-        await cache.put(req, cloned.clone());
-        res = cloned;
-      }
+    if (res) {
+      // Validate cached body is JSON before returning (defensive against poisoned entries)
+      const cachedText = await res.clone().text();
+      try { return JSON.parse(cachedText); }
+      catch (e) { /* poisoned cache — fall through to refetch */ }
     }
-    return res.json();
+    // Fetch fresh from upstream
+    const fresh = await fetch(req, { redirect: 'follow' });
+    if (!fresh.ok) return { ok: false, error: 'upstream_http_' + fresh.status };
+    const text = await fresh.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch (e) { return { ok: false, error: 'upstream_non_json' }; }
+    // Only cache valid JSON
+    const toCache = new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=' + ttl }
+    });
+    await cache.put(req, toCache);
+    return data;
   }
   const res = await fetch(target, { redirect: 'follow' });
-  return res.json();
+  const text = await res.text();
+  try { return JSON.parse(text); }
+  catch (e) { return { ok: false, error: 'upstream_non_json' }; }
 }
 
 // Stale-while-revalidate: returns cached JSON immediately if available; refetches in background.
@@ -71,7 +83,10 @@ async function passthroughGetSWR(url, ttl, ctx) {
     try {
       const res = await fetch(target, { redirect: 'follow' });
       if (!res.ok) return null;
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); }
+      catch (e) { return null; } // upstream returned HTML/redirect — don't poison
       if (data && data.ok === false) return null; // don't poison cache with errors
       const respToCache = new Response(JSON.stringify(data), {
         status: 200,
@@ -90,14 +105,17 @@ async function passthroughGetSWR(url, ttl, ctx) {
   };
   if (stale) {
     const staleAge = parseInt(stale.headers.get('Age') || '0', 10);
-    // If stale is fresh enough, just return it without revalidation
-    if (staleAge < ttl) {
-      return await stale.json();
+    // Defensive JSON parse on cached body (defends against pre-fix poisoned entries)
+    const staleText = await stale.clone().text();
+    let staleData;
+    try { staleData = JSON.parse(staleText); }
+    catch (e) { staleData = null; }
+    if (staleData) {
+      if (staleAge < ttl) return staleData;
+      if (ctx && ctx.waitUntil) ctx.waitUntil(refresh());
+      return Object.assign({}, staleData, { stale: true, stale_age_s: staleAge });
     }
-    // Otherwise return stale + revalidate in background
-    if (ctx && ctx.waitUntil) ctx.waitUntil(refresh());
-    const data = await stale.json();
-    return Object.assign({}, data, { stale: true, stale_age_s: staleAge });
+    // Poisoned stale entry — fall through to fresh fetch
   }
   // No cache yet — must fetch synchronously
   const fresh = await refresh();

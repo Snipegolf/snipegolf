@@ -189,22 +189,42 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     </div>
     <div class="row">
       <div>
-        <label>Bracket A</label>
-        <input id="m_bracket_a">
+        <label>Bracket A · pick 1</label>
+        <select id="m_bracket_a"><option value="">—</option></select>
       </div>
-      <div>
-        <label>Bracket B</label>
-        <input id="m_bracket_b">
+      <div class="pick2-cell">
+        <label>Bracket A · pick 2</label>
+        <select id="m_bracket_a2"><option value="">—</option></select>
       </div>
     </div>
     <div class="row">
       <div>
-        <label>Bracket C</label>
-        <input id="m_bracket_c">
+        <label>Bracket B · pick 1</label>
+        <select id="m_bracket_b"><option value="">—</option></select>
       </div>
+      <div class="pick2-cell">
+        <label>Bracket B · pick 2</label>
+        <select id="m_bracket_b2"><option value="">—</option></select>
+      </div>
+    </div>
+    <div class="row">
       <div>
-        <label>Bracket D</label>
-        <input id="m_bracket_d">
+        <label>Bracket C · pick 1</label>
+        <select id="m_bracket_c"><option value="">—</option></select>
+      </div>
+      <div class="pick2-cell">
+        <label>Bracket C · pick 2</label>
+        <select id="m_bracket_c2"><option value="">—</option></select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Bracket D · pick 1</label>
+        <select id="m_bracket_d"><option value="">—</option></select>
+      </div>
+      <div class="pick2-cell">
+        <label>Bracket D · pick 2</label>
+        <select id="m_bracket_d2"><option value="">—</option></select>
       </div>
     </div>
     <label>Tiebreaker (to par, e.g. -12)</label>
@@ -244,6 +264,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
   var listEntries = [];
   var currentEntry = null;
   var postLock = false;
+  var bracketsCache = {};   // comp_slug -> {A:[], B:[], C:[], D:[]}
+  var picksPerBracket = 1;  // set from admin_list comp.picks_per_bracket
+  var currentCompSlug = ''; // current league's comp
 
   // ---- helpers ----
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
@@ -456,7 +479,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
       .then(function(d){
         if (!d.ok) { $('listBody').innerHTML = '<div class="alert err">' + esc(d.error || 'load failed') + '</div>'; return; }
         postLock = !!d.post_lock;
+        picksPerBracket = (d.comp && parseInt(d.comp.picks_per_bracket, 10)) || 1;
+        currentCompSlug = (d.league && d.league.comp_slug) || '';
         $('postLockBanner').classList.toggle('hidden', !postLock);
+        // Preload brackets in the background so edit modal opens fast
+        if (currentCompSlug) fetchBrackets(currentCompSlug);
         var s = d.stats || {};
         $('listStats').innerHTML =
           '<div class="stat"><div class="v">' + (s.total||0) + '</div><div class="l">Entries</div></div>' +
@@ -485,9 +512,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
       var e = entries[i];
       var picks = '';
       if (e.bracket_a) picks += '<span class="pick-chip">A:' + esc(e.bracket_a) + '</span>';
+      if (e.bracket_a2) picks += '<span class="pick-chip">A2:' + esc(e.bracket_a2) + '</span>';
       if (e.bracket_b) picks += '<span class="pick-chip">B:' + esc(e.bracket_b) + '</span>';
+      if (e.bracket_b2) picks += '<span class="pick-chip">B2:' + esc(e.bracket_b2) + '</span>';
       if (e.bracket_c) picks += '<span class="pick-chip">C:' + esc(e.bracket_c) + '</span>';
+      if (e.bracket_c2) picks += '<span class="pick-chip">C2:' + esc(e.bracket_c2) + '</span>';
       if (e.bracket_d) picks += '<span class="pick-chip">D:' + esc(e.bracket_d) + '</span>';
+      if (e.bracket_d2) picks += '<span class="pick-chip">D2:' + esc(e.bracket_d2) + '</span>';
       if (e.tiebreaker) picks += '<span class="pick-chip">TB:' + esc(e.tiebreaker) + '</span>';
       var paidClass = (e.paid_status === 'paid') ? 'paid' : 'unpaid';
       html += '<div class="entry-row" data-pid="' + esc(e.pid) + '">' +
@@ -510,6 +541,72 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     }
   }
 
+  // ---- brackets fetch & modal dropdowns ----
+  function fetchBrackets(compSlug){
+    if (bracketsCache[compSlug]) return Promise.resolve(bracketsCache[compSlug]);
+    return fetch(apiBase + '/brackets?comp=' + encodeURIComponent(compSlug))
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (d && d.ok && d.brackets){ bracketsCache[compSlug] = d.brackets; return d.brackets; }
+        return null;
+      }).catch(function(){ return null; });
+  }
+  function buildBracketOptions(sel, list, currentVal, excludeVal){
+    sel.innerHTML = '<option value="">— select —</option>';
+    var found = false;
+    for (var i=0;i<list.length;i++){
+      var p = list[i];
+      var nm = p.name || '';
+      if (excludeVal && nm === excludeVal && nm !== currentVal) continue;
+      var opt = document.createElement('option');
+      opt.value = nm;
+      opt.textContent = p.rank ? (nm + ' (#' + p.rank + ')') : nm;
+      if (nm === currentVal) { opt.selected = true; found = true; }
+      sel.appendChild(opt);
+    }
+    // Preserve legacy value not in current field list
+    if (currentVal && !found){
+      var legacy = document.createElement('option');
+      legacy.value = currentVal; legacy.textContent = currentVal + ' (legacy)'; legacy.selected = true;
+      sel.appendChild(legacy);
+    }
+  }
+  function populateBracketSelects(brackets){
+    var letters = ['a','b','c','d'];
+    for (var i=0;i<letters.length;i++){
+      var L = letters[i];
+      var list = (brackets && brackets[L.toUpperCase()]) || [];
+      var s1 = $('m_bracket_' + L);
+      var s2 = $('m_bracket_' + L + '2');
+      var v1 = currentEntry['bracket_' + L] || '';
+      var v2 = currentEntry['bracket_' + L + '2'] || '';
+      buildBracketOptions(s1, list, v1, v2);
+      buildBracketOptions(s2, list, v2, v1);
+    }
+    // Show/hide pick 2 rows based on picks_per_bracket
+    var cells = document.querySelectorAll('.pick2-cell');
+    for (var k=0;k<cells.length;k++){
+      cells[k].style.display = (picksPerBracket === 2) ? '' : 'none';
+    }
+  }
+  function wireBracketExclusion(){
+    var letters = ['a','b','c','d'];
+    for (var i=0;i<letters.length;i++){
+      (function(L){
+        var s1 = $('m_bracket_' + L);
+        var s2 = $('m_bracket_' + L + '2');
+        var brackets = bracketsCache[currentCompSlug];
+        var list = (brackets && brackets[L.toUpperCase()]) || [];
+        var rebuild = function(){
+          buildBracketOptions(s1, list, s1.value, s2.value);
+          buildBracketOptions(s2, list, s2.value, s1.value);
+        };
+        s1.onchange = rebuild;
+        s2.onchange = rebuild;
+      })(letters[i]);
+    }
+  }
+
   // ---- edit modal ----
   function openEditModal(pid){
     currentEntry = null;
@@ -520,10 +617,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     $('m_email').value = currentEntry.email || '';
     $('m_paid_status').value = currentEntry.paid_status || 'unpaid';
     $('m_paid_method').value = currentEntry.paid_method || '';
-    $('m_bracket_a').value = currentEntry.bracket_a || '';
-    $('m_bracket_b').value = currentEntry.bracket_b || '';
-    $('m_bracket_c').value = currentEntry.bracket_c || '';
-    $('m_bracket_d').value = currentEntry.bracket_d || '';
+    // Populate brackets: use cache immediately, then refresh if needed
+    var brackets = bracketsCache[currentCompSlug];
+    if (brackets){
+      populateBracketSelects(brackets);
+      wireBracketExclusion();
+    } else if (currentCompSlug){
+      // Fetch then populate; show placeholder until ready
+      populateBracketSelects({A:[],B:[],C:[],D:[]});
+      fetchBrackets(currentCompSlug).then(function(b){
+        if (b) { populateBracketSelects(b); wireBracketExclusion(); }
+      });
+    } else {
+      populateBracketSelects({A:[],B:[],C:[],D:[]});
+    }
     $('m_tiebreaker').value = currentEntry.tiebreaker || '';
     $('m_notes').value = currentEntry.notes || '';
     if ($('m_reason')) $('m_reason').value = '';
@@ -540,10 +647,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
       email: $('m_email').value.trim(),
       paid_status: $('m_paid_status').value,
       paid_method: $('m_paid_method').value,
-      bracket_a: $('m_bracket_a').value.trim(),
-      bracket_b: $('m_bracket_b').value.trim(),
-      bracket_c: $('m_bracket_c').value.trim(),
-      bracket_d: $('m_bracket_d').value.trim(),
+      bracket_a: $('m_bracket_a').value,
+      bracket_b: $('m_bracket_b').value,
+      bracket_c: $('m_bracket_c').value,
+      bracket_d: $('m_bracket_d').value,
+      bracket_a2: $('m_bracket_a2').value,
+      bracket_b2: $('m_bracket_b2').value,
+      bracket_c2: $('m_bracket_c2').value,
+      bracket_d2: $('m_bracket_d2').value,
       tiebreaker: $('m_tiebreaker').value.trim(),
       notes: $('m_notes').value.trim()
     };
