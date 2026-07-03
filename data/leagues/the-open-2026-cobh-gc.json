@@ -78,6 +78,15 @@
       "paid_status": "paid"
     }
   ],
-  "picks": [],
-  "published_at": "2026-07-03T08:59:52.880Z"
+  "picks": [
+    {
+      "pid": "ba871c14",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Corey Conners",
+      "bracket_c": "Billy Horschel",
+      "bracket_d": "Ryutaro Nagano",
+      "tiebreaker": -12
+    }
+  ],
+  "published_at": "2026-07-03T09:04:54.625Z"
 }
