@@ -56,8 +56,13 @@
       "pid": "024cd909",
       "display_name": "Cfv30f 1",
       "paid_status": "paid"
+    },
+    {
+      "pid": "64ac5ec2",
+      "display_name": "Norm Verify 1",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-07-03T07:24:53.551Z"
+  "published_at": "2026-07-03T07:29:58.618Z"
 }
