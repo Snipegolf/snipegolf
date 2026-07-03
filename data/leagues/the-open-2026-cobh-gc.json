@@ -13,66 +13,6 @@
       "paid_status": "paid"
     },
     {
-      "pid": "5ff3898f",
-      "display_name": "Test Baden",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "0b45b0fc",
-      "display_name": "CF Test Baden",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "a09fbd70",
-      "display_name": "CF Test 4",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "546f102e",
-      "display_name": "CF Test Normalized",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "21c0d066",
-      "display_name": "CF Norm 1",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "cb4e865b",
-      "display_name": "CF Norm V29 1",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "1f8ed4de",
-      "display_name": "Cfv30 1",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "62aaf35e",
-      "display_name": "Cfv30 R",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "024cd909",
-      "display_name": "Cfv30f 1",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "64ac5ec2",
-      "display_name": "Norm Verify 1",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "9a97aaef",
-      "display_name": "Normalizer Test",
-      "paid_status": "paid"
-    },
-    {
-      "pid": "f664555d",
-      "display_name": "Normalizer Test 3",
-      "paid_status": "unpaid"
-    },
-    {
       "pid": "ba871c14",
       "display_name": "Lucy Maher",
       "paid_status": "paid"
@@ -88,5 +28,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-03T10:04:50.725Z"
+  "published_at": "2026-07-03T10:09:50.376Z"
 }
