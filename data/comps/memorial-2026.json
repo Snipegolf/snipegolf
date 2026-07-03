@@ -6,7 +6,7 @@
   "start_date": "Fri Jun 05 2026 00:00:00 GMT+0100 (British Summer Time)",
   "picks_open_date": "Thu Jun 04 2026 00:00:00 GMT+0100 (British Summer Time)",
   "picks_lock_datetime": "2026-06-05T22:00:00+01:00",
-  "status": "live",
+  "status": "frozen",
   "freeze_message": "Thanks for playing the Memorial test sweep.",
   "logo_url": "https://a.espncdn.com/i/teamlogos/leagues/500/pga.png",
   "brackets": {
@@ -379,5 +379,5 @@
       }
     ]
   },
-  "published_at": "2026-07-03T10:09:42.843Z"
+  "published_at": "2026-07-03T10:14:44.097Z"
 }
