@@ -26,8 +26,23 @@
       "pid": "a09fbd70",
       "display_name": "CF Test 4",
       "paid_status": "paid"
+    },
+    {
+      "pid": "546f102e",
+      "display_name": "CF Test Normalized",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "21c0d066",
+      "display_name": "CF Norm 1",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "cb4e865b",
+      "display_name": "CF Norm V29 1",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-07-03T07:14:51.522Z"
+  "published_at": "2026-07-03T07:20:05.712Z"
 }
