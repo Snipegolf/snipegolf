@@ -3,16 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Entry — SnipeGolf</title>
+<title>Admin — SnipeGolf</title>
 <style>
 :root{
   --bg:#0a0e14; --card:#141c28; --line:#1f2a3a;
   --ink:#e6edf6; --mute:#8aa0bd; --gold:#d4b24c; --green:#2dd4a4; --red:#ff5d6c;
+  --paid:rgba(45,212,164,.14); --unpaid:rgba(255,213,74,.14);
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,Inter,Segoe UI,sans-serif}
-.wrap{max-width:520px;margin:0 auto;padding:18px 16px 80px}
+.wrap{max-width:820px;margin:0 auto;padding:18px 16px 80px}
 h1{font-size:22px;margin:0 0 4px}
+h2{font-size:17px;margin:0 0 6px}
 .sub{color:var(--mute);font-size:13px;margin-bottom:18px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
 label{display:block;font-size:12px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;margin:10px 0 4px}
@@ -28,6 +30,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 .btn{display:block;width:100%;background:var(--gold);color:#1a1300;font-weight:800;padding:14px;border:0;border-radius:12px;font-size:16px;cursor:pointer;margin-top:14px;letter-spacing:.02em}
 .btn:disabled{opacity:.5}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:8px 12px;font-size:13px;margin-top:0;width:auto;display:inline-block}
 .alert{padding:12px;border-radius:10px;margin:10px 0;font-size:14px}
 .alert.ok{background:#0e3a2a;color:#9be3c4}
 .alert.err{background:#3a1418;color:#ffb3bb}
@@ -38,6 +41,43 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 .recent{font-size:13px;color:var(--mute);max-height:200px;overflow:auto;border-top:1px dashed var(--line);margin-top:10px;padding-top:10px}
 .recent div{padding:4px 0;border-bottom:1px dashed var(--line)}
 .recent div:last-child{border-bottom:0}
+
+/* tabs */
+.tabs{display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:0}
+.tab{background:transparent;color:var(--mute);border:0;padding:12px 14px;font-size:14px;cursor:pointer;border-bottom:2px solid transparent;font-weight:600}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* entry list */
+.stats{display:flex;gap:8px;margin-bottom:12px}
+.stat{flex:1;background:#0a121d;border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.stat .v{font-size:22px;font-weight:800;color:var(--gold)}
+.stat .l{font-size:10px;text-transform:uppercase;color:var(--mute);letter-spacing:1px}
+.stat.paid .v{color:var(--green)}
+.stat.unpaid .v{color:#ffd54a}
+.list-toolbar{display:flex;gap:8px;margin-bottom:10px}
+.list-toolbar input{flex:1}
+.entry-row{display:flex;align-items:center;justify-content:space-between;padding:10px 8px;border-bottom:1px solid var(--line);gap:8px}
+.entry-row:last-child{border-bottom:0}
+.entry-name{font-weight:700;font-size:14px}
+.entry-meta{color:var(--mute);font-size:12px;margin-top:2px}
+.pay-chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-left:6px}
+.pay-chip.paid{background:var(--paid);color:var(--green)}
+.pay-chip.unpaid{background:var(--unpaid);color:#ffd54a}
+.picks-line{color:var(--mute);font-size:11px;margin-top:2px}
+.pick-chip{display:inline-block;margin:1px 3px 1px 0;padding:1px 5px;background:rgba(212,178,76,.1);color:var(--gold);border-radius:3px;font-size:10px}
+.edit-btn{background:transparent;color:var(--gold);border:1px solid var(--gold);border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer;font-weight:700;flex-shrink:0}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:flex-start;justify-content:center;padding:20px 16px;z-index:100;overflow-y:auto}
+.modal-bg.show{display:flex}
+.modal{background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:20px;max-width:460px;width:100%;margin:auto}
+.modal h3{margin:0 0 12px;font-size:17px;color:var(--gold)}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.modal-actions button{flex:1;padding:11px;border:0;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer}
+.modal-actions .save{background:var(--gold);color:#1a1300}
+.modal-actions .cancel{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.modal-actions .del{background:var(--red);color:#fff}
+.post-lock-banner{background:rgba(255,93,108,.15);color:var(--red);padding:10px;text-align:center;font-size:12px;font-weight:700;border-radius:10px;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -49,12 +89,19 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 </div>
 
 <div id="app" class="hidden">
-  <h1>Add entry</h1>
+  <h1>SnipeGolf Admin</h1>
   <div class="sub" id="adminMeta">Loading…</div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="add">Add entry</button>
+    <button class="tab" data-tab="list">Entries</button>
+    <button class="tab" data-tab="prizes">Prizes</button>
+  </div>
 
   <div id="alertBox"></div>
 
-  <div class="card">
+  <!-- ADD ENTRY -->
+  <div class="card tab-panel" id="tab-add">
     <label>Player name</label>
     <input id="display_name" autocomplete="name" placeholder="e.g. Baden Maher">
 
@@ -81,22 +128,104 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     <label>Notes (optional)</label>
     <textarea id="notes" rows="2" placeholder="Any context"></textarea>
 
-    <button class="btn" id="submitBtn">Add entry & send email</button>
+    <button class="btn" id="submitBtn">Add entry &amp; send email</button>
     <button class="btn ghost" id="clearBtn">Clear form</button>
 
     <div class="recent" id="recent"></div>
   </div>
 
-  <div class="card" id="prizesCard">
-    <h2 style="margin:0 0 4px;font-size:18px">Prizes (free text)</h2>
-    <div class="sub" style="margin-bottom:8px">Shown on the league page. Edit freely — line breaks preserved.</div>
+  <!-- ENTRIES LIST -->
+  <div class="card tab-panel hidden" id="tab-list">
+    <label>League</label>
+    <select id="list_league"></select>
+    <div id="postLockBanner" class="post-lock-banner hidden">TOURNAMENT STARTED — edits will be logged</div>
+    <div class="stats" id="listStats"></div>
+    <div class="list-toolbar">
+      <input id="listSearch" placeholder="Search name or email…">
+      <button class="btn small ghost" id="listRefresh">Refresh</button>
+    </div>
+    <div id="listBody"><div style="text-align:center;color:var(--mute);padding:30px">Pick a league.</div></div>
+  </div>
+
+  <!-- PRIZES -->
+  <div class="card tab-panel hidden" id="tab-prizes">
+    <h2>Prizes (free text)</h2>
+    <div class="sub" style="margin-bottom:8px">Shown on the league page. Line breaks preserved.</div>
     <label>League</label>
     <select id="prizes_league"></select>
     <label>Prizes text</label>
-    <textarea id="prizes_text" rows="6" placeholder="1st: €60&#10;2nd: €30&#10;Longest drive: sleeve of balls"></textarea>
+    <textarea id="prizes_text" rows="6" placeholder="1st: &euro;60&#10;2nd: &euro;30&#10;Longest drive: sleeve of balls"></textarea>
     <button class="btn" id="prizesSaveBtn">Save prizes</button>
     <div id="prizesAlert"></div>
   </div>
+</div>
+
+<!-- EDIT ENTRY MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle">Edit entry</h3>
+    <label>Display name</label>
+    <input id="m_display_name">
+    <label>Email</label>
+    <input id="m_email">
+    <div class="row">
+      <div>
+        <label>Paid status</label>
+        <select id="m_paid_status">
+          <option value="unpaid">unpaid</option>
+          <option value="paid">paid</option>
+        </select>
+      </div>
+      <div>
+        <label>Paid method</label>
+        <select id="m_paid_method">
+          <option value="">—</option>
+          <option value="cash">cash</option>
+          <option value="revolut">revolut</option>
+          <option value="shop">shop</option>
+          <option value="pending">pending / IOU</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Bracket A</label>
+        <input id="m_bracket_a">
+      </div>
+      <div>
+        <label>Bracket B</label>
+        <input id="m_bracket_b">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Bracket C</label>
+        <input id="m_bracket_c">
+      </div>
+      <div>
+        <label>Bracket D</label>
+        <input id="m_bracket_d">
+      </div>
+    </div>
+    <label>Tiebreaker (to par, e.g. -12)</label>
+    <input id="m_tiebreaker">
+    <label>Notes</label>
+    <input id="m_notes">
+    <div id="reasonLabel" class="hidden">
+      <label>Reason for post-lock edit (required)</label>
+      <input id="m_reason" placeholder="e.g. picks lost in submission">
+    </div>
+    <div class="modal-actions">
+      <button class="cancel" id="modalCancel">Cancel</button>
+      <button class="del" id="modalDelete">Delete</button>
+      <button class="save" id="modalSave">Save</button>
+    </div>
+    <div style="margin-top:10px;text-align:right">
+      <button class="btn small ghost" id="modalResend">Resend confirmation email</button>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -109,47 +238,65 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
   document.getElementById('app').classList.remove('hidden');
 
   var $ = function(id){ return document.getElementById(id); };
-  var apiBase = '';  // injected from state.json
-  var workerBase = 'https://twilight-recipe-e213.badenmaher.workers.dev/api';
+  var WORKER = 'https://twilight-recipe-e213.badenmaher.workers.dev/api';
+  var apiBase = WORKER;
+  var allLeagues = [];
+  var listEntries = [];
+  var currentEntry = null;
+  var postLock = false;
 
+  // ---- helpers ----
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
   function alertMsg(kind, text){
     var box = $('alertBox');
     box.innerHTML = '<div class="alert ' + kind + '">' + text + '</div>';
     if (kind === 'ok') setTimeout(function(){ box.innerHTML=''; }, 6000);
   }
-
   function loadState(){
     return fetch('state.json?ts=' + Date.now()).then(function(r){ return r.json(); });
   }
 
-  function fillLeagues(state, leagues){
-    var sel = $('league_slug');
-    var psel = $('prizes_league');
-    sel.innerHTML = '';
-    psel.innerHTML = '';
-    if (!leagues || !leagues.length) {
-      var o = document.createElement('option');
-      o.value = ''; o.textContent = '(no leagues)';
-      sel.appendChild(o);
-      var o2 = document.createElement('option');
-      o2.value = ''; o2.textContent = '(no leagues)';
-      psel.appendChild(o2);
-      return;
-    }
-    for (var i=0;i<leagues.length;i++){
-      var L = leagues[i];
-      var o = document.createElement('option');
-      o.value = L.league_slug;
-      o.textContent = L.league_name + ' (\u20AC' + (L.entry_fee_eur || '?') + ')';
-      o.setAttribute('data-fee', L.entry_fee_eur || '');
-      sel.appendChild(o);
-      var op = document.createElement('option');
-      op.value = L.league_slug;
-      op.textContent = L.league_name;
-      psel.appendChild(op);
+  // ---- tabs ----
+  var tabs = document.querySelectorAll('.tab');
+  for (var i=0;i<tabs.length;i++){
+    tabs[i].addEventListener('click', function(ev){
+      var name = ev.currentTarget.getAttribute('data-tab');
+      for (var j=0;j<tabs.length;j++) tabs[j].classList.remove('active');
+      ev.currentTarget.classList.add('active');
+      var panels = document.querySelectorAll('.tab-panel');
+      for (var k=0;k<panels.length;k++) panels[k].classList.add('hidden');
+      $('tab-' + name).classList.remove('hidden');
+      if (name === 'list') loadList();
+      if (name === 'prizes') loadPrizes();
+    });
+  }
+
+  // ---- league fill ----
+  function fillLeagueSelects(){
+    var selects = [$('league_slug'), $('list_league'), $('prizes_league')];
+    for (var i=0;i<selects.length;i++){
+      var sel = selects[i];
+      sel.innerHTML = '';
+      if (!allLeagues.length){
+        var o = document.createElement('option');
+        o.value=''; o.textContent='(no leagues)';
+        sel.appendChild(o);
+        continue;
+      }
+      for (var j=0;j<allLeagues.length;j++){
+        var L = allLeagues[j];
+        var o = document.createElement('option');
+        o.value = L.league_slug;
+        if (sel.id === 'league_slug'){
+          o.textContent = L.league_name + ' (\u20AC' + (L.entry_fee_eur || '?') + ')';
+          o.setAttribute('data-fee', L.entry_fee_eur || '');
+        } else {
+          o.textContent = L.league_name;
+        }
+        sel.appendChild(o);
+      }
     }
     onLeagueChange();
-    loadPrizes();
   }
 
   function onLeagueChange(){
@@ -160,12 +307,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
   }
   $('league_slug').addEventListener('change', onLeagueChange);
 
-  // Boot
+  // ---- boot ----
   loadState().then(function(state){
-    apiBase = state.participant_api;
-    // Prefer worker for admin ops (outage-proof); fall back to apps script if worker down
-    apiBase = workerBase || state.participant_api;
-    // Fetch leagues for this admin key
     return fetch(apiBase + '/admin_leagues?key=' + encodeURIComponent(key))
       .then(function(r){ return r.json(); })
       .then(function(res){
@@ -176,20 +319,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
           return;
         }
         $('adminMeta').textContent = 'Signed in as ' + res.admin_name + ' \u00b7 ' + res.leagues.length + ' league(s)';
-        fillLeagues(state, res.leagues);
+        allLeagues = res.leagues || [];
+        fillLeagueSelects();
       });
   }).catch(function(e){
     alertMsg('err', 'Failed to load: ' + e);
   });
 
-  // Recent entries list (local only)
+  // ---- recent (add-entry local history) ----
   function pushRecent(name, league){
-    var key = 'sg_recent_v1';
+    var rk = 'sg_recent_v1';
     var arr = [];
-    try { arr = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){}
+    try { arr = JSON.parse(localStorage.getItem(rk) || '[]'); } catch(e){}
     arr.unshift({ name: name, league: league, ts: new Date().toISOString() });
     arr = arr.slice(0, 12);
-    try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
+    try { localStorage.setItem(rk, JSON.stringify(arr)); } catch(e){}
     renderRecent();
   }
   function renderRecent(){
@@ -200,7 +344,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     var h = '<b>Recent on this device:</b>';
     for (var i=0;i<arr.length;i++){
       var t = new Date(arr[i].ts);
-      h += '<div>' + arr[i].name + ' \u2014 ' + arr[i].league + ' \u00b7 ' + t.toLocaleTimeString() + '</div>';
+      h += '<div>' + esc(arr[i].name) + ' \u2014 ' + esc(arr[i].league) + ' \u00b7 ' + t.toLocaleTimeString() + '</div>';
     }
     el.innerHTML = h;
   }
@@ -212,10 +356,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     return '';
   }
 
+  // ---- add entry ----
   function doSubmit(force){
     var name = $('display_name').value.trim();
     var email = $('email').value.trim();
-    var phone = '';
     var league = $('league_slug').value;
     var paym = getRadio('paym');
     var pays = getRadio('pays');
@@ -227,14 +371,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     }
 
     $('submitBtn').disabled = true;
-    $('submitBtn').textContent = 'Submitting…';
+    $('submitBtn').textContent = 'Submitting\u2026';
 
     var payload = {
-      route: 'admin_entry',
       key: key,
       display_name: name,
       email: email,
-      phone: phone,
+      phone: '',
       league_slug: league,
       paid_method: paym,
       paid_status: pays,
@@ -258,7 +401,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
         showDupeModal(res.existing);
         return;
       }
-      alertMsg('ok', 'Added ' + name + '. Email ' + (res.email_queued ? 'queued' : 'sent') + '.');
+      alertMsg('ok', 'Added ' + esc(name) + '. Email ' + (res.email_queued ? 'queued' : 'sent') + '.');
       pushRecent(name, league);
       $('display_name').value = '';
       $('email').value = '';
@@ -267,7 +410,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     }).catch(function(e){
       $('submitBtn').disabled = false;
       $('submitBtn').textContent = 'Add entry & send email';
-      // Crash fallback — email the entry
       var subj = encodeURIComponent('SnipeGolf admin entry CRASH: ' + name);
       var body = encodeURIComponent('Form crashed. Please add manually:\n\n' + JSON.stringify(payload, null, 2));
       alertMsg('err', 'Submit failed. <a style="color:#fff" href="mailto:snipegolfclothing@gmail.com?subject=' + subj + '&body=' + body + '">Tap here to email entry instead</a>');
@@ -279,18 +421,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     box.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;z-index:99;padding:16px';
     box.innerHTML = '<div style="background:#141c28;border:1px solid #1f2a3a;border-radius:14px;padding:20px;max-width:420px;width:100%">' +
       '<h2 style="margin:0 0 8px;color:#d4b24c;font-size:18px">Already entered</h2>' +
-      '<p style="color:#cdd9eb;font-size:14px;margin:0 0 8px"><b>' + existing.display_name + '</b> (' + existing.email + ')<br>' + existing.league_name + ' \u00b7 ' + (existing.paid_status || 'unpaid') + '</p>' +
+      '<p style="color:#cdd9eb;font-size:14px;margin:0 0 8px"><b>' + esc(existing.display_name) + '</b> (' + esc(existing.email) + ')<br>' + esc(existing.league_name) + ' \u00b7 ' + esc(existing.paid_status || 'unpaid') + '</p>' +
       '<p style="color:#8aa0bd;font-size:13px;margin:0 0 16px">Update this entry with the new details, or cancel.</p>' +
       '<div style="display:flex;gap:8px">' +
         '<button id="dupeUpdate" style="flex:1;background:#d4b24c;color:#1a1300;border:0;border-radius:10px;padding:12px;font-weight:800;font-size:15px;cursor:pointer">Update</button>' +
         '<button id="dupeCancel" style="flex:1;background:transparent;color:#e6edf6;border:1px solid #1f2a3a;border-radius:10px;padding:12px;font-size:15px;cursor:pointer">Cancel</button>' +
       '</div></div>';
     document.body.appendChild(box);
-    document.getElementById('dupeUpdate').addEventListener('click', function(){
+    $('dupeUpdate').addEventListener('click', function(){
       document.body.removeChild(box);
       doSubmit(true);
     });
-    document.getElementById('dupeCancel').addEventListener('click', function(){
+    $('dupeCancel').addEventListener('click', function(){
       document.body.removeChild(box);
     });
   }
@@ -300,7 +442,155 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     $('display_name').value=''; $('email').value=''; $('notes').value='';
   });
 
-  // ---- Prizes free-text ----
+  // ---- entries list ----
+  function loadList(){
+    var slug = $('list_league').value;
+    if (!slug){
+      $('listBody').innerHTML = '<div style="text-align:center;color:var(--mute);padding:30px">Pick a league.</div>';
+      $('listStats').innerHTML = '';
+      return;
+    }
+    $('listBody').innerHTML = '<div style="text-align:center;color:var(--mute);padding:30px">Loading\u2026</div>';
+    fetch(apiBase + '/admin_list?league=' + encodeURIComponent(slug) + '&key=' + encodeURIComponent(key))
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (!d.ok) { $('listBody').innerHTML = '<div class="alert err">' + esc(d.error || 'load failed') + '</div>'; return; }
+        postLock = !!d.post_lock;
+        $('postLockBanner').classList.toggle('hidden', !postLock);
+        var s = d.stats || {};
+        $('listStats').innerHTML =
+          '<div class="stat"><div class="v">' + (s.total||0) + '</div><div class="l">Entries</div></div>' +
+          '<div class="stat paid"><div class="v">' + (s.paid||0) + '</div><div class="l">Paid</div></div>' +
+          '<div class="stat unpaid"><div class="v">' + (s.unpaid||0) + '</div><div class="l">Unpaid</div></div>';
+        listEntries = d.entries || [];
+        renderList(listEntries);
+      })
+      .catch(function(e){ $('listBody').innerHTML = '<div class="alert err">Network: ' + esc(e) + '</div>'; });
+  }
+  $('list_league').addEventListener('change', loadList);
+  $('listRefresh').addEventListener('click', loadList);
+  $('listSearch').addEventListener('input', function(ev){
+    var q = ev.target.value.toLowerCase();
+    var f = listEntries.filter(function(e){ return ((e.display_name||'') + ' ' + (e.email||'')).toLowerCase().indexOf(q) >= 0; });
+    renderList(f);
+  });
+
+  function renderList(entries){
+    if (!entries.length){
+      $('listBody').innerHTML = '<div style="text-align:center;color:var(--mute);padding:30px">No entries.</div>';
+      return;
+    }
+    var html = '';
+    for (var i=0;i<entries.length;i++){
+      var e = entries[i];
+      var picks = '';
+      if (e.bracket_a) picks += '<span class="pick-chip">A:' + esc(e.bracket_a) + '</span>';
+      if (e.bracket_b) picks += '<span class="pick-chip">B:' + esc(e.bracket_b) + '</span>';
+      if (e.bracket_c) picks += '<span class="pick-chip">C:' + esc(e.bracket_c) + '</span>';
+      if (e.bracket_d) picks += '<span class="pick-chip">D:' + esc(e.bracket_d) + '</span>';
+      if (e.tiebreaker) picks += '<span class="pick-chip">TB:' + esc(e.tiebreaker) + '</span>';
+      var paidClass = (e.paid_status === 'paid') ? 'paid' : 'unpaid';
+      html += '<div class="entry-row" data-pid="' + esc(e.pid) + '">' +
+        '<div style="min-width:0;flex:1">' +
+          '<div class="entry-name">' + esc(e.display_name) +
+            '<span class="pay-chip ' + paidClass + '">' + esc(e.paid_status || 'unpaid') + (e.paid_method ? ' \u00b7 ' + esc(e.paid_method) : '') + '</span>' +
+          '</div>' +
+          '<div class="entry-meta">' + esc(e.email || '') + '</div>' +
+          (picks ? '<div class="picks-line">' + picks + '</div>' : '') +
+        '</div>' +
+        '<button class="edit-btn" data-pid="' + esc(e.pid) + '">Edit</button>' +
+      '</div>';
+    }
+    $('listBody').innerHTML = html;
+    var btns = $('listBody').querySelectorAll('.edit-btn');
+    for (var j=0;j<btns.length;j++){
+      btns[j].addEventListener('click', function(ev){
+        openEditModal(ev.currentTarget.getAttribute('data-pid'));
+      });
+    }
+  }
+
+  // ---- edit modal ----
+  function openEditModal(pid){
+    currentEntry = null;
+    for (var i=0;i<listEntries.length;i++) if (listEntries[i].pid === pid) { currentEntry = listEntries[i]; break; }
+    if (!currentEntry) return;
+    $('modalTitle').textContent = 'Edit: ' + currentEntry.display_name;
+    $('m_display_name').value = currentEntry.display_name || '';
+    $('m_email').value = currentEntry.email || '';
+    $('m_paid_status').value = currentEntry.paid_status || 'unpaid';
+    $('m_paid_method').value = currentEntry.paid_method || '';
+    $('m_bracket_a').value = currentEntry.bracket_a || '';
+    $('m_bracket_b').value = currentEntry.bracket_b || '';
+    $('m_bracket_c').value = currentEntry.bracket_c || '';
+    $('m_bracket_d').value = currentEntry.bracket_d || '';
+    $('m_tiebreaker').value = currentEntry.tiebreaker || '';
+    $('m_notes').value = currentEntry.notes || '';
+    if ($('m_reason')) $('m_reason').value = '';
+    $('reasonLabel').classList.toggle('hidden', !postLock);
+    $('modalBg').classList.add('show');
+  }
+  function closeEditModal(){ $('modalBg').classList.remove('show'); currentEntry = null; }
+  $('modalCancel').addEventListener('click', closeEditModal);
+
+  $('modalSave').addEventListener('click', function(){
+    if (!currentEntry) return;
+    var fields = {
+      display_name: $('m_display_name').value.trim(),
+      email: $('m_email').value.trim(),
+      paid_status: $('m_paid_status').value,
+      paid_method: $('m_paid_method').value,
+      bracket_a: $('m_bracket_a').value.trim(),
+      bracket_b: $('m_bracket_b').value.trim(),
+      bracket_c: $('m_bracket_c').value.trim(),
+      bracket_d: $('m_bracket_d').value.trim(),
+      tiebreaker: $('m_tiebreaker').value.trim(),
+      notes: $('m_notes').value.trim()
+    };
+    var reason = ($('m_reason') && $('m_reason').value.trim()) || '';
+    if (postLock && !reason) { alertMsg('err','Reason required post-lock.'); return; }
+    $('modalSave').disabled = true;
+    fetch(apiBase + '/admin_update', {
+      method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ key:key, pid:currentEntry.pid, fields:fields, reason:reason })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      $('modalSave').disabled = false;
+      if (!d.ok) { alertMsg('err', d.error || 'save failed'); return; }
+      alertMsg('ok', 'Saved.'); closeEditModal(); loadList();
+    }).catch(function(e){
+      $('modalSave').disabled = false;
+      alertMsg('err', 'Network: ' + e);
+    });
+  });
+
+  $('modalDelete').addEventListener('click', function(){
+    if (!currentEntry) return;
+    var reason = prompt('Reason for deletion?');
+    if (reason == null) return;
+    if (!confirm('Delete ' + currentEntry.display_name + '?')) return;
+    fetch(apiBase + '/admin_delete', {
+      method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ key:key, pid:currentEntry.pid, reason:reason })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      if (!d.ok) { alertMsg('err', d.error || 'delete failed'); return; }
+      alertMsg('ok','Deleted.'); closeEditModal(); loadList();
+    });
+  });
+
+  $('modalResend').addEventListener('click', function(){
+    if (!currentEntry) return;
+    $('modalResend').disabled = true;
+    fetch(apiBase + '/admin_resend', {
+      method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ key:key, pid:currentEntry.pid })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      $('modalResend').disabled = false;
+      if (!d.ok) { alertMsg('err', d.error || 'resend failed'); return; }
+      alertMsg('ok','Email resent.');
+    });
+  });
+
+  // ---- prizes ----
   function prizesAlert(kind, text){
     var el = $('prizesAlert');
     el.innerHTML = '<div class="alert ' + kind + '">' + text + '</div>';
@@ -315,7 +605,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
         if (res && typeof res.text === 'string') {
           $('prizes_text').value = res.text;
         } else if (res && Array.isArray(res.prizes)) {
-          // legacy fallback: render array as lines
           var lines = [];
           for (var i=0;i<res.prizes.length;i++){
             var p = res.prizes[i] || {};
@@ -337,7 +626,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     fetch(apiBase + '/prizes_save', {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ route:'prizes_save', key: key, league: slug, prizes_text: text })
+      body: JSON.stringify({ key: key, league: slug, prizes_text: text })
     }).then(function(r){ return r.json(); }).then(function(res){
       $('prizesSaveBtn').disabled = false;
       $('prizesSaveBtn').textContent = 'Save prizes';
