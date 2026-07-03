@@ -1,0 +1,33 @@
+name: Warm worker cache
+# Keeps Cloudflare SWR cache hot so visitors never wait for an
+# Apps Script cold hit (2-5s). Runs every 5 minutes during comp weeks.
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  warm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping hot routes
+        env:
+          BASE: https://twilight-recipe-e213.badenmaher.workers.dev/api
+          COMP: the-open-2026
+          LEAGUE: the-open-2026-cobh-gc
+        run: |
+          set -e
+          echo "== ping =="
+          curl -sS --max-time 20 "$BASE/ping" | head -c 200; echo
+          echo "== league =="
+          curl -sS --max-time 20 "$BASE/league?slug=$LEAGUE" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n'
+          echo "== brackets =="
+          curl -sS --max-time 20 "$BASE/brackets?comp=$COMP" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n'
+          echo "== participants =="
+          curl -sS --max-time 20 "$BASE/participants?league=$LEAGUE" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n'
+          echo "== leaderboard =="
+          curl -sS --max-time 20 "$BASE/leaderboard?league=$LEAGUE" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n' || true
+          echo "== field =="
+          curl -sS --max-time 20 "$BASE/field?comp=$COMP" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n' || true
