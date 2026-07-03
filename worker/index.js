@@ -6,6 +6,7 @@ const APPS_SCRIPT_EXEC = 'https://script.google.com/macros/s/AKfycbyOyPYQKZYonF-
 
 const ALLOWED_ORIGINS = [
   'https://snipegolf.github.io',
+  'https://snipegolf.pages.dev',
   'https://snipegolfclothing.com',
   'https://www.snipegolfclothing.com',
   'http://localhost:8000',

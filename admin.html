@@ -86,6 +86,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 
     <div class="recent" id="recent"></div>
   </div>
+
+  <div class="card" id="prizesCard">
+    <h2 style="margin:0 0 4px;font-size:18px">Prizes (free text)</h2>
+    <div class="sub" style="margin-bottom:8px">Shown on the league page. Edit freely — line breaks preserved.</div>
+    <label>League</label>
+    <select id="prizes_league"></select>
+    <label>Prizes text</label>
+    <textarea id="prizes_text" rows="6" placeholder="1st: €60&#10;2nd: €30&#10;Longest drive: sleeve of balls"></textarea>
+    <button class="btn" id="prizesSaveBtn">Save prizes</button>
+    <div id="prizesAlert"></div>
+  </div>
 </div>
 
 <script>
@@ -99,6 +110,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 
   var $ = function(id){ return document.getElementById(id); };
   var apiBase = '';  // injected from state.json
+  var workerBase = 'https://twilight-recipe-e213.badenmaher.workers.dev/api';
 
   function alertMsg(kind, text){
     var box = $('alertBox');
@@ -112,11 +124,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 
   function fillLeagues(state, leagues){
     var sel = $('league_slug');
+    var psel = $('prizes_league');
     sel.innerHTML = '';
+    psel.innerHTML = '';
     if (!leagues || !leagues.length) {
       var o = document.createElement('option');
       o.value = ''; o.textContent = '(no leagues)';
       sel.appendChild(o);
+      var o2 = document.createElement('option');
+      o2.value = ''; o2.textContent = '(no leagues)';
+      psel.appendChild(o2);
       return;
     }
     for (var i=0;i<leagues.length;i++){
@@ -126,8 +143,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
       o.textContent = L.league_name + ' (\u20AC' + (L.entry_fee_eur || '?') + ')';
       o.setAttribute('data-fee', L.entry_fee_eur || '');
       sel.appendChild(o);
+      var op = document.createElement('option');
+      op.value = L.league_slug;
+      op.textContent = L.league_name;
+      psel.appendChild(op);
     }
     onLeagueChange();
+    loadPrizes();
   }
 
   function onLeagueChange(){
@@ -141,8 +163,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
   // Boot
   loadState().then(function(state){
     apiBase = state.participant_api;
+    // Prefer worker for admin ops (outage-proof); fall back to apps script if worker down
+    apiBase = workerBase || state.participant_api;
     // Fetch leagues for this admin key
-    return fetch(apiBase + (apiBase.indexOf('?')<0 ? '?' : '&') + 'route=admin_leagues&key=' + encodeURIComponent(key))
+    return fetch(apiBase + '/admin_leagues?key=' + encodeURIComponent(key))
       .then(function(r){ return r.json(); })
       .then(function(res){
         if (res.error) {
@@ -218,7 +242,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
       force_create: force ? '1' : ''
     };
 
-    fetch(apiBase, {
+    fetch(apiBase + '/admin_entry', {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
@@ -274,6 +298,56 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
   $('submitBtn').addEventListener('click', function(){ doSubmit(false); });
   $('clearBtn').addEventListener('click', function(){
     $('display_name').value=''; $('email').value=''; $('notes').value='';
+  });
+
+  // ---- Prizes free-text ----
+  function prizesAlert(kind, text){
+    var el = $('prizesAlert');
+    el.innerHTML = '<div class="alert ' + kind + '">' + text + '</div>';
+    if (kind === 'ok') setTimeout(function(){ el.innerHTML=''; }, 5000);
+  }
+  function loadPrizes(){
+    var slug = $('prizes_league').value;
+    if (!slug) return;
+    fetch(apiBase + '/prizes?league=' + encodeURIComponent(slug))
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (res && typeof res.text === 'string') {
+          $('prizes_text').value = res.text;
+        } else if (res && Array.isArray(res.prizes)) {
+          // legacy fallback: render array as lines
+          var lines = [];
+          for (var i=0;i<res.prizes.length;i++){
+            var p = res.prizes[i] || {};
+            lines.push((p.label || '') + (p.amount ? ': ' + p.amount : ''));
+          }
+          $('prizes_text').value = lines.join('\n');
+        } else {
+          $('prizes_text').value = '';
+        }
+      }).catch(function(){});
+  }
+  $('prizes_league').addEventListener('change', loadPrizes);
+  $('prizesSaveBtn').addEventListener('click', function(){
+    var slug = $('prizes_league').value;
+    var text = $('prizes_text').value;
+    if (!slug) { prizesAlert('err','Pick a league.'); return; }
+    $('prizesSaveBtn').disabled = true;
+    $('prizesSaveBtn').textContent = 'Saving\u2026';
+    fetch(apiBase + '/prizes_save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ route:'prizes_save', key: key, league: slug, prizes_text: text })
+    }).then(function(r){ return r.json(); }).then(function(res){
+      $('prizesSaveBtn').disabled = false;
+      $('prizesSaveBtn').textContent = 'Save prizes';
+      if (res && res.ok) prizesAlert('ok','Prizes saved (' + (res.chars || 0) + ' chars).');
+      else prizesAlert('err', (res && res.error) || 'Save failed.');
+    }).catch(function(e){
+      $('prizesSaveBtn').disabled = false;
+      $('prizesSaveBtn').textContent = 'Save prizes';
+      prizesAlert('err', 'Network error: ' + e);
+    });
   });
 })();
 </script>
