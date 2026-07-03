@@ -41,8 +41,23 @@
       "pid": "cb4e865b",
       "display_name": "CF Norm V29 1",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1f8ed4de",
+      "display_name": "Cfv30 1",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "62aaf35e",
+      "display_name": "Cfv30 R",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "024cd909",
+      "display_name": "Cfv30f 1",
+      "paid_status": "paid"
     }
   ],
   "picks": [],
-  "published_at": "2026-07-03T07:20:05.712Z"
+  "published_at": "2026-07-03T07:24:53.551Z"
 }
