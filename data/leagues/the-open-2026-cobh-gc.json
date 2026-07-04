@@ -39,7 +39,15 @@
       "bracket_c": "Laurie Canter",
       "bracket_d": "Sam Bairstow",
       "tiebreaker": -15
+    },
+    {
+      "pid": 19917000000000000,
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "John Parry",
+      "bracket_d": "James Nicholas",
+      "tiebreaker": -8
     }
   ],
-  "published_at": "2026-07-04T07:49:51.150Z"
+  "published_at": "2026-07-04T07:54:58.584Z"
 }
