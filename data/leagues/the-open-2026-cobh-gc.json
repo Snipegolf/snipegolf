@@ -16,6 +16,11 @@
       "pid": "ba871c14",
       "display_name": "Lucy Maher",
       "paid_status": "paid"
+    },
+    {
+      "pid": 19917000000000000,
+      "display_name": "Conor Coyne",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -36,5 +41,5 @@
       "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-04T07:44:53.946Z"
+  "published_at": "2026-07-04T07:49:51.150Z"
 }
