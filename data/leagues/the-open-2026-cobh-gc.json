@@ -26,6 +26,11 @@
       "pid": "28cf5cf9",
       "display_name": "Stephen O' Driscoll",
       "paid_status": "unpaid"
+    },
+    {
+      "pid": "30e2eb7c",
+      "display_name": "Noel Maguire",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -52,7 +57,15 @@
       "bracket_c": "John Parry",
       "bracket_d": "James Nicholas",
       "tiebreaker": -8
+    },
+    {
+      "pid": "30e2eb7c",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "Adrien Saddier",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -14
     }
   ],
-  "published_at": "2026-07-04T13:54:49.426Z"
+  "published_at": "2026-07-04T13:59:51.961Z"
 }
