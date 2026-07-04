@@ -12,22 +12,40 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Ping hot routes
+      - name: Ping hot routes + canary
         env:
           BASE: https://twilight-recipe-e213.badenmaher.workers.dev/api
           COMP: the-open-2026
           LEAGUE: the-open-2026-cobh-gc
         run: |
           set -e
-          echo "== ping =="
-          curl -sS --max-time 20 "$BASE/ping" | head -c 200; echo
-          echo "== league =="
-          curl -sS --max-time 20 "$BASE/league?slug=$LEAGUE" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n'
-          echo "== brackets =="
-          curl -sS --max-time 20 "$BASE/brackets?comp=$COMP" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n'
-          echo "== participants =="
-          curl -sS --max-time 20 "$BASE/participants?league=$LEAGUE" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n'
-          echo "== leaderboard =="
-          curl -sS --max-time 20 "$BASE/leaderboard?league=$LEAGUE" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n' || true
-          echo "== field =="
-          curl -sS --max-time 20 "$BASE/field?comp=$COMP" -o /dev/null -w 'http=%{http_code} ttfb=%{time_starttransfer}s\n' || true
+          fail=0
+
+          check() {
+            name=$1; url=$2; required=$3
+            body=$(curl -sS --max-time 25 -A "Mozilla/5.0" "$url") || body=""
+            code=$(curl -sS --max-time 25 -A "Mozilla/5.0" -o /dev/null -w "%{http_code}" "$url") || code=000
+            ok=$(echo "$body" | head -c 20 | grep -c '"ok":true' || true)
+            echo "  $name http=$code ok_flag=$ok bytes=${#body}"
+            if [ "$required" = "1" ] && [ "$ok" != "1" ]; then
+              echo "::error title=$name canary failed::route $name returned $code / ok=$ok"
+              echo "BODY (first 200): ${body:0:200}"
+              fail=1
+            fi
+          }
+
+          echo "== warm + canary =="
+          check ping        "$BASE/ping"                            0
+          check league      "$BASE/league?slug=$LEAGUE"              1
+          check brackets    "$BASE/brackets?comp=$COMP"              1
+          check comp        "$BASE/comp?slug=$COMP"                  1
+          check participants "$BASE/participants?league=$LEAGUE"     1
+          check leaderboard "$BASE/leaderboard?league=$LEAGUE"       0
+          check field       "$BASE/field?comp=$COMP"                 0
+
+          if [ "$fail" = "1" ]; then
+            echo "::error::One or more critical routes are unhealthy. Apps Script deployment auth may have flipped."
+            echo "Fix: https://script.google.com/home/projects/1BitIqSOo-CxFY44VNfRs8IUz8pnb44UepSYnHoPI8MRZ0g5So05hZQH4/deployments"
+            echo "Set deployment @31 web-app access to Anyone, then Deploy."
+            exit 1
+          fi
