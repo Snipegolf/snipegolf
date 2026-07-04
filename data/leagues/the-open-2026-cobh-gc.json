@@ -21,6 +21,11 @@
       "pid": 19917000000000000,
       "display_name": "Conor Coyne",
       "paid_status": "paid"
+    },
+    {
+      "pid": "28cf5cf9",
+      "display_name": "Stephen O' Driscoll",
+      "paid_status": "unpaid"
     }
   ],
   "picks": [
@@ -49,5 +54,5 @@
       "tiebreaker": -8
     }
   ],
-  "published_at": "2026-07-04T07:59:48.243Z"
+  "published_at": "2026-07-04T08:04:51.681Z"
 }
