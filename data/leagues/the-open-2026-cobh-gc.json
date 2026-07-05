@@ -75,7 +75,15 @@
       "bracket_c": "Adrien Saddier",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -14
+    },
+    {
+      "pid": "12acbfcb",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Gary Woodland",
+      "bracket_c": "Jacob Bridgeman",
+      "bracket_d": "Stuart Grehan",
+      "tiebreaker": -7
     }
   ],
-  "published_at": "2026-07-05T12:04:52.894Z"
+  "published_at": "2026-07-05T12:09:49.412Z"
 }
