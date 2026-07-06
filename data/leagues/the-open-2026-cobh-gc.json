@@ -46,6 +46,11 @@
       "pid": "e800c95f",
       "display_name": "David Kidney",
       "paid_status": "paid"
+    },
+    {
+      "pid": "8d0b850b",
+      "display_name": "Patrick Griffiths",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -96,7 +101,15 @@
       "bracket_c": "Dan Brown",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -18
+    },
+    {
+      "pid": "8d0b850b",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "John Parry",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -7
     }
   ],
-  "published_at": "2026-07-06T11:54:52.026Z"
+  "published_at": "2026-07-06T11:59:53.870Z"
 }
