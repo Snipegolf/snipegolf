@@ -51,6 +51,11 @@
       "pid": "8d0b850b",
       "display_name": "Patrick Griffiths",
       "paid_status": "paid"
+    },
+    {
+      "pid": "d5867486",
+      "display_name": "Carol Forrest",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -109,7 +114,15 @@
       "bracket_c": "John Parry",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -7
+    },
+    {
+      "pid": "d5867486",
+      "bracket_a": "Ludvig Aberg",
+      "bracket_b": "Alex Noren",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-06T14:04:56.598Z"
+  "published_at": "2026-07-06T14:09:55.188Z"
 }
