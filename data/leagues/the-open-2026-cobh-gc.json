@@ -41,6 +41,11 @@
       "pid": "390ca476",
       "display_name": "Dan Murphy",
       "paid_status": "paid"
+    },
+    {
+      "pid": "e800c95f",
+      "display_name": "David Kidney",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -85,5 +90,5 @@
       "tiebreaker": -7
     }
   ],
-  "published_at": "2026-07-06T07:34:55.989Z"
+  "published_at": "2026-07-06T07:39:57.791Z"
 }
