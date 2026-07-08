@@ -56,6 +56,11 @@
       "pid": "d5867486",
       "display_name": "Carol Forrest",
       "paid_status": "paid"
+    },
+    {
+      "pid": "7d1ade25",
+      "display_name": "John Aherne",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -124,5 +129,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-08T20:19:49.219Z"
+  "published_at": "2026-07-08T20:24:51.708Z"
 }
