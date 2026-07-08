@@ -73,36 +73,65 @@ async function passthroughGet(url, ttl) {
 }
 
 // Stale-while-revalidate: returns cached JSON immediately if available; refetches in background.
-// On upstream failure or {ok:false}, returns the last good cached response (with `stale:true`).
+// On upstream failure, returns the last good cached response (with `stale:true`).
+async function fetchWithTimeout_(target, ms) {
+  const controller = new AbortController();
+  const timer = setTimeout(function () { controller.abort(); }, ms);
+  try {
+    return await fetch(target, { redirect: 'follow', signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function passthroughGetSWR(url, ttl, ctx) {
   const target = APPS_SCRIPT_EXEC + url.search;
   // Use a stable cache key that ignores the host portion changing
   const cacheKey = new Request('https://swr.snipegolf.local' + url.pathname + url.search);
   const stale = await cache.match(cacheKey);
-  const refresh = async () => {
+
+  // Single attempt at the live fetch. Apps Script cold-starts can take 5-10s+,
+  // so give it real time and retry once before giving up.
+  const attemptFetch = async () => {
     try {
-      const res = await fetch(target, { redirect: 'follow' });
-      if (!res.ok) return null;
+      const res = await fetchWithTimeout_(target, 9000);
+      if (!res.ok) return { fail: 'upstream_http_' + res.status };
       const text = await res.text();
       let data;
       try { data = JSON.parse(text); }
-      catch (e) { return null; } // upstream returned HTML/redirect — don't poison
-      if (data && data.ok === false) return null; // don't poison cache with errors
+      catch (e) { return { fail: 'upstream_non_json' }; } // upstream returned HTML/redirect
+      // Any well-formed JSON from Apps Script (ok:true OR ok:false with a real
+      // error like missing_league/league_not_found) is a valid upstream response —
+      // it is NOT the same as the upstream being unreachable. Surface it as-is.
+      return { data: data };
+    } catch (e) {
+      return { fail: 'upstream_fetch_error' };
+    }
+  };
+
+  const refresh = async () => {
+    var attempt = await attemptFetch();
+    if (attempt.fail) {
+      // one retry — covers transient edge/cold-start blips
+      attempt = await attemptFetch();
+    }
+    if (attempt.fail) return null;
+    var data = attempt.data;
+    // Only cache genuinely successful payloads so a real ok:false doesn't poison SWR cache.
+    if (data && data.ok !== false) {
       const respToCache = new Response(JSON.stringify(data), {
         status: 200,
         headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=' + (ttl * 8) }
       });
-      // store under long TTL so we always have something to serve on outage
       if (ctx && ctx.waitUntil) {
         ctx.waitUntil(cache.put(cacheKey, respToCache.clone()));
       } else {
         await cache.put(cacheKey, respToCache.clone());
       }
-      return data;
-    } catch (e) {
-      return null;
     }
+    return data;
   };
+
   if (stale) {
     const staleAge = parseInt(stale.headers.get('Age') || '0', 10);
     // Defensive JSON parse on cached body (defends against pre-fix poisoned entries)
@@ -117,10 +146,10 @@ async function passthroughGetSWR(url, ttl, ctx) {
     }
     // Poisoned stale entry — fall through to fresh fetch
   }
-  // No cache yet — must fetch synchronously
+  // No cache yet — must fetch synchronously (with retry baked into refresh())
   const fresh = await refresh();
   if (fresh) return fresh;
-  // Upstream dead AND no cache — return graceful error
+  // Live fetch failed twice AND no cache to fall back on — genuine outage.
   return { ok: false, error: 'upstream_unavailable' };
 }
 
