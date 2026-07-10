@@ -163,7 +163,15 @@
       "bracket_c": "Angel Ayora",
       "bracket_d": "James Nicholas",
       "tiebreaker": -12
+    },
+    {
+      "pid": "1dd8336f",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Henrik Stenson",
+      "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-10T17:00:09.260Z"
+  "published_at": "2026-07-10T17:05:27.665Z"
 }
