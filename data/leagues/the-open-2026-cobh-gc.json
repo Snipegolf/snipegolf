@@ -61,6 +61,16 @@
       "pid": "7d1ade25",
       "display_name": "John Aherne",
       "paid_status": "paid"
+    },
+    {
+      "pid": "aaf75c0d",
+      "display_name": "Stephen Ryan",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "86a5e591",
+      "display_name": "Se?n Curtin",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -129,5 +139,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-10T07:44:52.052Z"
+  "published_at": "2026-07-10T07:50:05.666Z"
 }
