@@ -76,6 +76,11 @@
       "pid": "79e035c7",
       "display_name": "Sir Nicholas O' Riordan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1dd8336f",
+      "display_name": "Denis McSweeney",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -160,5 +165,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-10T16:55:05.613Z"
+  "published_at": "2026-07-10T17:00:09.260Z"
 }
