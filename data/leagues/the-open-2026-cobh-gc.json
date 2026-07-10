@@ -71,6 +71,11 @@
       "pid": "86a5e591",
       "display_name": "Se?n Curtin",
       "paid_status": "paid"
+    },
+    {
+      "pid": "79e035c7",
+      "display_name": "Sir Nicholas O' Riordan",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -145,7 +150,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -10
+    },
+    {
+      "pid": "79e035c7",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Angel Ayora",
+      "bracket_d": "James Nicholas",
+      "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-10T16:49:52.324Z"
+  "published_at": "2026-07-10T16:55:05.613Z"
 }
