@@ -141,6 +141,21 @@
       "pid": "9c0f1822",
       "display_name": "Kieran Flannery",
       "paid_status": "paid"
+    },
+    {
+      "pid": "2e84c949",
+      "display_name": "Adam Horgan",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "35d79e6e",
+      "display_name": "David Gettings",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "8b4c0416",
+      "display_name": "Diarmuid O' Sullivan",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -241,5 +256,5 @@
       "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-11T07:59:51.813Z"
+  "published_at": "2026-07-11T08:04:51.113Z"
 }
