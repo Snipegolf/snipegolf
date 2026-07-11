@@ -176,6 +176,16 @@
       "pid": "739d62f7",
       "display_name": "Jerry O' Connor",
       "paid_status": "paid"
+    },
+    {
+      "pid": "19bcda69",
+      "display_name": "Denis O' Rourke",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "22d43935",
+      "display_name": "Philip O' Connor",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -276,5 +286,5 @@
       "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-11T08:24:49.193Z"
+  "published_at": "2026-07-11T08:29:56.288Z"
 }
