@@ -201,6 +201,11 @@
       "pid": "c84f8c33",
       "display_name": "Damien O' Sullivan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "f7395d99",
+      "display_name": "Patrick Walsh",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -299,7 +304,15 @@
       "bracket_c": "Haotong Li",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -15
+    },
+    {
+      "pid": "f7395d99",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Angel Ayora",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-11T08:39:48.437Z"
+  "published_at": "2026-07-11T08:44:52.301Z"
 }
