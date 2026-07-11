@@ -121,6 +121,11 @@
       "pid": "4beab4b2",
       "display_name": "Michael Lynch",
       "paid_status": "paid"
+    },
+    {
+      "pid": "eaff93d5",
+      "display_name": "Danny O' Donoghue",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -213,5 +218,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-11T07:30:02.224Z"
+  "published_at": "2026-07-11T07:34:55.934Z"
 }
