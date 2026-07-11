@@ -206,6 +206,11 @@
       "pid": "f7395d99",
       "display_name": "Patrick Walsh",
       "paid_status": "paid"
+    },
+    {
+      "pid": "e07d2bcf",
+      "display_name": "Aaron Kenneally",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -314,5 +319,5 @@
       "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-11T08:59:50.019Z"
+  "published_at": "2026-07-11T09:04:51.513Z"
 }
