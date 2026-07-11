@@ -335,7 +335,15 @@
       "bracket_c": "Billy Horschel",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -10
+    },
+    {
+      "pid": "d8bddc5f",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Eugenio Chacarra",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-11T11:44:49.672Z"
+  "published_at": "2026-07-11T11:50:01.249Z"
 }
