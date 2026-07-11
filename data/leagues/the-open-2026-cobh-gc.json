@@ -366,7 +366,15 @@
       "bracket_c": "Billy Horschel",
       "bracket_d": "Tim Wiedemeyer",
       "tiebreaker": -11
+    },
+    {
+      "pid": "1dec1efa",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Stuart Grehan",
+      "tiebreaker": -18
     }
   ],
-  "published_at": "2026-07-11T14:45:00.066Z"
+  "published_at": "2026-07-11T14:50:05.927Z"
 }
