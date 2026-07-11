@@ -353,7 +353,15 @@
       "bracket_c": "Eugenio Chacarra",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -15
+    },
+    {
+      "pid": "093f3028",
+      "bracket_a": "Xander Schauffele",
+      "bracket_b": "Corey Conners",
+      "bracket_c": "Billy Horschel",
+      "bracket_d": "Tim Wiedemeyer",
+      "tiebreaker": -11
     }
   ],
-  "published_at": "2026-07-11T14:29:50.796Z"
+  "published_at": "2026-07-11T14:34:49.753Z"
 }
