@@ -156,6 +156,16 @@
       "pid": "8b4c0416",
       "display_name": "Diarmuid O' Sullivan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "06ea4ad8",
+      "display_name": "Edward O' Mahony",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "208c824b",
+      "display_name": "Anthony Lynch",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -256,5 +266,5 @@
       "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-11T08:04:51.113Z"
+  "published_at": "2026-07-11T08:09:50.763Z"
 }
