@@ -186,6 +186,11 @@
       "pid": "22d43935",
       "display_name": "Philip O' Connor",
       "paid_status": "paid"
+    },
+    {
+      "pid": "093f3028",
+      "display_name": "Kevin Bell",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -286,5 +291,5 @@
       "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-11T08:29:56.288Z"
+  "published_at": "2026-07-11T08:34:50.503Z"
 }
