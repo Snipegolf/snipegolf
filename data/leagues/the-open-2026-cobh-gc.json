@@ -221,6 +221,11 @@
       "pid": "5380f557",
       "display_name": "Greg Higgins",
       "paid_status": "paid"
+    },
+    {
+      "pid": "6f481a43",
+      "display_name": "Elaine O' Flynn",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -345,5 +350,5 @@
       "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-11T12:24:49.649Z"
+  "published_at": "2026-07-11T12:29:55.263Z"
 }
