@@ -111,6 +111,11 @@
       "pid": "1dec1efa",
       "display_name": "Sean Gallagher",
       "paid_status": "paid"
+    },
+    {
+      "pid": "f67779a7",
+      "display_name": "Anthony Murray",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -203,5 +208,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-11T07:14:56.956Z"
+  "published_at": "2026-07-11T07:20:44.115Z"
 }
