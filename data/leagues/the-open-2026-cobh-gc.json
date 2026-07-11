@@ -216,6 +216,11 @@
       "pid": "6a8a02e9",
       "display_name": "Eoin O' Donovan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "5380f557",
+      "display_name": "Greg Higgins",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -332,5 +337,5 @@
       "tiebreaker": -10
     }
   ],
-  "published_at": "2026-07-11T09:44:56.270Z"
+  "published_at": "2026-07-11T09:50:39.941Z"
 }
