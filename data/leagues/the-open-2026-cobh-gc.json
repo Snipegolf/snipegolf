@@ -91,6 +91,11 @@
       "pid": "25ddb008",
       "display_name": "Terry Shealy",
       "paid_status": "paid"
+    },
+    {
+      "pid": "d8bddc5f",
+      "display_name": "James O' Donoghue",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -183,5 +188,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-11T05:59:59.819Z"
+  "published_at": "2026-07-11T06:04:52.173Z"
 }
