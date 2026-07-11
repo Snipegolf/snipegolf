@@ -106,6 +106,11 @@
       "pid": "2edabc48",
       "display_name": "John Kenneally",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1dec1efa",
+      "display_name": "Sean Gallagher",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -198,5 +203,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-11T07:04:53.305Z"
+  "published_at": "2026-07-11T07:09:53.520Z"
 }
