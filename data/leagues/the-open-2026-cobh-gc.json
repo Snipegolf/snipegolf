@@ -317,7 +317,15 @@
       "bracket_c": "Angel Ayora",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -13
+    },
+    {
+      "pid": "e07d2bcf",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Rickie Fowler",
+      "bracket_c": "Billy Horschel",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -10
     }
   ],
-  "published_at": "2026-07-11T09:04:51.513Z"
+  "published_at": "2026-07-11T09:09:58.225Z"
 }
