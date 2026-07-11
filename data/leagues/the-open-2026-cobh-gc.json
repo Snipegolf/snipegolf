@@ -136,6 +136,11 @@
       "pid": "f0f3ce25",
       "display_name": "John Barry",
       "paid_status": "paid"
+    },
+    {
+      "pid": "9c0f1822",
+      "display_name": "Kieran Flannery",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -236,5 +241,5 @@
       "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-11T07:55:01.629Z"
+  "published_at": "2026-07-11T07:59:51.813Z"
 }
