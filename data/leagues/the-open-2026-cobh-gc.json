@@ -211,6 +211,11 @@
       "pid": "e07d2bcf",
       "display_name": "Aaron Kenneally",
       "paid_status": "paid"
+    },
+    {
+      "pid": "6a8a02e9",
+      "display_name": "Eoin O' Donovan",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -327,5 +332,5 @@
       "tiebreaker": -10
     }
   ],
-  "published_at": "2026-07-11T09:29:51.502Z"
+  "published_at": "2026-07-11T09:35:01.053Z"
 }
