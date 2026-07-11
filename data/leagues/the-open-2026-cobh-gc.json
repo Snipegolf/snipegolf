@@ -116,6 +116,11 @@
       "pid": "f67779a7",
       "display_name": "Anthony Murray",
       "paid_status": "paid"
+    },
+    {
+      "pid": "4beab4b2",
+      "display_name": "Michael Lynch",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -208,5 +213,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-11T07:24:53.574Z"
+  "published_at": "2026-07-11T07:30:02.224Z"
 }
