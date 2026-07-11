@@ -131,6 +131,11 @@
       "pid": "63e9d72e",
       "display_name": "Niall Tyrrell",
       "paid_status": "paid"
+    },
+    {
+      "pid": "f0f3ce25",
+      "display_name": "John Barry",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -223,5 +228,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-11T07:44:50.226Z"
+  "published_at": "2026-07-11T07:49:59.471Z"
 }
