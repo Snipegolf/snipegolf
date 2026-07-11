@@ -96,6 +96,16 @@
       "pid": "d8bddc5f",
       "display_name": "James O' Donoghue",
       "paid_status": "paid"
+    },
+    {
+      "pid": "eb556e15",
+      "display_name": "Brian McCann",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "2edabc48",
+      "display_name": "John Kenneally",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -188,5 +198,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-11T06:39:52.085Z"
+  "published_at": "2026-07-11T06:45:10.970Z"
 }
