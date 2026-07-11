@@ -226,6 +226,11 @@
       "pid": "6f481a43",
       "display_name": "Elaine O' Flynn",
       "paid_status": "paid"
+    },
+    {
+      "pid": "33f3ecc7",
+      "display_name": "Sanjay Nayak",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -350,5 +355,5 @@
       "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-11T13:34:56.498Z"
+  "published_at": "2026-07-11T13:39:51.889Z"
 }
