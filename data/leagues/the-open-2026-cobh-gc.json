@@ -81,6 +81,11 @@
       "pid": "1dd8336f",
       "display_name": "Denis McSweeney",
       "paid_status": "paid"
+    },
+    {
+      "pid": "087a3b80",
+      "display_name": "Robert Fitzpatrick",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -173,5 +178,5 @@
       "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-11T05:40:19.765Z"
+  "published_at": "2026-07-11T05:44:52.610Z"
 }
