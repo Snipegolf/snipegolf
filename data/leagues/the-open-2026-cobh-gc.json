@@ -395,7 +395,15 @@
       "bracket_c": "Jordan Smith",
       "bracket_d": "Shaun Norris",
       "tiebreaker": 21
+    },
+    {
+      "pid": "86a5e591",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Haotong Li",
+      "bracket_d": "Shaun Norris",
+      "tiebreaker": -18
     }
   ],
-  "published_at": "2026-07-12T09:54:50.482Z"
+  "published_at": "2026-07-12T09:59:55.485Z"
 }
