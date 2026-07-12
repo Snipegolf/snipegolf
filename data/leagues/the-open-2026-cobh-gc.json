@@ -236,6 +236,11 @@
       "pid": "8923265e",
       "display_name": "Tom Cronin",
       "paid_status": "paid"
+    },
+    {
+      "pid": "a05a00d2",
+      "display_name": "Peter Lambe",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -392,5 +397,5 @@
       "tiebreaker": 21
     }
   ],
-  "published_at": "2026-07-12T08:39:49.399Z"
+  "published_at": "2026-07-12T08:44:52.012Z"
 }
