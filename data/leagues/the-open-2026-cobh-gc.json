@@ -382,7 +382,15 @@
       "bracket_c": "Jackson Suber",
       "bracket_d": "James Nicholas",
       "tiebreaker": -13
+    },
+    {
+      "pid": "63e9d72e",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Shaun Norris",
+      "tiebreaker": 21
     }
   ],
-  "published_at": "2026-07-12T08:05:00.939Z"
+  "published_at": "2026-07-12T08:09:50.548Z"
 }
