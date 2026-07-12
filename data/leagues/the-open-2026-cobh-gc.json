@@ -421,7 +421,15 @@
       "bracket_c": "Jacob Bridgeman",
       "bracket_d": "Sam Bairstow",
       "tiebreaker": 14
+    },
+    {
+      "pid": "eb556e15",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Rickie Fowler",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Travis Smyth",
+      "tiebreaker": -11
     }
   ],
-  "published_at": "2026-07-12T15:44:50.294Z"
+  "published_at": "2026-07-12T15:49:57.542Z"
 }
