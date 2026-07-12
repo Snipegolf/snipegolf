@@ -413,7 +413,15 @@
       "bracket_c": "Haotong Li",
       "bracket_d": "Shaun Norris",
       "tiebreaker": -18
+    },
+    {
+      "pid": "aaf75c0d",
+      "bracket_a": "Wyndham Clark",
+      "bracket_b": "Corey Conners",
+      "bracket_c": "Jacob Bridgeman",
+      "bracket_d": "Sam Bairstow",
+      "tiebreaker": 14
     }
   ],
-  "published_at": "2026-07-12T14:10:02.034Z"
+  "published_at": "2026-07-12T14:14:53.225Z"
 }
