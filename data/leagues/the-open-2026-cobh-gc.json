@@ -463,7 +463,15 @@
       "bracket_c": "Jordan Smith",
       "bracket_d": "Michael Hollick",
       "tiebreaker": 14
+    },
+    {
+      "pid": "4beab4b2",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Matthew Baldwin",
+      "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-13T11:59:56.603Z"
+  "published_at": "2026-07-13T12:04:58.248Z"
 }
