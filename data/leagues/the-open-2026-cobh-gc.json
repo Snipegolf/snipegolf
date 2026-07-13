@@ -251,6 +251,11 @@
       "pid": "0482d78c",
       "display_name": "Brendan Crowley",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1fc8fbf3",
+      "display_name": "Greg Lougheed",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -447,5 +452,5 @@
       "tiebreaker": 17
     }
   ],
-  "published_at": "2026-07-13T07:54:51.174Z"
+  "published_at": "2026-07-13T07:59:57.833Z"
 }
