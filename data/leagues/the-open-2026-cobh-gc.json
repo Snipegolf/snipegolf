@@ -523,7 +523,15 @@
       "bracket_c": "Dan Brown",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -14
+    },
+    {
+      "pid": "eaff93d5",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Harris English",
+      "bracket_c": "Haotong Li",
+      "bracket_d": "Matthew Southgate",
+      "tiebreaker": -14
     }
   ],
-  "published_at": "2026-07-13T18:40:06.950Z"
+  "published_at": "2026-07-13T18:45:05.453Z"
 }
