@@ -266,6 +266,11 @@
       "pid": "dfa8de0c",
       "display_name": "Jamie Bates",
       "paid_status": "paid"
+    },
+    {
+      "pid": 65647170,
+      "display_name": "Tom Stack",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -484,7 +489,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -11
+    },
+    {
+      "pid": "dfa8de0c",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "Keita Nakajima",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -11
     }
   ],
-  "published_at": "2026-07-13T13:34:56.213Z"
+  "published_at": "2026-07-13T13:40:07.149Z"
 }
