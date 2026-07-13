@@ -271,6 +271,16 @@
       "pid": 65647170,
       "display_name": "Tom Stack",
       "paid_status": "paid"
+    },
+    {
+      "pid": 53700323,
+      "display_name": "Colm McGinley",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "2644f310",
+      "display_name": "Marvin Prince",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -515,5 +525,5 @@
       "tiebreaker": -14
     }
   ],
-  "published_at": "2026-07-13T15:29:57.177Z"
+  "published_at": "2026-07-13T15:34:54.151Z"
 }
