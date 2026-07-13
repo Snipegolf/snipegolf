@@ -256,6 +256,11 @@
       "pid": "1fc8fbf3",
       "display_name": "Greg Lougheed",
       "paid_status": "paid"
+    },
+    {
+      "pid": "3298f506",
+      "display_name": "Julie Doyle",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -460,5 +465,5 @@
       "tiebreaker": 14
     }
   ],
-  "published_at": "2026-07-13T11:14:56.187Z"
+  "published_at": "2026-07-13T11:19:54.331Z"
 }
