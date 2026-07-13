@@ -450,7 +450,15 @@
       "bracket_c": "Angel Ayora",
       "bracket_d": "Joakim Lagergren",
       "tiebreaker": 17
+    },
+    {
+      "pid": "19bcda69",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Michael Hollick",
+      "tiebreaker": 14
     }
   ],
-  "published_at": "2026-07-13T08:39:57.848Z"
+  "published_at": "2026-07-13T08:45:06.169Z"
 }
