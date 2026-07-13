@@ -476,7 +476,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Matthew Baldwin",
       "tiebreaker": -13
+    },
+    {
+      "pid": "c84f8c33",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Haotong Li",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -11
     }
   ],
-  "published_at": "2026-07-13T12:59:53.305Z"
+  "published_at": "2026-07-13T13:04:53.046Z"
 }
