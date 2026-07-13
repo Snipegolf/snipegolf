@@ -261,6 +261,11 @@
       "pid": "3298f506",
       "display_name": "Julie Doyle",
       "paid_status": "paid"
+    },
+    {
+      "pid": "dfa8de0c",
+      "display_name": "Jamie Bates",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -473,5 +478,5 @@
       "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-13T12:20:00.423Z"
+  "published_at": "2026-07-13T12:24:54.761Z"
 }
