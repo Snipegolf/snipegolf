@@ -497,7 +497,15 @@
       "bracket_c": "Keita Nakajima",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -11
+    },
+    {
+      "pid": "1fc8fbf3",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Haotong Li",
+      "bracket_d": "Stuart Grehan",
+      "tiebreaker": -14
     }
   ],
-  "published_at": "2026-07-13T14:14:50.859Z"
+  "published_at": "2026-07-13T14:19:54.263Z"
 }
