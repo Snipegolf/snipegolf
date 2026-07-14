@@ -428,7 +428,7 @@
     },
     {
       "pid": "d8bddc5f",
-      "bracket_a": "Tommy Fleetwood",
+      "bracket_a": "Cameron Young",
       "bracket_b": "Chris Gotterup",
       "bracket_c": "Eugenio Chacarra",
       "bracket_d": "Padraig Harrington",
@@ -665,7 +665,23 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -4
+    },
+    {
+      "pid": "208c824b",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Antoine Rozner",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -15
+    },
+    {
+      "pid": "5380f557",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Billy Horschel",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -10
     }
   ],
-  "published_at": "2026-07-14T19:20:03.921Z"
+  "published_at": "2026-07-14T19:24:55.457Z"
 }
