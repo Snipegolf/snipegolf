@@ -281,6 +281,11 @@
       "pid": "2644f310",
       "display_name": "Marvin Prince",
       "paid_status": "paid"
+    },
+    {
+      "pid": "5a52ba36",
+      "display_name": "Coley O Driscoll",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -541,5 +546,5 @@
       "tiebreaker": -11
     }
   ],
-  "published_at": "2026-07-14T07:39:49.107Z"
+  "published_at": "2026-07-14T07:44:59.420Z"
 }
