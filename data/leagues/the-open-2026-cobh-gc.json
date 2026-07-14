@@ -680,7 +680,7 @@
       "bracket_b": "Patrick Reed",
       "bracket_c": "Billy Horschel",
       "bracket_d": "Padraig Harrington",
-      "tiebreaker": -10
+      "tiebreaker": -12
     },
     {
       "pid": "f67779a7",
@@ -691,5 +691,5 @@
       "tiebreaker": 8
     }
   ],
-  "published_at": "2026-07-14T20:50:11.259Z"
+  "published_at": "2026-07-14T20:55:01.363Z"
 }
