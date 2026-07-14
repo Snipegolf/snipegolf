@@ -301,6 +301,11 @@
       "pid": "631f5f78",
       "display_name": "John O Halloran",
       "paid_status": "paid"
+    },
+    {
+      "pid": "6ff1026a",
+      "display_name": "Rosaire Higgins",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -593,5 +598,5 @@
       "tiebreaker": 13
     }
   ],
-  "published_at": "2026-07-14T11:04:58.009Z"
+  "published_at": "2026-07-14T11:10:06.398Z"
 }
