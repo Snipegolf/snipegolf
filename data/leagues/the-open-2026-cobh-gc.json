@@ -578,7 +578,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "James Nicholas",
       "tiebreaker": -13
+    },
+    {
+      "pid": "1624c9c5",
+      "bracket_a": "Jon Rahm",
+      "bracket_b": "Jason Day",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": 13
     }
   ],
-  "published_at": "2026-07-14T10:20:00.231Z"
+  "published_at": "2026-07-14T10:24:57.875Z"
 }
