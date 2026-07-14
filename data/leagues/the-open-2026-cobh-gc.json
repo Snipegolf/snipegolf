@@ -649,7 +649,15 @@
       "bracket_c": "Billy Horschel",
       "bracket_d": "Shaun Norris",
       "tiebreaker": 11
+    },
+    {
+      "pid": "2644f310",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Keita Nakajima",
+      "bracket_d": "Kazuki Higa",
+      "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-14T18:19:57.074Z"
+  "published_at": "2026-07-14T18:25:00.739Z"
 }
