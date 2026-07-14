@@ -689,7 +689,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": 8
+    },
+    {
+      "pid": "087a3b80",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Antoine Rozner",
+      "bracket_d": "Joakim Lagergren",
+      "tiebreaker": 12
     }
   ],
-  "published_at": "2026-07-14T21:29:50.667Z"
+  "published_at": "2026-07-14T21:34:48.947Z"
 }
