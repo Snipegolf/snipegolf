@@ -570,7 +570,15 @@
       "bracket_c": "Francesco Molinari",
       "bracket_d": "Sam Bairstow",
       "tiebreaker": -14
+    },
+    {
+      "pid": "9fef2d19",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "James Nicholas",
+      "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-14T09:59:51.439Z"
+  "published_at": "2026-07-14T10:04:49.709Z"
 }
