@@ -531,7 +531,15 @@
       "bracket_c": "Haotong Li",
       "bracket_d": "Matthew Southgate",
       "tiebreaker": -14
+    },
+    {
+      "pid": "9c0f1822",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Frederic Lacroix",
+      "tiebreaker": -11
     }
   ],
-  "published_at": "2026-07-14T04:59:56.243Z"
+  "published_at": "2026-07-14T05:04:53.810Z"
 }
