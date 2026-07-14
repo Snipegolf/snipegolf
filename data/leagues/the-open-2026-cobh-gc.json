@@ -617,7 +617,15 @@
       "bracket_c": "Billy Horschel",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": 8
+    },
+    {
+      "pid": "390ca476",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Angel Ayora",
+      "bracket_d": "Michael Hollick",
+      "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-14T13:15:10.352Z"
+  "published_at": "2026-07-14T13:20:07.490Z"
 }
