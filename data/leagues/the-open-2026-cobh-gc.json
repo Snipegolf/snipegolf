@@ -641,7 +641,15 @@
       "bracket_c": "Haotong Li",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -10
+    },
+    {
+      "pid": 53700323,
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Billy Horschel",
+      "bracket_d": "Shaun Norris",
+      "tiebreaker": 11
     }
   ],
-  "published_at": "2026-07-14T17:19:50.281Z"
+  "published_at": "2026-07-14T17:25:02.976Z"
 }
