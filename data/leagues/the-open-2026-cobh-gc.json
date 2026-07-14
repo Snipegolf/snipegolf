@@ -306,6 +306,11 @@
       "pid": "6ff1026a",
       "display_name": "Rosaire Higgins",
       "paid_status": "paid"
+    },
+    {
+      "pid": "43b6e1ed",
+      "display_name": "Sandra Bronkhorst",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -596,7 +601,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": 13
+    },
+    {
+      "pid": "43b6e1ed",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-14T11:39:54.804Z"
+  "published_at": "2026-07-14T11:44:58.274Z"
 }
