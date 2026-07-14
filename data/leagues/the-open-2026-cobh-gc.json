@@ -544,7 +544,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Frederic Lacroix",
       "tiebreaker": -11
+    },
+    {
+      "pid": "5a52ba36",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Alex Smalley",
+      "bracket_d": "Ryutaro Nagano",
+      "tiebreaker": 7
     }
   ],
-  "published_at": "2026-07-14T07:49:49.132Z"
+  "published_at": "2026-07-14T07:54:55.721Z"
 }
