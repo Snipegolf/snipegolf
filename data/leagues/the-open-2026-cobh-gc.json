@@ -625,7 +625,15 @@
       "bracket_c": "Angel Ayora",
       "bracket_d": "Michael Hollick",
       "tiebreaker": -13
+    },
+    {
+      "pid": "8923265e",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Ryan Fox",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-14T15:09:49.786Z"
+  "published_at": "2026-07-14T15:14:54.376Z"
 }
