@@ -286,6 +286,16 @@
       "pid": "5a52ba36",
       "display_name": "Coley O Driscoll",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1624c9c5",
+      "display_name": "Marie Flynn",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "9fef2d19",
+      "display_name": "Paddy Donnachie",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -562,5 +572,5 @@
       "tiebreaker": -14
     }
   ],
-  "published_at": "2026-07-14T09:54:53.713Z"
+  "published_at": "2026-07-14T09:59:51.439Z"
 }
