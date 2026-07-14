@@ -681,7 +681,15 @@
       "bracket_c": "Billy Horschel",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -10
+    },
+    {
+      "pid": "f67779a7",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": 8
     }
   ],
-  "published_at": "2026-07-14T19:44:48.926Z"
+  "published_at": "2026-07-14T19:49:55.391Z"
 }
