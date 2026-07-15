@@ -341,6 +341,11 @@
       "pid": "a43a40dc",
       "display_name": "Pat Fitzgerald",
       "paid_status": "paid"
+    },
+    {
+      "pid": "34882c0f",
+      "display_name": "Emma Ahern",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -785,5 +790,5 @@
       "tiebreaker": 13
     }
   ],
-  "published_at": "2026-07-15T12:59:50.664Z"
+  "published_at": "2026-07-15T13:04:51.700Z"
 }
