@@ -336,6 +336,11 @@
       "pid": "66e156ba",
       "display_name": "Michael Doyle",
       "paid_status": "paid"
+    },
+    {
+      "pid": "a43a40dc",
+      "display_name": "Pat Fitzgerald",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -772,5 +777,5 @@
       "tiebreaker": -20
     }
   ],
-  "published_at": "2026-07-15T12:19:54.033Z"
+  "published_at": "2026-07-15T12:24:51.058Z"
 }
