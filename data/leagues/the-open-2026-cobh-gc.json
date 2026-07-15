@@ -840,7 +840,15 @@
       "bracket_c": "Angel Ayora",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -10
+    },
+    {
+      "pid": "2edabc48",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Billy Horschel",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -17
     }
   ],
-  "published_at": "2026-07-15T14:11:25.264Z"
+  "published_at": "2026-07-15T14:15:04.020Z"
 }
