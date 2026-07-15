@@ -346,6 +346,11 @@
       "pid": "34882c0f",
       "display_name": "Emma Ahern",
       "paid_status": "paid"
+    },
+    {
+      "pid": "3a11ed9d",
+      "display_name": "Phillip Kennedy",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -788,7 +793,15 @@
       "bracket_c": "Dan Brown",
       "bracket_d": "MJ Daffue",
       "tiebreaker": 13
+    },
+    {
+      "pid": "34882c0f",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Jason Day",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Henrik Stenson",
+      "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-15T13:09:58.517Z"
+  "published_at": "2026-07-15T13:15:16.377Z"
 }
