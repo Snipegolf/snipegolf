@@ -832,7 +832,15 @@
       "bracket_c": "Haotong Li",
       "bracket_d": "Henrik Stenson",
       "tiebreaker": -16
+    },
+    {
+      "pid": "3298f506",
+      "bracket_a": "Viktor Hovland",
+      "bracket_b": "Michael Kim",
+      "bracket_c": "Angel Ayora",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -10
     }
   ],
-  "published_at": "2026-07-15T14:00:01.659Z"
+  "published_at": "2026-07-15T14:05:00.545Z"
 }
