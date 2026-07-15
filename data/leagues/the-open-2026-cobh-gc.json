@@ -945,7 +945,15 @@
       "bracket_c": "Billy Horschel",
       "bracket_d": "Joakim Lagergren",
       "tiebreaker": -12
+    },
+    {
+      "pid": "05ea8d25",
+      "bracket_a": "Robert MacIntyre",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -16
     }
   ],
-  "published_at": "2026-07-15T18:20:04.537Z"
+  "published_at": "2026-07-15T18:24:58.944Z"
 }
