@@ -723,7 +723,15 @@
       "bracket_c": "Alex Smalley",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -14
+    },
+    {
+      "pid": "7d1ade25",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Corey Conners",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -10
     }
   ],
-  "published_at": "2026-07-15T09:45:03.721Z"
+  "published_at": "2026-07-15T09:50:03.453Z"
 }
