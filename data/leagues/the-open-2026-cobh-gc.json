@@ -731,7 +731,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -10
+    },
+    {
+      "pid": "631f5f78",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Nicolai Hojgaard",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -10
     }
   ],
-  "published_at": "2026-07-15T10:09:51.941Z"
+  "published_at": "2026-07-15T10:14:57.939Z"
 }
