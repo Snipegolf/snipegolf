@@ -316,6 +316,11 @@
       "pid": "1b84d86f",
       "display_name": "John Dunphy",
       "paid_status": "paid"
+    },
+    {
+      "pid": "b6ba4a9b",
+      "display_name": "Finn Twomey",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -720,5 +725,5 @@
       "tiebreaker": -14
     }
   ],
-  "published_at": "2026-07-15T09:39:57.543Z"
+  "published_at": "2026-07-15T09:45:03.721Z"
 }
