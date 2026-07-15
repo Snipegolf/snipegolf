@@ -361,6 +361,11 @@
       "pid": "350f4e3e",
       "display_name": "Maire Keenan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "a5289311",
+      "display_name": "Evan Baumann",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -811,7 +816,23 @@
       "bracket_c": "Jordan Smith",
       "bracket_d": "Henrik Stenson",
       "tiebreaker": -13
+    },
+    {
+      "pid": "a5289311",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Angel Ayora",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -9
+    },
+    {
+      "pid": "3a11ed9d",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "Haotong Li",
+      "bracket_d": "Henrik Stenson",
+      "tiebreaker": -16
     }
   ],
-  "published_at": "2026-07-15T13:24:57.871Z"
+  "published_at": "2026-07-15T13:30:08.410Z"
 }
