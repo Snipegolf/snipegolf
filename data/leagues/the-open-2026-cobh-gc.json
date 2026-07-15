@@ -937,7 +937,15 @@
       "bracket_c": "Haotong Li",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -10
+    },
+    {
+      "pid": "25ddb008",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Maverick McNealy",
+      "bracket_c": "Billy Horschel",
+      "bracket_d": "Joakim Lagergren",
+      "tiebreaker": -12
     }
   ],
-  "published_at": "2026-07-15T16:29:54.386Z"
+  "published_at": "2026-07-15T16:34:51.568Z"
 }
