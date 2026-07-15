@@ -953,7 +953,15 @@
       "bracket_c": "Jordan Smith",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -16
+    },
+    {
+      "pid": "0482d78c",
+      "bracket_a": "Ludvig Aberg",
+      "bracket_b": "Patrick Reed",
+      "bracket_c": "Dan Brown",
+      "bracket_d": "Frederic Lacroix",
+      "tiebreaker": -21
     }
   ],
-  "published_at": "2026-07-15T19:54:58.588Z"
+  "published_at": "2026-07-15T20:00:09.866Z"
 }
