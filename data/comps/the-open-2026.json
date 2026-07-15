@@ -6,7 +6,7 @@
   "start_date": "Thu Jul 16 2026 00:00:00 GMT+0100 (British Summer Time)",
   "picks_open_date": "Thu Jul 02 2026 00:00:00 GMT+0100 (British Summer Time)",
   "picks_lock_datetime": "2026-07-15T22:00:00+01:00",
-  "status": "picks_open",
+  "status": "ready_to_freeze",
   "freeze_message": "Entries open now. Brackets lock Wed 15 July 22:00 BST.",
   "logo_url": "https://a.espncdn.com/i/teamlogos/leagues/500/pga.png",
   "brackets": {
@@ -684,5 +684,5 @@
       }
     ]
   },
-  "published_at": "2026-07-15T20:59:43.985Z"
+  "published_at": "2026-07-15T21:04:47.040Z"
 }
