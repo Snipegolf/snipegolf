@@ -882,7 +882,15 @@
       "bracket_c": "Jordan Smith",
       "bracket_d": "Sam Bairstow",
       "tiebreaker": -17
+    },
+    {
+      "pid": "66e156ba",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Shaun Norris",
+      "tiebreaker": -11
     }
   ],
-  "published_at": "2026-07-15T14:49:54.083Z"
+  "published_at": "2026-07-15T14:54:54.837Z"
 }
