@@ -697,7 +697,15 @@
       "bracket_c": "Antoine Rozner",
       "bracket_d": "Joakim Lagergren",
       "tiebreaker": 12
+    },
+    {
+      "pid": "a05a00d2",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Chris Gotterup",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": 9
     }
   ],
-  "published_at": "2026-07-15T01:09:58.192Z"
+  "published_at": "2026-07-15T01:14:52.551Z"
 }
