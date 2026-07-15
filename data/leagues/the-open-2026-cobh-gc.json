@@ -351,6 +351,16 @@
       "pid": "3a11ed9d",
       "display_name": "Phillip Kennedy",
       "paid_status": "paid"
+    },
+    {
+      "pid": "ad5fe8e6",
+      "display_name": "Damien Keeting",
+      "paid_status": "paid"
+    },
+    {
+      "pid": "350f4e3e",
+      "display_name": "Maire Keenan",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -803,5 +813,5 @@
       "tiebreaker": -13
     }
   ],
-  "published_at": "2026-07-15T13:15:16.377Z"
+  "published_at": "2026-07-15T13:19:55.983Z"
 }
