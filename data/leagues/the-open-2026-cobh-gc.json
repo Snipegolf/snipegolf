@@ -705,7 +705,15 @@
       "bracket_c": "Jordan Smith",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": 9
+    },
+    {
+      "pid": "6ff1026a",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Brian Harman",
+      "bracket_c": "Alex Smalley",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -14
     }
   ],
-  "published_at": "2026-07-15T08:44:55.965Z"
+  "published_at": "2026-07-15T08:49:58.542Z"
 }
