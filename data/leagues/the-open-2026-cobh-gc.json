@@ -744,7 +744,15 @@
       "bracket_c": "Jordan Smith",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -10
+    },
+    {
+      "pid": "6f481a43",
+      "bracket_a": "Tommy Fleetwood",
+      "bracket_b": "Si Woo Kim",
+      "bracket_c": "Francesco Molinari",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": 13
     }
   ],
-  "published_at": "2026-07-15T11:44:51.332Z"
+  "published_at": "2026-07-15T11:49:50.823Z"
 }
