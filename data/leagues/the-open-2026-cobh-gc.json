@@ -381,6 +381,11 @@
       "pid": "b1228d5e",
       "display_name": "Ross McAuliffe",
       "paid_status": "paid"
+    },
+    {
+      "pid": "1b95a5d1",
+      "display_name": "Brendan Daly",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -903,7 +908,23 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -15
+    },
+    {
+      "pid": "1b95a5d1",
+      "bracket_a": "Matt Fitzpatrick",
+      "bracket_b": "Harris English",
+      "bracket_c": "Haotong Li",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -10
+    },
+    {
+      "pid": "11ef501a",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Francesco Molinari",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": 8
     }
   ],
-  "published_at": "2026-07-15T15:24:53.003Z"
+  "published_at": "2026-07-15T15:29:58.858Z"
 }
