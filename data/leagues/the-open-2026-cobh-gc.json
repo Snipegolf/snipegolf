@@ -929,7 +929,15 @@
       "bracket_c": "Francesco Molinari",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": 8
+    },
+    {
+      "pid": "a43a40dc",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Corey Conners",
+      "bracket_c": "Haotong Li",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -10
     }
   ],
-  "published_at": "2026-07-15T16:19:51.740Z"
+  "published_at": "2026-07-15T16:24:55.455Z"
 }
