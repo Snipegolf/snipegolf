@@ -371,6 +371,11 @@
       "pid": "11ef501a",
       "display_name": "Val Keenan",
       "paid_status": "paid"
+    },
+    {
+      "pid": "56e27700",
+      "display_name": "Mark O'Connell",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -853,7 +858,31 @@
       "bracket_c": "Billy Horschel",
       "bracket_d": "Padraig Harrington",
       "tiebreaker": -17
+    },
+    {
+      "pid": "56e27700",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Aaron Rai",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Shaun Norris",
+      "tiebreaker": -9
+    },
+    {
+      "pid": "d0032fd4",
+      "bracket_a": "Scottie Scheffler",
+      "bracket_b": "Ben Griffin",
+      "bracket_c": "Alex Smalley",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -18
+    },
+    {
+      "pid": "350f4e3e",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Alex Fitzpatrick",
+      "bracket_c": "Jordan Smith",
+      "bracket_d": "Sam Bairstow",
+      "tiebreaker": -17
     }
   ],
-  "published_at": "2026-07-15T14:44:50.813Z"
+  "published_at": "2026-07-15T14:49:54.083Z"
 }
