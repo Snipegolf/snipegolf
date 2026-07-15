@@ -376,6 +376,11 @@
       "pid": "56e27700",
       "display_name": "Mark O'Connell",
       "paid_status": "paid"
+    },
+    {
+      "pid": "b1228d5e",
+      "display_name": "Ross McAuliffe",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -890,7 +895,15 @@
       "bracket_c": "Tom McKibbin",
       "bracket_d": "Shaun Norris",
       "tiebreaker": -11
+    },
+    {
+      "pid": "b1228d5e",
+      "bracket_a": "Rory McIlroy",
+      "bracket_b": "Corey Conners",
+      "bracket_c": "Tom McKibbin",
+      "bracket_d": "Padraig Harrington",
+      "tiebreaker": -15
     }
   ],
-  "published_at": "2026-07-15T15:04:57.439Z"
+  "published_at": "2026-07-15T15:09:57.402Z"
 }
