@@ -386,6 +386,11 @@
       "pid": "1b95a5d1",
       "display_name": "Brendan Daly",
       "paid_status": "paid"
+    },
+    {
+      "pid": "05ea8d25",
+      "display_name": "Seamus Dennehy",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -926,5 +931,5 @@
       "tiebreaker": 8
     }
   ],
-  "published_at": "2026-07-15T15:29:58.858Z"
+  "published_at": "2026-07-15T15:34:52.639Z"
 }
