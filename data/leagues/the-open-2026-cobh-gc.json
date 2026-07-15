@@ -366,6 +366,11 @@
       "pid": "a5289311",
       "display_name": "Evan Baumann",
       "paid_status": "paid"
+    },
+    {
+      "pid": "11ef501a",
+      "display_name": "Val Keenan",
+      "paid_status": "paid"
     }
   ],
   "picks": [
@@ -850,5 +855,5 @@
       "tiebreaker": -17
     }
   ],
-  "published_at": "2026-07-15T14:29:49.353Z"
+  "published_at": "2026-07-15T14:39:59.898Z"
 }
