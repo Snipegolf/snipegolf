@@ -396,7 +396,7 @@
   "picks": [
     {
       "pid": "ba871c14",
-      "bracket_a": "Ludvig Aberg",
+      "bracket_a": "Ludvig ?berg",
       "bracket_b": "Corey Conners",
       "bracket_c": "Billy Horschel",
       "bracket_d": "Ryutaro Nagano",
@@ -452,7 +452,7 @@
     },
     {
       "pid": "d5867486",
-      "bracket_a": "Ludvig Aberg",
+      "bracket_a": "Ludvig ?berg",
       "bracket_b": "Alex Noren",
       "bracket_c": "Jordan Smith",
       "bracket_d": "Padraig Harrington",
@@ -647,7 +647,7 @@
       "bracket_a": "Rory McIlroy",
       "bracket_b": "Chris Gotterup",
       "bracket_c": "Tom McKibbin",
-      "bracket_d": "Frederic Lacroix",
+      "bracket_d": "Frederic LaCroix",
       "tiebreaker": -11
     },
     {
@@ -956,12 +956,12 @@
     },
     {
       "pid": "0482d78c",
-      "bracket_a": "Ludvig Aberg",
+      "bracket_a": "Ludvig ?berg",
       "bracket_b": "Patrick Reed",
       "bracket_c": "Daniel Brown",
-      "bracket_d": "Frederic Lacroix",
+      "bracket_d": "Frederic LaCroix",
       "tiebreaker": -21
     }
   ],
-  "published_at": "2026-07-19T10:29:56.079Z"
+  "published_at": "2026-07-19T10:34:48.220Z"
 }
